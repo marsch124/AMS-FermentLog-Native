@@ -1,0 +1,11 @@
+What to try first on TestFlight (6.0, build 1)
+1. Settings: "Bring your jars over from the web app". Export the backup in the old app first (Settings, Backup & export), then choose the file here. Check the counts it shows, and that your jars, pictures and people are all there.
+2. Settings, Burp alarm: tap "Allow notifications". Open your cabbage jar, check the switch "Burp alarm" is on (plain lid) and the line says it rings at 08:00 and 20:00.
+3. When the alarm rings: press and hold the notification and tap "Burped". Open the jar: a line "Burped the jar" with the time should be in the Timeline.
+4. Tap the "Burped" button on a jar page yourself. Check "Last burp" and the Undo bar.
+5. Open the same jar on the iPad and on the Mac. A change on one (a Taste line, say) should appear on the others within a minute; Settings, iCloud, "Sync now" speeds it up.
+6. Recipes: open a Vegetable ferment recipe, tap "Start a jar from this recipe", Save. Tick a step in the To do list: a Did line with the time should appear in the Timeline. Tick it again to take it back.
+7. On a jar with some Did lines, tap "Save steps as a recipe", look the recipe over and Save.
+8. Taste reminder: on the iPhone, a jar due for a taste test should show "Taste test due" and ring at 08:00 on the due day.
+9. Settings, iCloud, Safety copies: there should be a "Daily" copy for today. Try "Make a safety copy now".
+10. Tell me anything that looks wrong, is hard to find, or has a word you do not understand.

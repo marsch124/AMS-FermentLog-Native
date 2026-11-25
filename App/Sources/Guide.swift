@@ -2,7 +2,7 @@ import Foundation
 
 /// The single source for the version the app shows, "What's new" and "How it works".
 enum Guide {
-    static let appVersion = "6.3"
+    static let appVersion = "6.4"
 
     struct Release: Identifiable {
         let version: String
@@ -12,6 +12,12 @@ enum Guide {
     }
 
     static let releases: [Release] = [
+        Release(version: "6.4 (build 7)", date: "25 Nov 2026", lines: [
+            "New: a find box on the Jars list. Before (6.3): to find a jar by its name you had to open the Search page. Now: under the three tiles there is a box, “Find a jar by name or vegetable”. Type a few letters and only the jars whose name or vegetable contains them stay in the list, at once, in all three groups. Big or small letters and accents do not matter: “surkal” finds “Surkål”. The word button Clear empties the box. If no jar fits, the list says “No jar matches “xyz”.” The box works together with a tile: choose In the fridge and type “carrot” and you see only the carrot jars in the fridge. The box starts empty every time the list opens. The Search page is still there and still looks everywhere (jars, bakes, recipes and lessons).",
+            "New: sort the jars. Before: the jars were always sorted by start date. Now: next to the find box (under it on a narrow iPhone) there is a switch, Sort, with two choices. Start date works as before: in Fermenting the jars due for a taste test come first, the most overdue first, then the newest start; In the fridge and Done show the newest start first. Name puts the jars in A to Z order in every group (accents and big or small letters do not matter); the taste-test order does not apply then. The box “1 jar is due for a taste test” stays on top with either choice. Your choice is remembered on the device you hold: the iPhone, the iPad and the Mac each keep their own.",
+            "Unchanged on purpose: the line under the tiles, “Tap a tile to show only those jars”, the tile filter, the Search page and everything a jar stores.",
+            "Updated: How it works (Your jars, Search) and the written specification.",
+        ]),
         Release(version: "6.3 (build 6)", date: "25 Nov 2026", lines: [
             "New: tap a tile on the Jars list to show only those jars. Before (6.2): the three tiles at the top (Fermenting, In the fridge, Done) only showed the numbers; tapping them did nothing. Now: each tile is a button. Tap one and only that group of jars stays in the list. The tile gets an outline in its own colour, and a line under the tiles says “Showing only: In the fridge” with a button, Show all. Tap the same tile again, or Show all, and every jar is back. With nothing chosen, a small grey line under the tiles says “Tap a tile to show only those jars”. When a group has no jars, the list says so, for example “No jars in the fridge.” The choice is not kept: when you close the app and open it again, all jars are shown. The orange Fermenting tile stays filled as before; filled still only means “first tile of the row”, and the outline is what means “chosen”.",
             "New: see a picture large. Before: pictures could only be looked at small (60 by 76 points on the head card of a jar, 120 by 120 in the row of pictures); tapping them did nothing. Now: tap the picture on a jar’s head card, or any picture in the row of pictures on a jar, a recipe or a bake page, and it opens large on a dark page. The picture fills the screen as far as it fits. At the top it says “2 of 3” and there is a Done button. On the iPhone and iPad, swipe left and right to go through the pictures of that jar (or recipe, or bake). On the Mac, the buttons Previous and Next (and the left and right arrow keys) go through them, and Escape closes the page. A small grey line under the row of pictures says “Tap a picture to see it large”. The pages where you change something (with Remove under each picture) are unchanged: there a tap on a picture still does nothing.",
@@ -126,12 +132,13 @@ Settings › Appearance picks System, Light or Dark for this device only; on the
 """),
 
         Section(title: "Your jars", text: """
-The Jars list (Home on the iPhone, Jars at the side on iPad and Mac) starts with three small tiles side by side, each with a big number: FERMENTING (the orange tile), IN THE FRIDGE (the pale blue tile) and DONE (the pale green tile). The colours are the colours of the pills on the rows below. The tiles are buttons. Tap one to show only those jars: the tile gets an outline in its own colour and a line under the tiles says “Showing only: In the fridge” with the button Show all. Tap the same tile again, or Show all, and every jar is back. With nothing chosen, a small grey line says “Tap a tile to show only those jars”. If a group has no jars, the list says so (“No jars in the fridge.”). Your choice is not kept: after you close the app, all jars are shown again. Under the tiles is the full-colour button Start a jar. On the iPad and the Mac there is also New jar at the top right.
+The Jars list (Home on the iPhone, Jars at the side on iPad and Mac) starts with three small tiles side by side, each with a big number: FERMENTING (the orange tile), IN THE FRIDGE (the pale blue tile) and DONE (the pale green tile). The colours are the colours of the pills on the rows below. The tiles are buttons. Tap one to show only those jars: the tile gets an outline in its own colour and a line under the tiles says “Showing only: In the fridge” with the button Show all. Tap the same tile again, or Show all, and every jar is back. With nothing chosen, a small grey line says “Tap a tile to show only those jars”. If a group has no jars, the list says so (“No jars in the fridge.”). Your choice is not kept: after you close the app, all jars are shown again. Under the tiles is a find box, “Find a jar by name or vegetable”: type a few letters and only the jars whose name or vegetable contains them stay in the list, at once, in all three groups. Big or small letters and accents do not matter (“surkal” finds “Surkål”). The word Clear empties the box. If no jar fits, the list says “No jar matches “xyz”.” The box works together with a tile (In the fridge and “carrot” shows the carrot jars in the fridge). It starts empty every time the list opens. Next to it (under it on a narrow iPhone) a switch, Sort, puts the jars in order: Start date or Name. Your choice is remembered on this device; the iPhone, the iPad and the Mac each keep their own. Then comes the full-colour button Start a jar. On the iPad and the Mac there is also New jar at the top right.
 If any jar is due for a taste test, a tinted box says “2 jars are due for a taste test” and names them.
 Jars are in three groups, each with its count:
-• Fermenting — on the counter. Jars due for a taste test come first, the most overdue first; the others follow, newest first.
-• In the fridge — newest first.
-• Done — a verdict has been recorded; newest first.
+• Fermenting — on the counter. With Sort on Start date: jars due for a taste test come first, the most overdue first; the others follow, newest first.
+• In the fridge — newest first (Start date).
+• Done — a verdict has been recorded; newest first (Start date).
+With Sort on Name, every group is in A to Z order and the taste-test order does not apply; the box “jars are due for a taste test” stays on top either way.
 Each row shows the jar’s picture (or a jar mark), its name (the vegetable when it has no name), a status pill with the day number (“Fermenting · day 3”; the day you started the jar is day 1), the brine percentage and, once rated, its stars. Two small tags can follow: “Taste test due” and “Burp alarm on”. Tap a row to open the jar.
 With no jars yet you see a big jar mark, “No jars yet” and Start a jar.
 """),
@@ -210,7 +217,7 @@ Days on read pages are written “Wed 25 Nov” (with the year only when it is n
 """),
 
         Section(title: "Search", text: """
-On the iPhone: Home › Search at the top right. On iPad and Mac: Search at the side (⌘F on the Mac). Results come as you type, grouped as Jars, Bakes and Recipes, each with its count. Every word you type must be found (in any order; capitals do not matter).
+On the iPhone: Home › Search at the top right. On iPad and Mac: Search at the side (⌘F on the Mac). Results come as you type, grouped as Jars, Bakes and Recipes, each with its count. Every word you type must be found (in any order; capitals do not matter). The find box on the Jars list is smaller: it looks only at the names and vegetables of jars, while Search looks everywhere.
 FermentLog looks in:
 • Jars — name, vegetable, form, vessel, lid, weight, notes, spices, taste notes, your Did lines and the titles of To do steps.
 • Bakes — name, category, recipe name, notes and problems.

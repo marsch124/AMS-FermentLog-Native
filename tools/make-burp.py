@@ -51,14 +51,14 @@ def resonate(x, freq_path, bw):
     return y
 
 
-def burp(length, pitch, f1, f2, f3=None, jitter=0.13, shimmer=0.28, rough=0.08, breath=0.10,
-         wobble=0.22, wobble_hz=19, drive=2.2, chest=0.35, loud=None, seed=7):
+def burp(length, pitch, f1, f2, f3=None, jitter=0.07, shimmer=0.16, rough=0.02, breath=0.07,
+         wobble=0.12, wobble_hz=19, drive=1.6, chest=0.15, loud=None, bounce=0.0, bounce_hz=6.0, seed=7):
     """One burp as a list of samples (-1…1, peak 1). Paths are [(0…1 of the length, value)]."""
     rnd = random.Random(seed)
     n = int(RATE * length)
     pitch = scaled(pitch, length)
     f1, f2 = scaled(f1, length), scaled(f2, length)
-    f3 = scaled(f3 or [(0, 2200), (0.06, 2450), (1, 2300)], length)
+    f3 = scaled(f3 or [(0, 2600), (0.06, 2900), (1, 2800)], length)
     loud = scaled(loud or [(0, 0), (0.012, 0.85), (0.08, 1), (0.45, 0.92), (0.8, 0.55), (0.95, 0.12), (1, 0)], length)
 
     # 1. The flutter: one soft pulse per beat, uneven in timing and strength; now and then weak/strong in turn.
@@ -100,7 +100,8 @@ def burp(length, pitch, f1, f2, f3=None, jitter=0.13, shimmer=0.28, rough=0.08, 
     for i, s in enumerate(sig):
         tt = i / RATE
         ph += 2 * math.pi * (wobble_hz + 6 * math.sin(2 * math.pi * 1.3 * tt)) / RATE
-        out.append(s * (1.0 + wobble * math.sin(ph)) * lerp(loud, tt))
+        lift = 1.0 + bounce * math.sin(2 * math.pi * bounce_hz * tt)      # a gentle, cheerful bounce
+        out.append(s * (1.0 + wobble * math.sin(ph)) * lift * lerp(loud, tt))
     peak = max(abs(v) for v in out) or 1.0
     out = [math.tanh(drive * v / peak) / math.tanh(drive) for v in out]
     mean = sum(out) / len(out)
@@ -113,44 +114,74 @@ def silence(seconds):
     return [0.0] * int(RATE * seconds)
 
 
-# Mouth shapes (F1, F2): "uh" is the plain burp; "aw" bigger; "oo" small and round.
-UH = ([(0, 300), (0.06, 560), (0.7, 600), (1, 380)], [(0, 700), (0.06, 980), (0.7, 1020), (1, 760)])
-AW = ([(0, 320), (0.05, 680), (0.7, 700), (1, 420)], [(0, 720), (0.05, 1050), (0.7, 1080), (1, 800)])
-OO = ([(0, 280), (0.08, 420), (1, 340)], [(0, 650), (0.08, 800), (1, 700)])
+def bloop(dur=0.06, f0=500, f1=1100, amp=0.35):
+    """A small bubble pop: a quick rising whistle that dies away (like a bubble leaving the brine)."""
+    n = int(RATE * dur)
+    out, ph = [], 0.0
+    for i in range(n):
+        t = i / RATE
+        f = f0 * (f1 / f0) ** (t / dur)
+        ph += 2 * math.pi * f / RATE
+        env = (1 - math.exp(-t / 0.002)) * math.exp(-t / (dur * 0.35))
+        out.append(amp * env * math.sin(ph))
+    return out
 
-# The ten — number, file, how loud (0…1 of full), and the recipe. Names live in the app (BurpSounds.swift).
+
+def mix(base, add, at):
+    """`add` laid over `base` from `at` seconds on (the result grows when needed)."""
+    start = int(RATE * at)
+    out = base + [0.0] * max(0, start + len(add) - len(base))
+    for i, v in enumerate(add):
+        out[start + i] += v
+    peak = max(abs(v) for v in out) or 1.0
+    return [v / peak for v in out] if peak > 1 else out
+
+
+# Mouth shapes (F1, F2) — 6.6: bright and open, like a smile ("ah", "eh"); softer "uh" for contrast.
+HA = ([(0, 400), (0.06, 750), (0.7, 780), (1, 560)], [(0, 1000), (0.06, 1450), (0.7, 1500), (1, 1150)])
+EH = ([(0, 380), (0.06, 620), (1, 520)], [(0, 1200), (0.06, 1750), (1, 1500)])
+UH = ([(0, 360), (0.06, 680), (1, 480)], [(0, 950), (0.06, 1250), (1, 1000)])
+
+# The ten — number, how loud (0…1 of full), and the recipe. Names live in the app (BurpSounds.swift).
+# 6.6: all remade happier (his words: "a bit more happy … now they are very maskuline"): pitch about
+# 150–330 Hz instead of 45–200, brighter mouths, little growl, most lift at the end, some end in a bubble.
 BURPS = {
-    # 1 Classic — a plain, honest burp (the 6.5 first burp)
-    1: (0.92, lambda: burp(1.05, [(0, 92), (0.1, 104), (0.33, 96), (0.71, 78), (1, 58)], *UH, seed=7)),
-    # 2 Short pop — quick and done
-    2: (0.92, lambda: burp(0.38, [(0, 110), (0.3, 118), (1, 80)], *UH, jitter=0.10, rough=0.04,
-                           loud=[(0, 0), (0.03, 1), (0.5, 0.8), (0.85, 0.25), (1, 0)], seed=21)),
-    # 3 Deep rumble — low, from the cellar
-    3: (0.95, lambda: burp(1.35, [(0, 62), (0.15, 70), (0.6, 58), (1, 42)], *AW, jitter=0.18, shimmer=0.35,
-                           rough=0.12, chest=0.6, wobble=0.18, wobble_hz=11, seed=33)),
-    # 4 Long one — takes its time
-    4: (0.90, lambda: burp(2.0, [(0, 96), (0.08, 106), (0.4, 92), (0.8, 74), (1, 56)], *UH, jitter=0.14,
-                           loud=[(0, 0), (0.008, 0.8), (0.05, 1), (0.6, 0.85), (0.88, 0.45), (0.97, 0.1), (1, 0)], seed=44)),
+    # 1 Classic — a cheerful little burp
+    1: (0.92, lambda: burp(0.8, [(0, 170), (0.15, 200), (0.6, 185), (0.85, 175), (1, 215)], *HA, seed=7)),
+    # 2 Short pop — quick and bubbly
+    2: (0.92, lambda: mix(burp(0.32, [(0, 210), (0.4, 235), (1, 250)], *EH,
+                               loud=[(0, 0), (0.04, 1), (0.6, 0.8), (0.9, 0.3), (1, 0)], seed=21),
+                          bloop(0.07, 500, 1100, 0.45), 0.3)),
+    # 3 Chuckle — burps like a happy laugh ("ha-ha-ha-buurp")
+    3: (0.92, lambda: burp(1.0, [(0, 190), (0.3, 180), (0.6, 200), (1, 230)], *HA,
+                           loud=[(0, 0), (0.02, 0.9), (0.09, 0.25), (0.13, 0.95), (0.2, 0.25), (0.24, 1.0),
+                                 (0.31, 0.3), (0.36, 1.0), (0.8, 0.75), (0.93, 0.4), (1, 0)], seed=33)),
+    # 4 Long one — takes its time, with a smile (a little song: up, down, up)
+    4: (0.90, lambda: burp(1.6, [(0, 165), (0.1, 190), (0.45, 200), (0.75, 180), (0.9, 195), (1, 230)], *HA,
+                           bounce=0.15, bounce_hz=5.5,
+                           loud=[(0, 0), (0.01, 0.8), (0.06, 1), (0.6, 0.85), (0.88, 0.5), (0.97, 0.12), (1, 0)], seed=44)),
     # 5 Squeaky — high and small
-    5: (0.85, lambda: burp(0.7, [(0, 175), (0.3, 195), (1, 150)], *OO, jitter=0.09, shimmer=0.2, rough=0.03,
-                           chest=0.15, breath=0.06, wobble=0.15, wobble_hz=24, seed=55)),
-    # 6 Double — two in a row
-    6: (0.92, lambda: burp(0.42, [(0, 100), (0.3, 110), (1, 84)], *UH, seed=61)
-                     + silence(0.09)
-                     + [0.85 * v for v in burp(0.6, [(0, 94), (0.3, 100), (1, 66)], *UH, seed=62)]),
-    # 7 Gurgle — wet and wobbly
-    7: (0.92, lambda: burp(1.15, [(0, 88), (0.2, 96), (0.7, 80), (1, 60)], *UH, jitter=0.2, shimmer=0.4,
-                           rough=0.15, breath=0.18, wobble=0.55, wobble_hz=14, seed=77)),
+    5: (0.85, lambda: burp(0.5, [(0, 280), (0.3, 320), (1, 330)], *EH, jitter=0.05, chest=0.05, seed=55)),
+    # 6 Double — two in a row, the second one higher
+    6: (0.92, lambda: burp(0.35, [(0, 180), (1, 200)], *HA, seed=61)
+                     + silence(0.07)
+                     + burp(0.5, [(0, 220), (0.5, 250), (1, 270)], *EH, seed=62)),
+    # 7 Bubbles — fizzy, like a fresh jar: a burp and four little bubbles going up
+    7: (0.92, lambda: mix(mix(mix(mix(burp(0.7, [(0, 175), (0.4, 195), (1, 205)], *HA, seed=77),
+                                      bloop(0.06, 400, 900, 0.40), 0.68),
+                                  bloop(0.06, 500, 1100, 0.36), 0.80),
+                              bloop(0.06, 650, 1300, 0.33), 0.90),
+                          bloop(0.07, 800, 1600, 0.30), 1.00)),
     # 8 Rising — ends going up, like a question
-    8: (0.90, lambda: burp(0.95, [(0, 84), (0.45, 78), (0.8, 110), (1, 138)], *UH, jitter=0.11,
-                           loud=[(0, 0), (0.015, 0.85), (0.1, 1), (0.6, 0.8), (0.9, 0.6), (1, 0)], seed=88)),
+    8: (0.90, lambda: burp(0.85, [(0, 160), (0.4, 165), (0.8, 240), (1, 300)], *UH,
+                           loud=[(0, 0), (0.015, 0.85), (0.1, 1), (0.6, 0.85), (0.9, 0.65), (1, 0)], seed=88)),
     # 9 Tiny — a polite little one
-    9: (0.55, lambda: burp(0.26, [(0, 130), (0.4, 136), (1, 110)], *OO, jitter=0.08, shimmer=0.15, rough=0.0,
-                           chest=0.2, breath=0.05, wobble=0.1,
+    9: (0.55, lambda: burp(0.25, [(0, 240), (1, 270)], *EH, jitter=0.04, chest=0.08, breath=0.04, wobble=0.06,
                            loud=[(0, 0), (0.05, 1), (0.6, 0.7), (1, 0)], seed=99)),
-    # 10 Big one — loud and rough
-    10: (1.0, lambda: burp(1.5, [(0, 78), (0.12, 92), (0.5, 80), (1, 50)], *AW, jitter=0.2, shimmer=0.42,
-                           rough=0.2, drive=3.4, chest=0.55, breath=0.14, wobble=0.3, wobble_hz=16, seed=101)),
+    # 10 Ta-da — proud, ends on a high note (and a bubble)
+    10: (1.0, lambda: mix(burp(1.2, [(0, 180), (0.15, 210), (0.5, 205), (0.75, 230), (1, 280)], *HA,
+                               drive=2.0, chest=0.25, wobble=0.15, seed=101),
+                          bloop(0.08, 700, 1500, 0.35), 1.16)),
 }
 
 

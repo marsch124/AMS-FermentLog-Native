@@ -1,0 +1,15 @@
+FermentLog 6.6 (build 9) - what to test
+
+Only the burp sounds changed. All ten are new, made to sound happier.
+
+1. Open Settings > Burp sounds.
+2. Press Play on each of the 10 burps, one after the other.
+3. Listen: does each one sound happy now (higher, brighter, less growl)?
+4. Tell me which ones still sound wrong, by number or name.
+
+Names now: 1 Classic, 2 Short pop, 3 Chuckle, 4 Long one, 5 Squeaky, 6 Double, 7 Bubbles, 8 Rising, 9 Tiny, 10 Ta-da.
+
+Also check:
+- A burp you had switched off in 6.5 is still off (under its new name if it was 3, 7 or 10).
+- Press Burped on a jar's page: one of the happy burps plays.
+- On a burp reminder the note says, for example, "Burp: Chuckle."

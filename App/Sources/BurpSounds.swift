@@ -14,16 +14,16 @@ struct BurpSound: Identifiable, Equatable {
 
 enum BurpSounds {
     static let all: [BurpSound] = [
-        BurpSound(number: 1, name: "Classic", line: "A plain, honest burp"),
-        BurpSound(number: 2, name: "Short pop", line: "Quick and done"),
-        BurpSound(number: 3, name: "Deep rumble", line: "Low, from the cellar"),
-        BurpSound(number: 4, name: "Long one", line: "Takes its time"),
+        BurpSound(number: 1, name: "Classic", line: "A cheerful little burp"),
+        BurpSound(number: 2, name: "Short pop", line: "Quick and bubbly"),
+        BurpSound(number: 3, name: "Chuckle", line: "Burps like a happy laugh"),
+        BurpSound(number: 4, name: "Long one", line: "Takes its time, with a smile"),
         BurpSound(number: 5, name: "Squeaky", line: "High and small"),
-        BurpSound(number: 6, name: "Double", line: "Two in a row"),
-        BurpSound(number: 7, name: "Gurgle", line: "Wet and wobbly"),
+        BurpSound(number: 6, name: "Double", line: "Two in a row, the second one higher"),
+        BurpSound(number: 7, name: "Bubbles", line: "Fizzy, like a fresh jar"),
         BurpSound(number: 8, name: "Rising", line: "Ends going up, like a question"),
         BurpSound(number: 9, name: "Tiny", line: "A polite little one"),
-        BurpSound(number: 10, name: "Big one", line: "Loud and rough"),
+        BurpSound(number: 10, name: "Ta-da", line: "Proud, ends on a high note"),
     ]
 
     /// UserDefaults: the numbers switched OFF ("3,7"); missing or empty = all on, so a burp added later starts on.

@@ -2,7 +2,7 @@ import Foundation
 
 /// The single source for the version the app shows, "What's new" and "How it works".
 enum Guide {
-    static let appVersion = "6.5"
+    static let appVersion = "6.6"
 
     struct Release: Identifiable {
         let version: String
@@ -12,6 +12,14 @@ enum Guide {
     }
 
     static let releases: [Release] = [
+        Release(version: "6.6 (build 9)", date: "25 Nov 2026", lines: [
+            "Changed: all 10 burps sound happier. Before (6.5): low, rough and gruff — deep voices and a lot of growl. Now: higher and brighter, smoother, with less growl; most go up a little at the end, and some end with a small bubble. They are still made for FermentLog from scratch, not recordings, and each still lasts from a quarter of a second to about 1.6 seconds.",
+            "Changed: three burps got a new name, because the old one no longer fits the sound. Before: 3 “Deep rumble — Low, from the cellar”, 7 “Gurgle — Wet and wobbly”, 10 “Big one — Loud and rough”. Now: 3 “Chuckle — Burps like a happy laugh”, 7 “Bubbles — Fizzy, like a fresh jar”, 10 “Ta-da — Proud, ends on a high note”. Your switches stay as they were: a burp you switched off stays off, under its new name.",
+            "Changed: some lines under the names. Before → now: 1 Classic, “A plain, honest burp” → “A cheerful little burp”; 2 Short pop, “Quick and done” → “Quick and bubbly”; 4 Long one, “Takes its time” → “Takes its time, with a smile”; 6 Double, “Two in a row” → “Two in a row, the second one higher”. The same as before: 5 Squeaky (High and small), 8 Rising (Ends going up, like a question), 9 Tiny (A polite little one).",
+            "Changed: the note on the reminder. Before: “Burp: Deep rumble.” (one of the old names). Now: it shows the new names, for example “Burp: Chuckle.”",
+            "Unchanged on purpose: which buttons burp, the random pick (never the same one twice in a row), Settings › Burp sounds with Play and a switch for each burp, and the silent switch rule.",
+            "Updated: How it works (The burp alarm) and the written specification.",
+        ]),
         Release(version: "6.5 (build 8)", date: "25 Nov 2026", lines: [
             "New: every Burped burps. Before (6.0 to 6.4): when you pressed Burped, on a burp reminder or on a jar’s page, the burp was written into the Timeline in silence. Now: both Burped buttons play a burp sound. This works on the iPhone, on the iPad and, when “Ring on this Mac” is on, on the Mac.",
             "New: 10 burps, picked at random. Before: there was no sound at all. Now: each press plays one of the burps that are switched on, picked at random, and never the same one twice in a row (when two or more are on). The ten: Classic (a plain, honest burp), Short pop (quick and done), Deep rumble (low, from the cellar), Long one (takes its time), Squeaky (high and small), Double (two in a row), Gurgle (wet and wobbly), Rising (ends going up, like a question), Tiny (a polite little one) and Big one (loud and rough). They were made for FermentLog from scratch; they are not recordings. Each lasts from a quarter of a second to 2 seconds.",
@@ -183,7 +191,7 @@ At the top right: Edit. Then, from the top:
 Gas builds up in a closed jar, so some jars need a burp every day. The alarm reminds you twice a day.
 • What rings: at 08:00 and 20:00 (change both in Settings › Burp alarm), for every jar that is fermenting and has its alarm on, you get “Burp: Cabbage jar — Morning burp · day 3. Tap Burped when it is done.”
 • The Burped button is on the notification itself: press and hold it (or pull it down) and tap Burped. “Burped the jar” and the time are written into the jar’s Timeline without opening the app. Tapping the notification itself opens the jar.
-• The burp sound: every Burped plays a burp, both the button on the notification and the Burped button on the jar’s page. It is one of 10 (Classic, Short pop, Deep rumble, Long one, Squeaky, Double, Gurgle, Rising, Tiny, Big one), picked at random from the ones that are switched on, never the same one twice in a row. On the notification a small note also shows, “Burped: Cabbage jar — Written in the Timeline at 08:12. Burp: Deep rumble.”, and goes away by itself after about 8 seconds. If FermentLog is open on the screen, you only hear the burp. You hear nothing when the iPhone is on silent (the switch on the side) or in a Focus that silences FermentLog; for the notification also when notification sounds for FermentLog are off in the system Settings.
+• The burp sound: every Burped plays a burp, both the button on the notification and the Burped button on the jar’s page. It is one of 10 (Classic, Short pop, Chuckle, Long one, Squeaky, Double, Bubbles, Rising, Tiny, Ta-da), all cheerful and bright,, picked at random from the ones that are switched on, never the same one twice in a row. On the notification a small note also shows, “Burped: Cabbage jar — Written in the Timeline at 08:12. Burp: Chuckle.”, and goes away by itself after about 8 seconds. If FermentLog is open on the screen, you only hear the burp. You hear nothing when the iPhone is on silent (the switch on the side) or in a Focus that silences FermentLog; for the notification also when notification sounds for FermentLog are off in the system Settings.
 • Burp sounds in Settings: Settings › Burp sounds lists the 10 burps. Play lets you hear one at once (even on silent); the switch puts it in or out of the random mix. All ten are on to begin with. With all off, Burped makes no sound. The choice is kept on each device on its own.
 • Which jars: a jar with a plain lid rings by itself. The other lids (airlock, burping / self-venting, cloth / open) do not, because the gas leaves on its own. Every jar has its own switch Burp alarm, on its page and in its form, to choose differently. The jar list marks the jars that ring with the grey tag “Burp alarm on”.
 • Which devices: Settings › Burp alarm › “Ring on this iPhone” (or iPad, or Mac). It is on from the start on the iPhone and off on iPad and Mac, because the iPhone is the one in your pocket. It is a choice for each device. The two times are the same on every device.

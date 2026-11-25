@@ -2,7 +2,7 @@ import Foundation
 
 /// The single source for the version the app shows, "What's new" and "How it works".
 enum Guide {
-    static let appVersion = "6.0"
+    static let appVersion = "6.1"
 
     struct Release: Identifiable {
         let version: String
@@ -12,6 +12,30 @@ enum Guide {
     }
 
     static let releases: [Release] = [
+        Release(version: "6.1 (build 3)", date: "25 Nov 2026", lines: [
+            "New: a new look, “Full colour”. Nothing about what FermentLog stores or does changes; only how the pages look. Before (6.0): plain lists of facts on flat white boxes on a beige page. Now: the pages are built from colour, cards and small tiles. You picked this look from a picture.",
+            "New: a head card on every read page. A jar, a recipe, a bake and Insights now open with a card filled with the colour of its part (Jars orange, Bakes gold-brown, Recipes purple, Insights teal) and white words. Before: the page began with a plain list of facts.",
+            "Changed: the page behind the cards. Before: flat white boxes on beige. Now: the page is lightly tinted with the colour of the part, and the cards have rounder corners and a soft shadow.",
+            "Changed: facts sit in small tiles. Before: one line per fact (“Lid  Plain lid”), eight lines under each other. Now: each fact is a small tile, with its name in small capitals and the value right under it.",
+            "Changed: days are written in plain words. Before: 2026-11-25. Now: “Wed 25 Nov” (with the year only when it is not this year). The pages where you change something, and the files you export, keep their date pickers and the old way of writing the day.",
+            "Changed: the switches Ferments | Bakes (Insights), What I did | Taste test (Timeline) and Jars | Bakes. Before: drawn in the Mac’s own accent colour (yellow on your Mac). Now: drawn in the colour of their part.",
+            "New: the jar page head card. A drawn jar, the jar’s name, a big “Day 1” (the days it has been fermenting), its state (Fermenting, In the fridge or Done) and “started Wed 25 Nov”. Under them a slim line fills from the start day to the next taste test, with “Taste test Sat 28 Nov · in 3 days” under it. Before: a small status pill and the words “Taste test due 2026-11-28”.",
+            "Changed: the jar’s facts. Before: eight lines, one fact each. Now: six tiles: Vegetable, Form, Brine, Room, Lid and Weight (plus Logged by when someone is set).",
+            "Changed: the Burp block. Before: three rows. Now: one row with the Burped button, when the jar was last burped, and the Burp alarm switch with its two times beside it.",
+            "Changed: the Timeline is now a rail. Before: every line repeated its date and time and carried a tag, “Did” or “Taste”. Now: each day has ONE heading (“DAY 1 · WED 25 NOV”); when several lines share a time, the time is written once; every line has a dot on a thin vertical line. A filled orange dot means something you did. A green ring with the word “Taste” means a taste test. Tapping a line still opens “Change this line”.",
+            "Changed: adding a Timeline line. Before: five rows. Now: two rows: the switch and “When”, and the text box with Add right beside it.",
+            "Changed: Insights starts with four number tiles. Before: four text lines in a box called “Your jars”. Now: Jars, Active now, Success (with a small ring that shows the share) and Average rating, each in its own tile.",
+            "Changed: the two labels “Show” in Insights are gone. Before: a label and a switch, then a label and a vegetable list, each on its own row. Now: the Ferments | Bakes switch and the vegetable chooser sit on one row.",
+            "Changed: Recommended recipe and Best jar so far. Before: text lines and a text link. Now: Recommended recipe is a head card with five tiles (Vegetable, Brine, Room, Days, Lid), and Best jar so far has a button, “Open this jar”.",
+            "Changed: the dot charts (rating and brine strength, room temperature, days fermented). Before: small dots on a dashed grid. Now: larger dots with a white edge, faint lines only for the stars 1 to 5, and “each dot is one jar” beside the heading. The brine chart shades the usual range, 2 to 3 %.",
+            "Changed: “Average rating by vegetable / form / lid” and “Problems that came up”. Before: thick square bars with grid lines and an axis under every chart. Now: one slim round bar per line, with the figure right beside the name (“Cabbage 4.0 ★”). Bake insights follows the same pattern: number tiles and slim bars.",
+            "New: the recipe page head card. Name, category, description, two tiles “Hands-on” and “Start to finish”, and the buttons in one row (the main one white on the colour). Before: a plain page with the category pill and a column of buttons.",
+            "Changed: Ingredients. Before: one line each, amount and words run together. Now: the amount stands in its own column at the left (“100 g” · “active sourdough starter”). On a wide window Ingredients and Equipment sit side by side.",
+            "New: a time ribbon above the Method, with one numbered piece per step, as long as the step takes. A pale piece is a wait of 2 hours or more; a full-colour piece is a shorter step. It shows only when the steps have times written. Below it the steps are numbered circles on a thin line, each with its time in a small tag. Before: a numbered list with the time as a tag.",
+            "Changed: the bake page. Before: pills, then a plain block of stars. Now: a head card with the bake’s name, category, day and recipe, and the ratings (Crust, Crumb, Flavour, Overall) as slim bars with the stars beside the name.",
+            "Unchanged on purpose: everything FermentLog keeps and does: your jars, bakes, recipes and lessons, the alarms, iCloud, safety copies, export and the spreadsheet files.",
+            "Updated: the written specification (docs/spec), How it works (the jar page, Timeline, Insights, recipe page and bake page, and Signs in this app) and this list.",
+        ]),
         Release(version: "6.0 (build 2)", date: "25 Nov 2026", lines: [
             "Fixed: moving recipe steps on the Mac. Before (build 1): the page New recipe / Edit recipe said “Drag a step to move it”, but on the Mac dragging did nothing, so the order of the steps could not be changed there at all. Now: every step on the Mac has a small drag handle (three short lines) at its right end. Hold the handle, drag the step onto another step and let go: it takes that step’s place. The step you are holding it over turns light purple, so you see where it will land. iPhone and iPad are unchanged.",
             "Changed: the Save button on the Mac. Before: on the pages New jar / Edit jar, Log a bake / Edit bake and New recipe / Edit recipe, Save at the top right was a plain bold word in a pale pill, just like Cancel. Now: it is in the full colour of its part (orange for jars, gold-brown for bakes, purple for recipes), so you see at once which one saves.",
@@ -111,11 +135,11 @@ After Save, a new jar opens on its own page.
 
         Section(title: "A jar’s page", text: """
 At the top right: Edit. Then, from the top:
-• A status pill (“Fermenting · day 3”, “In fridge · day 12”, “Done · day 12”) and, while a taste test is coming, “Taste test due 2026-11-28” (deep orange once the day has come, grey before).
-• Pictures, then the facts: Vegetable, Form, Brine (green when it is 2–3 %), Room temp, Started, Lid, Weight, who logged it, your spices as small tags, and your notes.
-• Burp (only while the jar is fermenting) — the full-colour Burped button; beside it “Not burped yet” or “Last burp: today 08:12 · 2 today”; the switch Burp alarm; and a line “Rings at 08:00 and 20:00” (with “— switched off for this device in Settings” when this device does not ring). One tap on Burped writes the burp into the Timeline; a bar at the bottom says “Burp logged 08:12” with Undo for 4 seconds.
+• An orange head card: a drawn jar, the jar’s name, a big “Day 3” (the days fermenting), its state (Fermenting, In the fridge or Done), “started Wed 25 Nov”, and, while a taste test is coming, a slim line that fills from the start day to the next taste test with “Taste test Sat 28 Nov · in 3 days” under it (deep orange once the day has come).
+• Pictures, then six tiles: Vegetable, Form, Brine (green when it is 2–3 %), Room, Lid and Weight, plus Logged by when set; your spices as small tags, and your notes.
+• Burp (only while the jar is fermenting) — all on one row: the full-colour Burped button; beside it “Not burped yet” or “Last burp: today 08:12 · 2 today”; and the switch Burp alarm with its two times (“Rings at 08:00 and 20:00”) beside it (with “— switched off for this device in Settings” when this device does not ring). One tap on Burped writes the burp into the Timeline; a bar at the bottom says “Burp logged 08:12” with Undo for 4 seconds.
 • To do — from <recipe> (only when the jar was started from a recipe) — the recipe’s steps as round boxes, with “2 of 7 done” above them. Tap a box: it turns green with a tick, the step shows “done 14:05”, and a Did line with the step’s words and that time is written into the Timeline. Tap it again to take both back (if you have changed that Timeline line’s words or time in between, the line stays).
-• Timeline — everything about the jar, oldest first, each line with its day and time. A line has a tag: Did (orange) for something you did, such as chopping the cabbage or burping the jar, or Taste (green) for a taste test. Tap a line to change its day, its time (“Has a time” can be switched off) or its words, then Save or Cancel; “Delete this line” asks first. To add a line, pick What I did or Taste test, set When (now to begin with; change it if it was earlier), write, and press the full-colour Add. In What I did every line you type or paste becomes its own step, and list numbers (“1.”, “2)”) and bullets are taken off; “2% salt” stays. In Taste test the whole text is one note, and it moves the next taste-test reminder. With an AI key, Taste test also offers “Add by voice”: write or dictate “day 4, tangy and still crunchy” and it makes the line.
+• Timeline — everything about the jar, oldest first, drawn as a rail. Each day has one heading (“DAY 1 · WED 25 NOV”); the time is written once when several lines share it; every line has a dot on a thin vertical line. A filled orange dot is something you did, such as chopping the cabbage or burping the jar. A green ring with the word “Taste” is a taste test. Tap a line to change its day, its time (“Has a time” can be switched off) or its words, then Save or Cancel; “Delete this line” asks first. To add a line, use two rows: pick What I did or Taste test and set When (now to begin with; change it if it was earlier), then write in the box, with the full-colour Add beside it. In What I did every line you type or paste becomes its own step, and list numbers (“1.”, “2)”) and bullets are taken off; “2% salt” stays. In Taste test the whole text is one note, and it moves the next taste-test reminder. With an AI key, Taste test also offers “Add by voice”: write or dictate “day 4, tangy and still crunchy” and it makes the line.
 • Move to the fridge (fermenting jars only) — one tap. Today is written as the fridge day, the status becomes In fridge and the alarms stop. There is no way back from the jar’s page, so tap it when you mean it.
 • Outcome — “No verdict recorded yet” and Record outcome; or the verdict in a green box “Success” or a red box “Didn’t work out”, with Taste, Sourness, Crunch and Overall as stars and the problems as red tags (Mould, Kahm yeast, Mushy / soft, Too salty, Not sour enough, Off smell). Edit outcome changes it. Recording an outcome makes the jar Done.
 • Duplicate (same set-up, a fresh jar called “… (copy)” with no lines, pictures or verdict; it opens at once), Share (a plain-words summary through the system’s share sheet) and Save steps as a recipe (it opens a new recipe filled in from the jar: ingredients, equipment and one step for each Did line, burps left out; nothing is saved until you press Save; the button shows only when there is a Did line besides burps). With an AI key there is also AI tips, with Add to notes or Dismiss.
@@ -143,7 +167,7 @@ Each jar has its own number of days between taste tests, set in the jar form (3 
         Section(title: "Recipes", text: """
 The Recipes tab (Recipes at the side on iPad and Mac) is a recipe book for fermenting and baking, the newest changed first. A row shows the picture (or a book mark), the title, a purple category pill, “Hands-on …”, “Total …” and the number of steps. With no recipes yet you get New recipe and “Add the sourdough example”.
 A recipe holds: Title, Category (Sourdough, Vegetable ferment, Drink / kombucha, Dairy, Other), Description, Pictures, Ingredients and Equipment (one per line), Hands-on time, Total time, the Method (each step has a title, a time hint such as “3 min” and what to do; drag a step by its handle to move it (on the Mac, drop it onto another step and it takes that step’s place); Remove takes one away; Add a step adds one) and Storage and keeping. “Delete this recipe” asks first and then offers Undo for 4 seconds.
-On a recipe’s page:
+On a recipe’s page, a purple head card holds the name, category, description, two tiles (Hands-on and Start to finish) and the buttons in one row, the main one white on the colour. Under it, Ingredients show the amount in its own column at the left (“100 g” · “active sourdough starter”), and on a wide window Ingredients and Equipment sit side by side. Above the Method a time ribbon has one numbered piece per step, as long as the step takes: pale for a wait of 2 hours or more, full colour for a shorter step (it shows only when the steps have times). The steps are numbered circles on a thin line, each with its time in a small tag. The buttons:
 • Start a jar from this recipe — on every recipe except Sourdough. It opens the New jar page already filled in: the name is the recipe’s title, the vegetable is found from the title when it names one (otherwise Carrot stays), spices are ticked when the ingredients mention them, the notes say “From recipe: …”, and the recipe’s steps become the jar’s To do list. Nothing is saved until you press Save. Each tick on the To do list is written into the Timeline with the time.
 • Log a bake from this recipe — on every recipe except Vegetable ferment. It opens a new bake linked to the recipe.
 • Duplicate, Share and, with an AI key, Improve with AI (it opens the form with the changes for you to check).
@@ -154,7 +178,7 @@ Save steps as a recipe, on a jar’s page, makes a recipe the other way round.
         Section(title: "Bakes and lessons", text: """
 Bakes are for sourdough and other baking. On the iPhone choose Bakes in the switch at the top of Home; on the iPad and Mac it is Bakes at the side. The full-colour button is Log a bake. A bake’s row shows a picture or a bread mark, its name, a gold-brown category pill, the date, its recipe, its stars (or “Not rated yet”) and its problems as red tags.
 • A bake has: Name, Category (Sourdough, Bread, Other), Date, Recipe (None or one of yours), Logged by, Photos, Crust, Crumb, Flavour and Overall (tap a star; tap the same star again to clear it), Problems (Dense crumb, Gummy, Flat / didn’t rise, Over-proofed, Under-proofed, Burnt, Pale crust) and Notes. With an AI key you can describe a bake and press Fill this in. Delete this bake asks first.
-• A bake’s page: ratings, problems, notes, who logged it, Duplicate (a copy dated today), Share, a link to its recipe, and “Lessons from this bake” with a box to add one.
+• A bake’s page: a gold-brown head card with the name, category, day and recipe; the ratings (Crust, Crumb, Flavour, Overall) as slim bars with the stars beside the name; problems, notes, who logged it, Duplicate (a copy dated today), Share, a link to its recipe, and “Lessons from this bake” with a box to add one.
 • Bake insights and lessons (a button under the bakes, or Insights › Bakes): the numbers (bakes, rated, average rating); the best bake; a trend chart and averages by recipe and by category (they appear once two bakes are rated); how often each problem came up; and the notebook “Lessons learned and improvements”. A lesson has its words, who noticed it, the recipe it is about, the jar or bake it came from and the day it was written. Remove takes one away and offers Undo for 4 seconds. A lesson is tied to a bake when you add it on that bake’s page; the notebook’s own form has the list “From a jar or bake” to tie a lesson to either.
 """),
 
@@ -162,10 +186,11 @@ Bakes are for sourdough and other baking. On the iPhone choose Bakes in the swit
 The Insights tab has a switch, Ferments | Bakes.
 Ferments:
 • When your jars hold more than one vegetable, a list picks All vegetables or one vegetable, and everything below follows it.
-• Your jars: Jars, Active now (fermenting or in the fridge), Success rate and Average rating.
-• Recommended recipe: once two finished jars are rated 4 or more, the typical values of those jars (vegetable, brine, temperature, days, lid). Until then it says how to get one.
-• With at least two finished, rated jars: Best jar so far (with “Open this jar”), scatter charts of the rating against brine strength, room temperature and days fermented, “Rating over your attempts”, the average rating by vegetable, by form and by lid, and “Problems that came up”. With fewer, it says “Not enough yet — finish and rate at least two jars and your charts appear here.”
-Bakes: see “Bakes and lessons”.
+• Four number tiles: Jars, Active now (fermenting or in the fridge), Success (with a small ring that shows the share of finished jars that were a success) and Average rating. The Ferments | Bakes switch and the vegetable chooser sit on one row.
+• Recommended recipe: once two finished jars are rated 4 or more, a head card with five tiles, the typical values of those jars (Vegetable, Brine, Room, Days, Lid). Until then it says how to get one.
+• With at least two finished, rated jars: Best jar so far (with “Open this jar”), dot charts of the rating against brine strength, room temperature and days fermented (each dot is one jar; the brine chart shades the usual range, 2–3 %), “Rating over your attempts”, the average rating by vegetable, by form and by lid, and “Problems that came up” (one slim bar per line, with the figure beside the name). With fewer, it says “Not enough yet — finish and rate at least two jars and your charts appear here.”
+Bakes: number tiles and slim bars in the same way; see “Bakes and lessons”.
+Days on read pages are written “Wed 25 Nov” (with the year only when it is not this year).
 """),
 
         Section(title: "Search", text: """
@@ -229,8 +254,6 @@ Pills (round-ended) and tags (small, square-cornered):
 • Green pill “Done” — a verdict has been recorded.
 • Purple pill — a recipe’s category (for example Sourdough). Gold-brown pill — a bake’s category.
 • Grey-blue pill “Logging” — the person whose name goes on new entries.
-• Orange tag “Did” — a Timeline line about something you did.
-• Green tag “Taste” — a Timeline line that is a taste test.
 • Deep orange tag “Taste test due” — this jar needs a taste test now. The same deep orange is used for the words “Taste test due <date>” on the jar’s page, and for the tinted box above the groups.
 • Grey tag “Burp alarm on” — the burp alarm rings for this jar. Your spices on a jar’s page are grey tags too: a plain fact, nothing to do.
 • Red tag — a problem you noted (Mould, Dense crumb …).
@@ -240,6 +263,12 @@ Boxes and words:
 • Red words — something is wrong (“Could not save”, “Notifications are switched off”), or it goes away when you tap it (Delete, Remove). A red bar at the top, “Update this device first”, means this device is a version behind.
 • Green “done 14:05” under a To do step — the time you ticked it.
 Marks:
+• Filled orange dot on the Timeline rail — something you did.
+• Green ring with the word “Taste” on the Timeline rail — a taste test.
+• The slim line on a jar’s head card — how far it is from the start day to the next taste test; full means the day has come.
+• The small ring beside Success in Insights — the share of finished jars that were a success.
+• The shaded band in the brine chart — the usual range, 2 to 3 %.
+• The time ribbon above a recipe’s Method — one piece per step, as long as the step takes: a pale piece is a wait of 2 hours or more, a full-colour piece is a shorter step.
 • ✓ green tick — in order: the brine is in the sweet spot, notifications are allowed, the AI key is saved.
 • Round box with a hand-drawn green tick — a To do step that is done. A grey empty circle is a step still to do.
 • ★ ☆ stars — a rating from 1 to 5; a filled star counts and an empty one does not, in the colour of the part. A dash “—” means no rating or no value. “Not rated yet” is a bake with no stars.

@@ -1,0 +1,12 @@
+What to look at in 6.1 (build 3) — the new look "Full colour". Nothing is stored or done differently; only how pages look. Check each point on iPhone, iPad and Mac, by day and by night.
+1. Open a jar. The top is an orange card with a drawn jar, the name, a big "Day N", its state, "started Wed 25 Nov" and a slim line with "Taste test ... · in 3 days" under it. The words are white and easy to read.
+2. Under it: six small tiles (Vegetable, Form, Brine, Room, Lid, Weight). The Burp block is one row: Burped, last burp, and the Burp alarm switch with its two times beside it.
+3. Timeline: one heading per day ("DAY 1 · WED 25 NOV"), a dot on a thin line for each line. A filled orange dot = something you did; a green ring with "Taste" = a taste test. Tap a line: "Change this line" still opens. Add a line: the switch and "When" in one row, the text box with Add beside it in the other.
+4. Insights: four number tiles (Success has a small ring). Ferments/Bakes and the vegetable chooser on one row, no word "Show". Recommended recipe is a head card with five tiles; Best jar so far has the button "Open this jar".
+5. Insights charts: big dots with a white edge, faint lines only for stars 1 to 5, a shaded 2-3 % band in the brine chart. The average-rating charts and "Problems that came up" are slim round bars with the figure beside the name. Check Bake insights the same way.
+6. Open a recipe: purple head card with two tiles and the buttons in one row. Ingredients have the amount in its own column; on the iPad and Mac, Ingredients and Equipment stand side by side. With times on the steps, a ribbon above the Method (pale = 2 hours or more); the steps are numbered circles on a line.
+7. Open a bake: gold-brown head card; Crust, Crumb, Flavour, Overall as slim bars with stars beside the name.
+8. Days read "Wed 25 Nov" on read pages; the pages where you change something still have their date pickers.
+9. The switches Ferments/Bakes, What I did/Taste test and Jars/Bakes are in the colour of their part, not yellow (Mac).
+10. Settings, How it works: the jar page, Timeline, Insights, recipe page and "Signs in this app" tell the new look. Settings, What's new: 6.1 (build 3) is at the top.
+11. Tell me anything that looks wrong, is cut off, too small to read, or has a word you do not understand.

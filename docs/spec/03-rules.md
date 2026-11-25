@@ -54,6 +54,16 @@ Notification (`AlarmPlan`): one per due jar, id `taste.<jarid>.<due day>`, at th
 - **Edit bake / Log a bake**: section headings in the Bakes colour; "Delete this bake" red.
 - **Rating trend axis** (Bake insights): whole numbers only, one per bake.
 
+## Look rules added in 6.1 (build 3)
+
+- **`Human.day(iso)`**: an ISO day "2026-11-25" is written "Wed 25 Nov"; the year is added ("Wed 25 Nov 2025") only when it is not this year. Text that is not an ISO day comes back unchanged. Used on read pages only; edit pages, exports and share text keep ISO days.
+- **`Human.fromNow(iso)`**: today / tomorrow / in N days / yesterday / N days ago, counted in whole calendar days from today.
+- **`Human.minutes(text)`**: reads a step's time words ("3 min", "2 h", "1 day", "10-15 min"): h / min / days are understood; a range counts as its middle ("10-15 min" = 12.5 min); no time words = nothing (the step has no length).
+- **Long wait**: a step of 120 minutes or more is a long wait (pale piece in the recipe time ribbon); a shorter one is full colour. The ribbon shows only when at least one step has a time.
+- **`Human.amount(line)`**: splits a leading amount from an ingredient line ("100 g active sourdough starter" gives "100 g" and "active sourdough starter"); a line with no leading amount keeps all its words and an empty amount column.
+- **Success ring**: the share of finished jars that were a success (same number as Success rate).
+- **Brine chart band**: 2-3 % is shaded (the same range as the brine hint).
+
 ## Insights
 
 - `summarizeStats(batches, vegetable)`: vegetables seen; total jars; active (not Done); finished (Done); success rate = successful finished ÷ finished; rated = finished jars with an overall rating, oldest start first; average rating (one decimal); points for rating against brine %, room temperature and days fermented; rating over time (attempt number 1, 2, 3 …); averages by vegetable, form and lid (sorted high to low, one decimal; empty labels skipped); problem counts (most frequent first); best jar = the highest rating (the first one on a tie).

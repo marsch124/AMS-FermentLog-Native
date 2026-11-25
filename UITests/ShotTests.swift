@@ -32,8 +32,9 @@ final class ShotTests: XCTestCase {
     }
     private func tap(_ app: XCUIApplication, _ id: String, scroll: Bool = true) {
         let e = el(app, id)
-        XCTAssertTrue(e.waitForExistence(timeout: 8), "missing \(id)")
+        _ = e.waitForExistence(timeout: 3)
         if scroll { reveal(app, e) }
+        XCTAssertTrue(e.exists, "missing \(id)")
         e.tap()
     }
     private func reveal(_ app: XCUIApplication, _ e: XCUIElement) {
@@ -128,7 +129,7 @@ final class ShotTests: XCTestCase {
 
     func test7_Insights() throws {
         let app = try start("insights")
-        XCTAssertTrue(el(app, "insights-total").waitForExistence(timeout: 10))
+        XCTAssertTrue(el(app, "insights-total").waitForExistence(timeout: 25))
         shot(19, "insights-top")
         scroll(app, 2); shot(20, "insights-charts")
     }
@@ -143,23 +144,21 @@ final class ShotTests: XCTestCase {
     }
 
     func test9_Settings() throws {
-        let app = try start("settings")
-        XCTAssertTrue(el(app, "settings-screen").waitForExistence(timeout: 10))
+        var app = try start("settings")
+        XCTAssertTrue(el(app, "settings-screen").waitForExistence(timeout: 20))
         shot(22, "settings-top")
         scroll(app, 2); shot(23, "settings-middle")
         let ver = el(app, "settings-version"); reveal(app, ver)
         shot(24, "settings-bottom")
-        tap(app, "settings-manage-lists")
-        Thread.sleep(forTimeInterval: 1); shot(25, "your-lists")
-        app.navigationBars.buttons.firstMatch.tap()
-        tap(app, "settings-safety-copies")
-        Thread.sleep(forTimeInterval: 1); shot(26, "safety-copies")
-        app.navigationBars.buttons.firstMatch.tap()
-        tap(app, "settings-guide")
-        Thread.sleep(forTimeInterval: 1); shot(27, "how-it-works")
-        app.navigationBars.buttons.firstMatch.tap()
-        tap(app, "settings-whats-new")
-        Thread.sleep(forTimeInterval: 1); shot(28, "whats-new")
+        // each sub-page from a fresh launch (the back button differs on iPhone, iPad and Mac)
+        for (n, id, name) in [(25, "settings-manage-lists", "your-lists"), (26, "settings-safety-copies", "safety-copies"),
+                              (27, "settings-guide", "how-it-works"), (28, "settings-whats-new", "whats-new")] {
+            app.terminate()
+            app = try start("settings")
+            XCTAssertTrue(el(app, "settings-screen").waitForExistence(timeout: 20))
+            tap(app, id)
+            Thread.sleep(forTimeInterval: 1.2); shot(n, name)
+        }
     }
 
     func test91_NewTab() throws {
@@ -167,5 +166,15 @@ final class ShotTests: XCTestCase {
         Thread.sleep(forTimeInterval: 1)
         if el(app, "new-menu").exists { el(app, "new-menu").tap(); Thread.sleep(forTimeInterval: 0.8) }
         shot(29, "new")
+    }
+
+    /// The Bake insights page shown inside Insights (switch "Bakes"): one title, one scroll area.
+    func test92_InsightsBakes() throws {
+        let app = try start("insights")
+        let sw = el(app, "insights-switch")
+        XCTAssertTrue(sw.waitForExistence(timeout: 10))
+        sw.buttons.element(boundBy: 1).tap()
+        Thread.sleep(forTimeInterval: 1)
+        shot(30, "insights-bakes")
     }
 }

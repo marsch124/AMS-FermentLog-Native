@@ -117,7 +117,7 @@ struct RootView: View {
         } detail: {
             let a = area ?? .jars
             NavigationStack(path: areaBinding(a)) {
-                areaRoot(a).routes()
+                areaRoot(a).navigationTitle(a.title).routes()
                     .toolbar {
                         ToolbarItem(placement: .primaryAction) {
                             Menu {

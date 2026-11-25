@@ -33,7 +33,7 @@ struct BakeLessonsSection: View {
             }
             Divider()
             TextField("e.g. A longer cold proof gives a tangier, more open crumb", text: $text, axis: .vertical)
-                .textFieldStyle(.roundedBorder).accessibilityIdentifier("lesson-text")
+                .fieldBox().accessibilityIdentifier("lesson-text")
             LoggedByPicker(name: $by)
             Picker("Recipe", selection: $recipeID) {
                 Text("None").tag("")

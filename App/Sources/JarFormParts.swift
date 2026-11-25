@@ -13,7 +13,7 @@ struct JarNumberField: View {
                 .keyboardType(.decimalPad)
                 #endif
                 .frame(maxWidth: 90)
-                .textFieldStyle(.roundedBorder)
+                .fieldBox()
                 .accessibilityIdentifier(id)
             Spacer(minLength: 0)
         }

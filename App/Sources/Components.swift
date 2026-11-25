@@ -254,3 +254,13 @@ struct Block<Content: View>: View {
         .background(Theme.surface, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 }
+
+extension View {
+    /// A text box that sits calmly on a card by day and by night (the system's rounded box turns pure black in dark mode).
+    func fieldBox() -> some View {
+        self.textFieldStyle(.plain)
+            .padding(.horizontal, 8).padding(.vertical, 6)
+            .background(Theme.surface2, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 8, style: .continuous).stroke(Theme.line, lineWidth: 1))
+    }
+}

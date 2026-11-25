@@ -15,6 +15,7 @@ struct JarBurpBlock: View {
                 Spacer(minLength: 0)
             }
             Toggle("Burp alarm", isOn: Binding(get: { Logic.burpAlarmOn(batch) }, set: setAlarm))
+                .toggleStyle(.switch).tint(Area.jars.color)
                 .accessibilityIdentifier("jar-burp-alarm")
             Text(caption).font(.caption).foregroundStyle(Theme.muted)
         }

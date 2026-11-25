@@ -36,7 +36,7 @@ struct JarTimelineBlock: View {
             DatePicker("When", selection: $when).accessibilityIdentifier("jar-timeline-when")
             TextField(kind == .did ? "What did you do? One step per line…" : "How does it taste, smell and look?",
                       text: $text, axis: .vertical).lineLimit(3...8)
-                .textFieldStyle(.roundedBorder)
+                .fieldBox()
                 .accessibilityIdentifier("jar-timeline-text")
             Text(kind == .did
                  ? "One step per line. Paste a whole list and every line becomes its own step — list numbers are removed."
@@ -66,7 +66,7 @@ struct JarTimelineBlock: View {
     private var voice: some View {
         VStack(alignment: .leading, spacing: Theme.tight) {
             TextField("…or say it: “day 4, tangy and still crunchy”", text: $voiceText, axis: .vertical).lineLimit(2...4)
-                .textFieldStyle(.roundedBorder).accessibilityIdentifier("jar-timeline-voice-text")
+                .fieldBox().accessibilityIdentifier("jar-timeline-voice-text")
             Button(voiceBusy ? "Adding…" : "Add by voice") { addByVoice() }
                 .buttonStyle(QuietButtonStyle(area: .jars))
                 .disabled(voiceBusy || voiceText.trimmingCharacters(in: .whitespaces).isEmpty)

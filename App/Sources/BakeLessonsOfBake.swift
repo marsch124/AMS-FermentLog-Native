@@ -34,7 +34,7 @@ struct BakeLessonsOfBake: View {
                 .accessibilityIdentifier("bake-lesson-\(l.id)")
             }
             TextField("Add a lesson from this bake", text: $text, axis: .vertical)
-                .textFieldStyle(.roundedBorder)
+                .fieldBox()
                 .accessibilityIdentifier("bake-lesson-text")
             Button("Add lesson") { add() }
                 .buttonStyle(PrimaryButtonStyle(area: .bakes))

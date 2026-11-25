@@ -12,6 +12,8 @@ enum MarkKind: String, CaseIterable, Hashable {
     case jar, book, plus, chart, gear
     // The small inline icons (app.js IC)
     case jarBand, bread, search, up, down
+    // Drawn for the native app: the handle a recipe step is dragged by (three short lines)
+    case grip
     // The larger illustrations (app.js ILLUS), on a 64 grid, with a soft inner fill
     case jarBig, carrot, breadBig, bookBig
 
@@ -49,6 +51,8 @@ enum MarkKind: String, CaseIterable, Hashable {
             return Drawing(stroke: 2, d: "M12 20V6 M6 12l6-6 6 6")
         case .down:
             return Drawing(stroke: 2, d: "M12 4v14 M6 12l6 6 6-6")
+        case .grip:
+            return Drawing(d: "M7 8h10 M7 12h10 M7 16h10")
         case .jarBig:
             return Drawing(stroke: 1.6, d: "M8 4h8 M8 4v1.4a3 3 0 0 1-.9 2.1A4 4 0 0 0 6 10.4V18a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3v-7.6a4 4 0 0 0-1.1-2.9A3 3 0 0 1 16 5.4V4 M6.4 12h11.2")
         case .carrot:
@@ -78,6 +82,7 @@ enum MarkKind: String, CaseIterable, Hashable {
         case .search: "Search"
         case .up: "Up"
         case .down: "Down"
+        case .grip: "Drag handle"
         case .carrot: "Carrot"
         }
     }

@@ -47,23 +47,24 @@ struct BakeFormScreen: View {
                 }.accessibilityIdentifier("bake-recipe")
                 LoggedByPicker(name: b.loggedBy)
             }
-            Section("Photos") { PhotoStrip(names: b.photos, area: .bakes) }
-            Section("How it turned out") {
+            Section { PhotoStrip(names: b.photos, area: .bakes) } header: { SectionHeading("Photos", area: .bakes) }
+            Section {
                 StarRating(label: "Crust", value: b.ratings.crust, area: .bakes, id: "bake-stars-crust")
                 StarRating(label: "Crumb", value: b.ratings.crumb, area: .bakes, id: "bake-stars-crumb")
                 StarRating(label: "Flavour", value: b.ratings.flavour, area: .bakes, id: "bake-stars-flavour")
                 StarRating(label: "Overall", value: b.ratings.overall, area: .bakes, id: "bake-stars-overall")
                 Text("Tap a star to rate; tap the same star again to clear it.").font(.caption).foregroundStyle(Theme.muted)
-            }
-            Section("Problems") {
+            } header: { SectionHeading("How it turned out", area: .bakes) }
+            Section {
                 ChipPicker(options: Logic.BAKE_PROBLEMS, selection: b.problems, area: .bakes, id: "bake-problem")
-            }
-            Section("Notes") {
+            } header: { SectionHeading("Problems", area: .bakes) }
+            Section {
                 TextField("Notes", text: b.notes, axis: .vertical).lineLimit(2...8).accessibilityIdentifier("bake-notes")
-            }
+            } header: { SectionHeading("Notes", area: .bakes) }
             if bakeID != nil {
                 Section {
                     Button("Delete this bake", role: .destructive) { confirmDelete = true }
+                        .foregroundStyle(Theme.problem).buttonStyle(.borderless)
                         .accessibilityIdentifier("bake-delete")
                 }
             }

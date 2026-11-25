@@ -51,6 +51,7 @@ extension Route {
 enum MacPictures {
     static func apply() {
         guard PictureArgs.on else { return }
+        if PictureArgs.has("dark") { NSApp.appearance = NSAppearance(named: .darkAqua) }   // as if the Mac itself were in dark mode
         if PictureArgs.has("tall") {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 for w in NSApp.windows where w.isVisible && w.styleMask.contains(.titled) && !w.isSheet {   // never a pop-up form: it keeps its own size

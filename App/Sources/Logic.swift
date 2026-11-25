@@ -682,6 +682,20 @@ enum Logic {
         return b.steps.filter { $0.kind == "burp" && $0.date == day }.count
     }
 
+    // MARK: Recipe steps in order (the Mac's drag and drop)
+
+    /// A step dropped on another step takes that step's place and the others close up.
+    /// Dropped on itself, or with a step that is not in the list: nothing changes.
+    static func moveStep(_ steps: [RecipeStep], id: String, onto target: String) -> [RecipeStep] {
+        guard id != target,
+              let from = steps.firstIndex(where: { $0.id == id }),
+              let to = steps.firstIndex(where: { $0.id == target }) else { return steps }
+        var out = steps
+        let step = out.remove(at: from)
+        out.insert(step, at: to)
+        return out
+    }
+
     // MARK: NEW 2 - Save a jar's steps as a recipe
 
     private static func plainNumber(_ d: Double) -> String { numStr(d) }

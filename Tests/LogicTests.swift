@@ -60,6 +60,15 @@ final class LogicTests: XCTestCase {
         XCTAssertEqual(Logic.ratingStars(nil), "\u{2014}")
     }
 
+    func testMoveStep() {
+        let s = ["A", "B", "C", "D"].map { RecipeStep(title: $0) }
+        func order(_ x: [RecipeStep]) -> String { x.map(\.title).joined() }
+        XCTAssertEqual(order(Logic.moveStep(s, id: s[0].id, onto: s[2].id)), "BCAD")   // down: lands where C was
+        XCTAssertEqual(order(Logic.moveStep(s, id: s[3].id, onto: s[1].id)), "ADBC")   // up: lands where B was
+        XCTAssertEqual(order(Logic.moveStep(s, id: s[1].id, onto: s[1].id)), "ABCD")   // on itself
+        XCTAssertEqual(order(Logic.moveStep(s, id: "nobody", onto: s[1].id)), "ABCD")  // unknown step
+    }
+
     func testNewBatchDefaults() {
         let b = Logic.newBatch(now: at("2026-07-21", "10:00"))
         XCTAssertEqual(b.vegetable, "Carrot"); XCTAssertEqual(b.form, "Sticks")

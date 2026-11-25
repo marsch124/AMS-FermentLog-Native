@@ -42,6 +42,8 @@ struct AMSFermentLogApp: App {
             NavigationStack { SettingsScreen().routes() }
                 .environmentObject(store)
                 .frame(minWidth: 520, minHeight: 560)
+                // Settings › Appearance counts for this window too (it used to follow the Mac only).
+                .preferredColorScheme(ProcessInfo.processInfo.arguments.contains("-dark") ? .dark : store.device.appearance.scheme)
         }
         #endif
     }

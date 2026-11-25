@@ -1,3 +1,9 @@
+What is new in build 2 (6.0, build 2) — try these on the Mac
+- Open a recipe, press Edit, and drag a step by the three short lines at its right end onto another step. It should take that step's place; the step you hold it over turns light purple. Press Save and check the new order on the recipe's page.
+- Open New jar, Log a bake and New recipe: Save at the top right should be in full colour (orange, gold-brown, purple), not a pale word.
+- Settings, Appearance: choose Dark, then press ⌘, to open the Settings window. It should be dark too (and light when you choose Light).
+- Edit a bake: the headings should be gold-brown and "Delete this bake" red. In Bake insights, the line under "Rating trend" should count 1, 2, 3 with no halves.
+
 What to try first on TestFlight (6.0, build 1)
 1. Settings: "Bring your jars over from the web app". Update the old web app to 5.26 or newer first, then export the backup in it (Settings, Backup & export), then choose the file here. Check the counts it shows, and that your jars, pictures and people are all there.
 2. Settings, Burp alarm: when the phone asks to allow notifications, say Allow (Settings, Burp alarm, shows the state). Open your cabbage jar, check the switch "Burp alarm" is on (plain lid) and the line says it rings at 08:00 and 20:00.

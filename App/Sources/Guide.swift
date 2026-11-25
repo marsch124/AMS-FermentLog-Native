@@ -12,6 +12,13 @@ enum Guide {
     }
 
     static let releases: [Release] = [
+        Release(version: "6.0 (build 2)", date: "25 Nov 2026", lines: [
+            "Fixed: moving recipe steps on the Mac. Before (build 1): the page New recipe / Edit recipe said “Drag a step to move it”, but on the Mac dragging did nothing, so the order of the steps could not be changed there at all. Now: every step on the Mac has a small drag handle (three short lines) at its right end. Hold the handle, drag the step onto another step and let go: it takes that step’s place. The step you are holding it over turns light purple, so you see where it will land. iPhone and iPad are unchanged.",
+            "Changed: the Save button on the Mac. Before: on the pages New jar / Edit jar, Log a bake / Edit bake and New recipe / Edit recipe, Save at the top right was a plain bold word in a pale pill, just like Cancel. Now: it is in the full colour of its part (orange for jars, gold-brown for bakes, purple for recipes), so you see at once which one saves.",
+            "Fixed: the Mac’s own Settings window (the one ⌘, opens). Before: it always followed the Mac’s own look, even when you had set Settings › Appearance to Light or Dark. Now: it follows Appearance (System, Light or Dark) like the rest of the app.",
+            "Changed: the page Log a bake / Edit bake. Before: the headings Photos, How it turned out, Problems and Notes were black and “Delete this bake” was grey. Now: the headings are in the Bakes colour (gold-brown) and “Delete this bake” is red, like on the jar and recipe pages.",
+            "Fixed: the chart “Rating trend, oldest to newest” in Bake insights. Before: the line along the bottom showed halves such as “0,5” and “1,5”, although a bake is always a whole one. Now: it counts whole bakes: 1, 2, 3 …",
+        ]),
         Release(version: "6.0 (build 1)", date: "25 Nov 2026", lines: [
             // The big change
             "New: FermentLog is now a real app for iPhone, iPad and Mac. Before (web app 5.25): a web page you put on the iPhone’s Home Screen, one copy per browser. Now: one app from TestFlight on each device, with its own icon, its own notifications and, on the Mac, its menus and keys (⌘N new jar, ⌥⌘N new bake, ⇧⌘N new recipe, ⌘F search, ⌘, Settings).",
@@ -74,8 +81,8 @@ On the iPhone there are five tabs along the bottom:
 • Insights — what makes your best jars and bakes.
 • Settings — alarms, iCloud, safety copies, export, the AI assistant and this guide.
 On the iPad and the Mac the same things stand in a list at the side: Jars, Bakes, Recipes, Insights, Search, Settings. A New button at the top right of the page offers New jar, New bake and New recipe. On the Mac these keys work: ⌘N new jar, ⌥⌘N new bake, ⇧⌘N new recipe, ⌘F search, ⌘, Settings; the Help menu opens this guide and What’s new.
-Every page where you change something has Cancel and Save; on the Mac, Escape is Cancel. The main button of a page is always in full colour. Each part of the app has its own colour: Jars orange, Bakes gold-brown, Recipes purple, Insights teal, Search slate blue, Settings grey-blue.
-Settings › Appearance picks System, Light or Dark for this device only. The version number is at the bottom of Settings.
+Every page where you change something has Cancel and Save; on the Mac, Escape is Cancel, and Save is in the full colour of its part (orange for jars, gold-brown for bakes, purple for recipes). The main button of a page is always in full colour. Each part of the app has its own colour: Jars orange, Bakes gold-brown, Recipes purple, Insights teal, Search slate blue, Settings grey-blue.
+Settings › Appearance picks System, Light or Dark for this device only; on the Mac it also decides how the Settings window (⌘,) looks. The version number is at the bottom of Settings.
 """),
 
         Section(title: "Your jars", text: """
@@ -135,7 +142,7 @@ Each jar has its own number of days between taste tests, set in the jar form (3 
 
         Section(title: "Recipes", text: """
 The Recipes tab (Recipes at the side on iPad and Mac) is a recipe book for fermenting and baking, the newest changed first. A row shows the picture (or a book mark), the title, a purple category pill, “Hands-on …”, “Total …” and the number of steps. With no recipes yet you get New recipe and “Add the sourdough example”.
-A recipe holds: Title, Category (Sourdough, Vegetable ferment, Drink / kombucha, Dairy, Other), Description, Pictures, Ingredients and Equipment (one per line), Hands-on time, Total time, the Method (each step has a title, a time hint such as “3 min” and what to do; drag a step by its handle to move it; Remove takes one away; Add a step adds one) and Storage and keeping. “Delete this recipe” asks first and then offers Undo for 4 seconds.
+A recipe holds: Title, Category (Sourdough, Vegetable ferment, Drink / kombucha, Dairy, Other), Description, Pictures, Ingredients and Equipment (one per line), Hands-on time, Total time, the Method (each step has a title, a time hint such as “3 min” and what to do; drag a step by its handle to move it (on the Mac, drop it onto another step and it takes that step’s place); Remove takes one away; Add a step adds one) and Storage and keeping. “Delete this recipe” asks first and then offers Undo for 4 seconds.
 On a recipe’s page:
 • Start a jar from this recipe — on every recipe except Sourdough. It opens the New jar page already filled in: the name is the recipe’s title, the vegetable is found from the title when it names one (otherwise Carrot stays), spices are ticked when the ingredients mention them, the notes say “From recipe: …”, and the recipe’s steps become the jar’s To do list. Nothing is saved until you press Save. Each tick on the To do list is written into the Timeline with the time.
 • Log a bake from this recipe — on every recipe except Vegetable ferment. It opens a new bake linked to the recipe.
@@ -237,7 +244,7 @@ Marks:
 • Round box with a hand-drawn green tick — a To do step that is done. A grey empty circle is a step still to do.
 • ★ ☆ stars — a rating from 1 to 5; a filled star counts and an empty one does not, in the colour of the part. A dash “—” means no rating or no value. “Not rated yet” is a bake with no stars.
 • Chips — in Spices and in Problems, a chip with a coloured outline is chosen; a grey chip is not.
-• The drag handle at the right of a recipe step — hold it and drag to move the step (“Drag a step to move it”).
+• The drag handle at the right of a recipe step (three short lines) — on iPhone, iPad and Mac, hold it and drag to move the step (“Drag a step to move it”). On the Mac you drop the step onto another step and it takes that step’s place; the step you are holding it over turns light purple.
 • The Undo bar — a small bar at the bottom after you remove something or log a burp. It goes by itself after 4 seconds; tap Undo before then to take it back.
 • Hand-drawn marks — a jar (Jars), a book (Recipes), a loaf (Bakes), a chart (Insights), a magnifying glass (Search), a gear (Settings), a plus (New). Each stands for the part it opens.
 • Colours of the parts — orange Jars, gold-brown Bakes, purple Recipes, teal Insights, slate blue Search, grey-blue Settings: headings, marks and the main button of that part.

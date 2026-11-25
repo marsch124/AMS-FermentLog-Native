@@ -17,6 +17,8 @@ struct BakeCharts: View {
                     PointMark(x: .value("Bake number", p.x), y: .value("Rating", p.y)).foregroundStyle(Area.bakes.color)
                 }
                 .chartYScale(domain: 0...5)
+                .chartXScale(domain: 0.5...(Double(max(2, stats.ratingOverTime.count)) + 0.5))   // half a bake of air at both ends, so the first and last number show
+                .chartXAxis { AxisMarks(values: BakeCharts.wholeMarks(stats.ratingOverTime.count)) }   // whole bakes, never "1,5"
                 .chartXAxisLabel("Bake number (1 is the oldest)")
                 .chartYAxisLabel("Stars")
                 .frame(height: 160)
@@ -24,6 +26,12 @@ struct BakeCharts: View {
             average("Average rating by recipe", stats.byRecipe.map { ($0.label.isEmpty ? "No recipe" : $0.label, $0.value) })
             average("Average rating by category", stats.byCategory.map { ($0.label.isEmpty ? "Other" : $0.label, $0.value) })
         }
+    }
+
+    /// 1, 2, 3 … up to the number of bakes; at most about eight marks.
+    static func wholeMarks(_ count: Int) -> [Int] {
+        let n = max(2, count)
+        return Array(stride(from: 1, through: n, by: max(1, Int((Double(n) / 8).rounded(.up)))))
     }
 
     private func average(_ title: String, _ rows: [(String, Double)]) -> some View {

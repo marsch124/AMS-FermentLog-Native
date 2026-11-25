@@ -220,7 +220,13 @@ extension View {
                 Button("Cancel", action: onCancel).keyboardShortcut(.cancelAction).accessibilityIdentifier("cancel")
             }
             ToolbarItem(placement: .confirmationAction) {
+                #if os(macOS)
+                // The main button in full colour (the plain toolbar button was a pale pill, like Cancel).
+                Button(saveTitle, action: onSave).fontWeight(.semibold).buttonStyle(.borderedProminent).tint(area.fill)
+                    .disabled(!canSave).accessibilityIdentifier("save")
+                #else
                 Button(saveTitle, action: onSave).fontWeight(.semibold).tint(area.color).disabled(!canSave).accessibilityIdentifier("save")
+                #endif
             }
         }
         .navigationBarBackButtonHiddenIfPossible()

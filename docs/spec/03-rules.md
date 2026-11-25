@@ -46,6 +46,14 @@ Notification (`AlarmPlan`): one per due jar, id `taste.<jarid>.<due day>`, at th
 - **Permission**: `apply` asks the system by itself, once, the first time the plan is not empty while permission was never asked; also when a jar's switch is turned on, when "Ring on this …" is turned on while still not asked, and by the button "Allow notifications". Without permission nothing is planned.
 - **The button**: "Burped" on the notification adds the burp (as above), saves at once to disk, and re-plans. A tap on the notification itself opens the jar (a waiting route is handed over when the window is ready).
 
+## Look rules added in 6.0 build 2
+
+- **Moving recipe steps** (`Logic.moveStep(steps, moving, onto)`): a step dropped on another step takes that step's place and the others shift by one; dropping a step on itself, or on a step that is not in the list, changes nothing. iPhone and iPad use the list's own move handle; the Mac drags the step by its own handle (a plain drag gesture) and tints the step it is held over in the Recipes colour.
+- **Cancel and Save on the Mac**: Cancel is a pale pill, Save is a full-colour button in the colour of its part (jars orange, bakes gold-brown, recipes purple); Escape is Cancel.
+- **Settings window on the Mac** (⌘,): follows Settings › Appearance (System / Light / Dark).
+- **Edit bake / Log a bake**: section headings in the Bakes colour; "Delete this bake" red.
+- **Rating trend axis** (Bake insights): whole numbers only, one per bake.
+
 ## Insights
 
 - `summarizeStats(batches, vegetable)`: vegetables seen; total jars; active (not Done); finished (Done); success rate = successful finished ÷ finished; rated = finished jars with an overall rating, oldest start first; average rating (one decimal); points for rating against brine %, room temperature and days fermented; rating over time (attempt number 1, 2, 3 …); averages by vegetable, form and lid (sorted high to low, one decimal; empty labels skipped); problem counts (most frequent first); best jar = the highest rating (the first one on a tie).

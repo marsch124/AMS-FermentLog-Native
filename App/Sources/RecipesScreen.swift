@@ -20,9 +20,9 @@ struct RecipesScreen: View {
                     }
                 }
             }
-            .page()
+            .page(.recipes)
         }
-        .background(Theme.bg)
+        .backdrop(.recipes)
         .navigationTitle("Recipes")
     }
 
@@ -71,9 +71,7 @@ struct RecipeRow: View {
             }
             Spacer(minLength: 0)
         }
-        .padding(8)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Theme.surface, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .card(padding: 8)
         .contentShape(Rectangle())
     }
 }

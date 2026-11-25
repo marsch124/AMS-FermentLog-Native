@@ -16,9 +16,12 @@ struct RecipeDetailScreen: View {
         Group {
             if let r = store.data.recipe(recipeID) { content(r) } else { Color.clear }
         }
-        .background(Theme.bg)
+        .backdrop(.recipes)
         .onChange(of: store.data.recipe(recipeID) == nil) { _, gone in if gone { dismiss() } }
         .navigationTitle(store.data.recipe(recipeID)?.title ?? "Recipe")
+        #if os(iOS)
+        .navigationBarTitleDisplayMode(.inline)
+        #endif
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 NavigationLink(value: Route.recipeEdit(recipeID)) { Text("Edit") }.accessibilityIdentifier("recipe-edit")
@@ -29,19 +32,29 @@ struct RecipeDetailScreen: View {
     private func content(_ r: Recipe) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Theme.gap) {
-                Pill(text: r.category, color: Area.recipes.color)
-                if !r.description.isEmpty { Text(r.description).font(.body) }
+                Hero(area: .recipes) {
+                    FlowLayout(spacing: Theme.gap) {
+                        Text(r.title).font(.title3.weight(.bold))
+                        Pill(text: r.category, color: Area.recipes.color)
+                    }
+                    if !r.description.isEmpty { Text(r.description).font(.subheadline).foregroundStyle(Look.heroSoft) }
+                    if !r.activeTime.isEmpty || !r.totalTime.isEmpty {
+                        TileGrid(columns: 2) {
+                            if !r.activeTime.isEmpty { Tile(label: "Hands-on", value: r.activeTime, area: .recipes) }
+                            if !r.totalTime.isEmpty { Tile(label: "Start to finish", value: r.totalTime, area: .recipes) }
+                        }
+                    }
+                    actions(r)
+                }
                 if !r.photos.isEmpty {
                     PhotoStrip(names: .constant(r.photos), editable: false, area: .recipes)
                 }
-                if !r.activeTime.isEmpty { Fact(name: "Hands-on time", value: r.activeTime) }
-                if !r.totalTime.isEmpty { Fact(name: "Total time", value: r.totalTime) }
-                actions(r)
                 RecipeBlocks(recipe: r)
                 lessons(r)
             }
-            .page()
+            .page(.recipes)
         }
+        .backdrop(.recipes)
         .navigationDestination(isPresented: $showJar) { JarFormScreen(batchID: nil, draft: jarDraft) }
         .navigationDestination(isPresented: $showBake) { BakeFormScreen(bakeID: nil, draft: bakeDraft) }
         .navigationDestination(isPresented: $showImproved) { RecipeFormScreen(recipeID: recipeID, draft: improveDraft) }
@@ -53,33 +66,33 @@ struct RecipeDetailScreen: View {
     }
 
     @ViewBuilder private func actions(_ r: Recipe) -> some View {
-        VStack(alignment: .leading, spacing: Theme.gap) {
+        FlowLayout(spacing: Theme.gap) {
             if r.category != "Sourdough" {
                 Button("Start a jar from this recipe") {
                     jarDraft = Logic.batch(from: r, now: Date(), customSpices: store.data.settings.customSpices); showJar = true
                 }
                 .buttonStyle(PrimaryButtonStyle(area: .recipes)).accessibilityIdentifier("recipe-start-jar")
-                Text("The jar gets this recipe's steps as a list to tick off \u{2014} each tick is written into the jar's Timeline with the time.")
-                    .font(.caption).foregroundStyle(Theme.muted)
             }
             if r.category != "Vegetable ferment" {
                 Button("Log a bake from this recipe") { bakeDraft = RecipeText.bakeDraft(from: r); showBake = true }
                     .buttonStyle(r.category == "Sourdough" ? AnyButtonStyle(PrimaryButtonStyle(area: .recipes)) : AnyButtonStyle(QuietButtonStyle(area: .recipes)))
                     .accessibilityIdentifier("recipe-log-bake")
             }
-            FlowLayout(spacing: Theme.gap) {
-                Button("Duplicate") {
-                    let d = Logic.duplicateRecipe(r); store.save(d)
-                    NotificationCenter.default.post(name: .openRoute, object: Route.recipe(d.id))
-                }
-                .buttonStyle(QuietButtonStyle(area: .recipes)).accessibilityIdentifier("recipe-duplicate")
-                ShareLink(item: RecipeText.summary(r), subject: Text(r.title)) { Text("Share") }
-                    .buttonStyle(QuietButtonStyle(area: .recipes)).accessibilityIdentifier("recipe-share")
-                if AI.hasKey {
-                    Button("Improve with AI") { showImprove = true }
-                        .buttonStyle(QuietButtonStyle(area: .recipes)).accessibilityIdentifier("recipe-improve-ai")
-                }
+            Button("Duplicate") {
+                let d = Logic.duplicateRecipe(r); store.save(d)
+                NotificationCenter.default.post(name: .openRoute, object: Route.recipe(d.id))
             }
+            .buttonStyle(QuietButtonStyle(area: .recipes)).accessibilityIdentifier("recipe-duplicate")
+            ShareLink(item: RecipeText.summary(r), subject: Text(r.title)) { Text("Share") }
+                .buttonStyle(QuietButtonStyle(area: .recipes)).accessibilityIdentifier("recipe-share")
+            if AI.hasKey {
+                Button("Improve with AI") { showImprove = true }
+                    .buttonStyle(QuietButtonStyle(area: .recipes)).accessibilityIdentifier("recipe-improve-ai")
+            }
+        }
+        if r.category != "Sourdough" {
+            Text("The jar gets this recipe's steps as a list to tick off \u{2014} each tick is written into the jar's Timeline with the time.")
+                .font(.caption).foregroundStyle(Look.heroSoft)
         }
     }
 

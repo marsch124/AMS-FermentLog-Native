@@ -58,6 +58,7 @@ struct JarBurpBlock: View {
         let now = Date()
         Logic.burped(&n, at: now)
         store.save(n)
+        if let sound = BurpSounds.next() { BurpPlayer.play(sound) }
         Alarms.reschedule(store: store)
         store.showToast("Burp logged \(Logic.clock(now))", undo: { store.save(old); Alarms.reschedule(store: store) })
     }

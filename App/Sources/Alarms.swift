@@ -1,5 +1,8 @@
 import Foundation
 import UserNotifications
+#if os(iOS)
+import UIKit
+#endif
 
 // The burp alarm (morning and evening, with a "Burped" button on the notification) and the taste-test
 // reminder. The plan itself is AlarmPlan (pure, tested); this file talks to the system.
@@ -26,6 +29,7 @@ enum Alarms {
         center.setNotificationCategories([
             UNNotificationCategory(identifier: "BURP", actions: [burped], intentIdentifiers: [], options: []),
             UNNotificationCategory(identifier: "TASTE", actions: [], intentIdentifiers: [], options: []),
+            UNNotificationCategory(identifier: AlarmPlan.burpedCategory, actions: [], intentIdentifiers: [], options: []),
         ])
         center.delegate = delegate
     }
@@ -93,8 +97,51 @@ enum Alarms {
             guard let id = n.request.content.userInfo["batchID"] as? String, let b = store.data.batch(id), let last = Logic.lastBurp(b) else { continue }
             if last >= n.date { clear.append(n.request.identifier) }
         }
+        // A "Burped" note (the one that carries the burp sound) left over from an earlier burp.
+        let oldNotes = delivered.filter { $0.request.identifier.hasPrefix(AlarmPlan.burpedPrefix) && $0.date < Date().addingTimeInterval(-AlarmPlan.burpedNoteSeconds) }
+        clear += oldNotes.map(\.request.identifier)
         if !clear.isEmpty { center.removeDeliveredNotifications(withIdentifiers: clear) }
     }
+
+    /// 6.5: "Burped" on a reminder plays a burp (one of the ten that are on, at random). The sound rides on a short note, because a notification's own
+    /// sound is the one thing that plays reliably while the app stays closed. The note goes away again by itself;
+    /// while the app is open it is sound only (see the delegate).
+    private static func playBurp(batchID: String, jarTitle: String) async {
+        guard let sound = BurpSounds.next() else { return }      // all burps off: quiet, as before 6.5
+        let note = AlarmPlan.burpedNote(batchID: batchID, jarTitle: jarTitle, at: Date(), sound: sound)
+        let content = UNMutableNotificationContent()
+        content.title = note.title; content.body = note.body
+        content.sound = UNNotificationSound(named: UNNotificationSoundName(note.sound))
+        content.categoryIdentifier = note.category
+        content.threadIdentifier = batchID
+        content.userInfo = ["batchID": batchID]
+        holdOn()
+        try? await center.add(UNNotificationRequest(identifier: note.id, content: content, trigger: nil))
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: UInt64(AlarmPlan.burpedNoteSeconds * 1_000_000_000))
+            center.removeDeliveredNotifications(withIdentifiers: [note.id])
+            letGo()
+        }
+    }
+
+    #if os(iOS)
+    /// Keeps the app awake in the background for the few seconds until the note is taken away.
+    private static var noteTask: UIBackgroundTaskIdentifier = .invalid
+    private static func holdOn() {
+        guard noteTask == .invalid else { return }
+        noteTask = UIApplication.shared.beginBackgroundTask(withName: "burped-note") {
+            MainActor.assumeIsolated { Alarms.letGo() }
+        }
+    }
+    private static func letGo() {
+        guard noteTask != .invalid else { return }
+        UIApplication.shared.endBackgroundTask(noteTask)
+        noteTask = .invalid
+    }
+    #else
+    private static func holdOn() {}
+    private static func letGo() {}
+    #endif
 
     /// Hands a waiting route to whichever screen is listening, then forgets it.
     static func deliverPendingRoute() {
@@ -111,6 +158,7 @@ enum Alarms {
             store.save(b)
             store.saveNow()          // on disk before the system suspends the app
             await apply(store: store)
+            await playBurp(batchID: b.id, jarTitle: b.title)
         } else if action == UNNotificationDefaultActionIdentifier, !batchID.isEmpty {
             pendingRoute = .jar(batchID)
             // Give a window that is still starting a moment to begin listening, then offer it.
@@ -123,7 +171,8 @@ enum Alarms {
 /// Receives the taps and the "Burped" button; kept alive by `Alarms`.
 final class AlarmDelegate: NSObject, UNUserNotificationCenterDelegate, @unchecked Sendable {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
-        [.banner, .list, .sound]
+        // The burp after "Burped" needs no banner while the app is on the screen: just the sound.
+        notification.request.content.categoryIdentifier == AlarmPlan.burpedCategory ? [.sound] : [.banner, .list, .sound]
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {

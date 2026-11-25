@@ -38,6 +38,16 @@ final class AlarmPlanTests: XCTestCase {
         XCTAssertTrue(plan(b).isEmpty)
     }
 
+    func testBurpedNote() {
+        let n = AlarmPlan.burpedNote(batchID: "b1", jarTitle: "Cabbage jar", at: at(2026, 11, 25, 8, 12), sound: BurpSounds.sound(3)!)
+        XCTAssertEqual(n.id, "burped.b1")
+        XCTAssertEqual(n.title, "Burped: Cabbage jar")
+        XCTAssertEqual(n.body, "Written in the Timeline at 08:12. Burp: Deep rumble.")
+        XCTAssertEqual(n.category, "BURPED")
+        XCTAssertEqual(n.sound, "burp-03.caf")
+        XCTAssertFalse(n.id.hasPrefix(AlarmPlan.burpPrefix), "the re-plan must never take it for a reminder")
+    }
+
     func testBurpHereFalseNone() {
         XCTAssertTrue(plan(jar(), burp: false).isEmpty)
     }

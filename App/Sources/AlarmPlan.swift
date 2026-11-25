@@ -14,6 +14,24 @@ enum AlarmPlan {
     static let burpPrefix = "burp."
     static let tastePrefix = "taste."
 
+    /// 6.5: the short note that carries the burp sound after "Burped" was pressed on a reminder.
+    struct BurpedNote: Equatable {
+        var id: String
+        var title: String
+        var body: String
+        var category: String
+        var sound: String
+    }
+    static let burpedPrefix = "burped."
+    static let burpedCategory = "BURPED"
+    /// Seconds the note stays before it is taken away again.
+    static let burpedNoteSeconds: Double = 8
+
+    static func burpedNote(batchID: String, jarTitle: String, at: Date, sound: BurpSound) -> BurpedNote {
+        BurpedNote(id: "\(burpedPrefix)\(batchID)", title: "Burped: \(jarTitle)",
+                   body: "Written in the Timeline at \(Logic.clock(at)). Burp: \(sound.name).", category: burpedCategory, sound: sound.file)
+    }
+
     static func plan(data: AppData, burpHere: Bool, tasteHere: Bool, now: Date, limit: Int = 60) -> [Planned] {
         var out: [Planned] = []
         let cal = Calendar.current

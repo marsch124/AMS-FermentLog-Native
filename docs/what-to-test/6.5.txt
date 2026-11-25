@@ -1,0 +1,29 @@
+What to look at in 6.5 (build 8) — every Burped burps, with 10 burps to choose from. Check on iPhone and iPad (and on the Mac if "Ring on this Mac" is on). Put the ring/silent switch on ring.
+
+A. The list in Settings
+1. Settings: right under Burp alarm there is a new part, Burp sounds. A note on top, then 10 rows: Classic, Short pop, Deep rumble, Long one, Squeaky, Double, Gurgle, Rising, Tiny, Big one. Each has a Play button, a small line under its name and a switch. All 10 are on.
+2. Tap Play on each one. You hear that burp at once. Are they different from each other? Too loud, too long, not funny enough?
+3. With the switch on silent, tap Play: you still hear it. That is meant.
+4. Under the list: "All off: Burped makes no sound." and "Your choice is kept on this device; ..."
+5. Settings, Burp alarm: the note ends "...and plays a burp."
+
+B. Burped on a jar's page
+6. Open a fermenting jar and tap the orange Burped button. You hear a burp. The bar "Burp logged 08:12" with Undo shows as before.
+7. Tap it five times. The burps change and you never hear the same one twice in a row.
+8. Switch most burps off in Settings, leaving two. Burped now plays only those two, taking turns. Leave only one: that one every time.
+9. Switch all off. Burped is quiet. Switch them back on.
+
+C. Burped on a reminder
+10. Set Evening to a minute ahead (Settings, Burp alarm) and wait. Close FermentLog so it is not on the screen.
+11. Press and hold the reminder (or pull it down) and tap Burped. You hear a burp and a small note shows: "Burped: <jar name>" and "Written in the Timeline at 08:12. Burp: <name>." The name is the burp you heard. The note goes away by itself after about 8 seconds.
+12. Open the jar: the Timeline has "Burped the jar" with the time.
+13. With FermentLog open on the screen when you press Burped: you hear the burp, no note shows.
+14. With all burps off: no sound and no note.
+
+D. Silent
+15. With the switch on silent, or a Focus that silences FermentLog: Burped on the page and on the reminder make no burp. That is meant.
+
+E. Words
+16. Settings, What's new: 6.5 (build 8) is at the top. How it works, The burp alarm, has the burp sound lines.
+
+Tell me anything that sounds wrong or looks wrong.

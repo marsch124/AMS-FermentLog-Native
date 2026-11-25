@@ -38,7 +38,7 @@ struct SettingsBurpSection: View {
                     else { Alarms.reschedule(store: store) }
                 }))
                 .accessibilityIdentifier("settings-burp-here")
-            SettingsNote("Rings for every fermenting jar with a plain lid. Each jar has its own switch. The notification has a Burped button — one tap writes the burp into the jar’s Timeline.")
+            SettingsNote("Rings for every fermenting jar with a plain lid. Each jar has its own switch. The notification has a Burped button — one tap writes the burp into the jar’s Timeline and plays a burp.")
             permissionLine
         }
         .task { permission = await Alarms.permission() }
@@ -77,5 +77,43 @@ struct SettingsBurpSection: View {
         #else
         if let u = URL(string: "x-apple.systempreferences:com.apple.Notifications-Settings.extension") { openURL(u) }
         #endif
+    }
+}
+
+/// 6.5: the ten burps — Play to hear one, a switch to keep it in the random mix. Kept on this device.
+struct SettingsBurpSoundsSection: View {
+    @AppStorage(BurpSounds.offKey) private var offStored = ""
+
+    private func isOn(_ n: Int) -> Binding<Bool> {
+        Binding(get: { !BurpSounds.offNumbers(offStored).contains(n) },
+                set: { on in
+                    var off = BurpSounds.offNumbers(offStored)
+                    if on { off.remove(n) } else { off.insert(n) }
+                    offStored = BurpSounds.stored(off: off)
+                })
+    }
+
+    var body: some View {
+        SettingsSection(title: "Burp sounds") {
+            SettingsNote("Every Burped plays one of the burps that are on, picked at random — never the same one twice in a row.")
+            ForEach(BurpSounds.all) { s in
+                HStack(spacing: 10) {
+                    Button("Play") { BurpPlayer.play(s, listen: true) }
+                        .buttonStyle(QuietButtonStyle(area: .settings))
+                        .accessibilityLabel("Play \(s.name)")
+                        .accessibilityIdentifier("settings-burp-play-\(s.number)")
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text(s.name)
+                        Text(s.line).font(.caption).foregroundStyle(Theme.muted)
+                    }
+                    Spacer(minLength: 8)
+                    Toggle(s.name, isOn: isOn(s.number))
+                        .labelsHidden()
+                        .accessibilityIdentifier("settings-burp-on-\(s.number)")
+                }
+            }
+            SettingsNote("All off: Burped makes no sound. Your choice is kept on this \(SettingsDevice.name); the iPhone, the iPad and the Mac each keep their own.")
+        }
+        .accessibilityIdentifier("settings-burp-sounds")
     }
 }

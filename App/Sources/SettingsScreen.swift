@@ -9,6 +9,7 @@ struct SettingsScreen: View {
         Form {
             SettingsPeopleSection()
             SettingsBurpSection()
+            SettingsBurpSoundsSection()
             SettingsTasteSection()
             SettingsAppearanceSection()
             SettingsICloudSection()

@@ -10,5 +10,5 @@ What to look at in 6.1 (build 4) — the new look "Full colour", and the start d
 9. Open a bake: gold-brown head card; Crust, Crumb, Flavour, Overall as slim bars with stars beside the name.
 10. Days read "Wed 25 Nov" on read pages; the pages where you change something still have their date pickers.
 11. The switches Ferments/Bakes, What I did/Taste test and Jars/Bakes are in the colour of their part, not yellow (Mac).
-12. Settings, How it works: the jar page, Timeline, Insights, recipe page and "Signs in this app" tell the new look. Settings, What's new: 6.1 (build 3) is at the top.
+12. Settings, How it works: the jar page, Timeline, Insights, recipe page and "Signs in this app" tell the new look. Settings, What's new: 6.1 (build 4) is at the top.
 13. Tell me anything that looks wrong, is cut off, too small to read, or has a word you do not understand.

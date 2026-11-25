@@ -187,9 +187,10 @@ enum Logic {
     /// Salt concentration as % by weight (1 ml water ~ 1 g). nil when an input is missing/invalid.
     static func computeBrinePercent(salt: Double?, water: Double?) -> Double? {
         guard let s = salt, let w = water, s.isFinite, w.isFinite, s >= 0, w >= 0 else { return nil }
-        let total = s + w
-        if total <= 0 { return nil }
-        return s / total * 100
+        // No water = a dry-salted ferment (sauerkraut): there is no brine to measure, so no figure
+        // (the web app said "100%" here, which meant nothing).
+        if w <= 0 { return nil }
+        return s / (s + w) * 100
     }
 
     static func isBrineInRange(_ brinePercent: Double?) -> Bool {

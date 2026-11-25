@@ -22,6 +22,7 @@ final class LogicTests: XCTestCase {
         XCTAssertEqual(Logic.computeBrinePercent(salt: 20, water: 980), 2)
         XCTAssertNil(Logic.computeBrinePercent(salt: nil, water: 1000))
         XCTAssertNil(Logic.computeBrinePercent(salt: 0, water: 0))
+        XCTAssertNil(Logic.computeBrinePercent(salt: 20, water: 0))   // dry-salted: no brine figure, not "100%"
         XCTAssertNil(Logic.computeBrinePercent(salt: -5, water: 1000))
         XCTAssertTrue(Logic.isBrineInRange(2.5))
         XCTAssertFalse(Logic.isBrineInRange(1.9))

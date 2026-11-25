@@ -19,10 +19,10 @@ enum Guide {
             "Changed: facts sit in small tiles. Before: one line per fact (“Lid  Plain lid”), eight lines under each other. Now: each fact is a small tile, with its name in small capitals and the value right under it.",
             "Changed: days are written in plain words. Before: 2026-11-25. Now: “Wed 25 Nov” (with the year only when it is not this year). The pages where you change something, and the files you export, keep their date pickers and the old way of writing the day.",
             "Changed: the switches Ferments | Bakes (Insights), What I did | Taste test (Timeline) and Jars | Bakes. Before: drawn in the Mac’s own accent colour (yellow on your Mac). Now: drawn in the colour of their part.",
-            "New: the jar page head card. A drawn jar, the jar’s name, a big “Day 1” (the days it has been fermenting), its state (Fermenting, In the fridge or Done) and “started Wed 25 Nov”. Under them a slim line fills from the start day to the next taste test, with “Taste test Sat 28 Nov · in 3 days” under it. Before: a small status pill and the words “Taste test due 2026-11-28”.",
-            "Changed: the jar’s facts. Before: eight lines, one fact each. Now: six tiles: Vegetable, Form, Brine, Room, Lid and Weight (plus Logged by when someone is set).",
+            "New: the jar page head card. A drawn jar, the jar’s name, a big “Day 2” (the whole days it has been fermenting, counted as before: the start day is day 0), its state (Fermenting, In the fridge or Done) and “started Wed 25 Nov”. Under them a slim line fills from the start day to the next taste test, with “Taste test Sat 28 Nov · in 3 days” under it. Before: a small status pill and the words “Taste test due 2026-11-28”.",
+            "Changed: the jar’s facts. Before: eight lines, one fact each. Now: small tiles, three side by side: Vegetable, Form, Brine, Room, Lid, Weight and Logged by. Only the ones you filled in are shown, so an empty fact no longer takes a line with a dash.",
             "Changed: the Burp block. Before: three rows. Now: one row with the Burped button, when the jar was last burped, and the Burp alarm switch with its two times beside it.",
-            "Changed: the Timeline is now a rail. Before: every line repeated its date and time and carried a tag, “Did” or “Taste”. Now: each day has ONE heading (“DAY 1 · WED 25 NOV”); when several lines share a time, the time is written once; every line has a dot on a thin vertical line. A filled orange dot means something you did. A green ring with the word “Taste” means a taste test. Tapping a line still opens “Change this line”.",
+            "Changed: the Timeline is now a rail. Before: every line repeated its date and time and carried a tag, “Did” or “Taste”. Now: each day has ONE heading (“DAY 1  THU 26 NOV”, the day counted from the start day, which is day 0); beside the word Timeline stands “10 lines · tap a line to change it”; when several lines share a time, the time is written once; every line has a dot on a thin vertical line. A filled orange dot means something you did. A green ring with the word “Taste” means a taste test. Tapping a line still opens “Change this line”.",
             "Changed: adding a Timeline line. Before: five rows. Now: two rows: the switch and “When”, and the text box with Add right beside it.",
             "Changed: Insights starts with four number tiles. Before: four text lines in a box called “Your jars”. Now: Jars, Active now, Success (with a small ring that shows the share) and Average rating, each in its own tile.",
             "Changed: the two labels “Show” in Insights are gone. Before: a label and a switch, then a label and a vegetable list, each on its own row. Now: the Ferments | Bakes switch and the vegetable chooser sit on one row.",
@@ -254,7 +254,8 @@ Pills (round-ended) and tags (small, square-cornered):
 • Green pill “Done” — a verdict has been recorded.
 • Purple pill — a recipe’s category (for example Sourdough). Gold-brown pill — a bake’s category.
 • Grey-blue pill “Logging” — the person whose name goes on new entries.
-• Deep orange tag “Taste test due” — this jar needs a taste test now. The same deep orange is used for the words “Taste test due <date>” on the jar’s page, and for the tinted box above the groups.
+• Deep orange tag “Taste test due” — this jar needs a taste test now. The same deep orange is used for the tinted box above the groups. On the jar’s own page the head card says it in white: “Taste test due today” or “Taste test due since Sat 28 Nov”.
+• On a head card (the coloured card at the top of a jar, a recipe, a bake and the recommended recipe) every word, pill and tile is white, because the card itself carries the colour of the part. The pill still says the same thing: Fermenting, In fridge or Done.
 • Grey tag “Burp alarm on” — the burp alarm rings for this jar. Your spices on a jar’s page are grey tags too: a plain fact, nothing to do.
 • Red tag — a problem you noted (Mould, Dense crumb …).
 Boxes and words:
@@ -265,9 +266,13 @@ Boxes and words:
 Marks:
 • Filled orange dot on the Timeline rail — something you did.
 • Green ring with the word “Taste” on the Timeline rail — a taste test.
-• The slim line on a jar’s head card — how far it is from the start day to the next taste test; full means the day has come.
+• The slim line on a jar’s head card — how far it is from the last taste test (or the start day) to the next taste test; full means the day has come.
+• The green line beside “1 of 3 done” in To do — how many of the steps are ticked.
+• A slim bar under a name with stars (a jar’s Outcome, a bake’s How it turned out, the average ratings in Insights) — how many of the five stars; the stars or the figure stand right beside the name. A red slim bar is a problem: how often it came up, the longest bar being the most frequent one.
+• A number in a full-colour circle — the number of a recipe step, the same number as its piece in the time ribbon.
+• A number tile filled with colour (the first one in Insights) — only the first of the row; it means nothing more.
 • The small ring beside Success in Insights — the share of finished jars that were a success.
-• The shaded band in the brine chart — the usual range, 2 to 3 %.
+• The shaded band in the brine chart — the usual range, 2 to 3 %; the words “shaded = the usual 2–3%” stand beside the chart’s heading.
 • The time ribbon above a recipe’s Method — one piece per step, as long as the step takes: a pale piece is a wait of 2 hours or more, a full-colour piece is a shorter step.
 • ✓ green tick — in order: the brine is in the sweet spot, notifications are allowed, the AI key is saved.
 • Round box with a hand-drawn green tick — a To do step that is done. A grey empty circle is a step still to do.

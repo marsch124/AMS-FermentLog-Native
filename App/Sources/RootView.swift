@@ -169,6 +169,8 @@ struct RootView: View {
         let args = ProcessInfo.processInfo.arguments
         guard let a = args.first(where: { $0.hasPrefix("-part:") }) else { return }
         let part = String(a.dropFirst(6))
+        // Pictures: "-insights:bakes" picks the Insights view. (A separate word after "-insightsView" reached the Mac as a file to open, and the app then showed no window.)
+        if let v = PictureArgs.value("insights") { UserDefaults.standard.set(v, forKey: "insightsView") }
         if part != "bakes" { UserDefaults.standard.set("jars", forKey: "homeView") }   // the Home tab remembers its last view
         switch part {
         case "bakes": UserDefaults.standard.set("bakes", forKey: "homeView"); area = .bakes; tab = .home
@@ -186,6 +188,8 @@ struct RootView: View {
         #if os(macOS)
         if PictureArgs.has("settingsWindow") { openSettings() }
         MacPictures.apply()
+        #else
+        PhonePictures.apply()
         #endif
     }
 }

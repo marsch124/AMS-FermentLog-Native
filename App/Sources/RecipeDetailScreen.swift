@@ -103,7 +103,7 @@ struct RecipeDetailScreen: View {
                 ForEach(ls) { l in
                     VStack(alignment: .leading, spacing: 2) {
                         Text(l.text).font(.subheadline)
-                        let meta = [l.linkLabel, l.loggedBy, Logic.isoDay(l.createdAt)].filter { !$0.isEmpty }.joined(separator: " \u{00b7} ")
+                        let meta = [l.linkLabel, l.loggedBy, Human.day(Logic.isoDay(l.createdAt))].filter { !$0.isEmpty }.joined(separator: " \u{00b7} ")
                         Text(meta).font(.caption).foregroundStyle(Theme.muted)
                     }
                     .accessibilityIdentifier("recipe-lesson-\(l.id)")

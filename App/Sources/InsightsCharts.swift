@@ -23,7 +23,7 @@ struct InsightsCharts: View {
 struct InsightsScatter: View {
     let title: String, xTitle: String, unit: String, points: [XYPoint], id: String
     var body: some View {
-        Block(title: title, area: .insights, note: "each dot is one jar") {
+        Block(title: title, area: .insights, note: id == "brine" ? "each dot is one jar \u{00b7} shaded = the usual 2–3%" : "each dot is one jar") {
             if points.isEmpty {
                 Text("Nothing to show yet.").foregroundStyle(Theme.muted)
             } else {
@@ -35,11 +35,7 @@ struct InsightsScatter: View {
                     if isBrine {
                         RectangleMark(xStart: .value("From", Logic.BRINE_MIN), xEnd: .value("To", Logic.BRINE_MAX),
                                       yStart: .value("Low", 0.5), yEnd: .value("High", 5.5))
-                            .foregroundStyle(Area.insights.color.opacity(0.10))
-                            .annotation(position: .bottomLeading, alignment: .bottomLeading, spacing: 2) {
-                                Text("usual range 2–3%").font(.caption2).foregroundStyle(Area.insights.color)
-                                    .fixedSize().padding(.leading, 2)
-                            }
+                            .foregroundStyle(Area.insights.color.opacity(0.12))   // what it means stands beside the heading (under the chart it ran into the 1% … 2% labels)
                     }
                     ForEach(Array(points.enumerated()), id: \.offset) { _, p in
                         PointMark(x: .value(xTitle, p.x), y: .value("Rating", p.y))

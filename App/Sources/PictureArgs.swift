@@ -1,6 +1,8 @@
 import SwiftUI
 #if os(macOS)
 import AppKit
+#else
+import UIKit
 #endif
 
 /// Launch arguments for pictures and screen tests. They act only together with "-uiTesting" (sample data in a
@@ -82,6 +84,47 @@ enum MacPictures {
             clip.scroll(to: o)
             page.reflectScrolledClipView(clip)
         }
+    }
+}
+#endif
+
+#if os(iOS)
+/// iPhone and iPad pictures: "-scrollDown:600" moves the page down by 600 points (tools/phone-pictures.sh),
+/// so every part of a long page can be photographed in the simulator without a screen test.
+@MainActor
+enum PhonePictures {
+    static func apply() {
+        guard PictureArgs.on, let p = PictureArgs.value("scrollDown").flatMap(Double.init) else { return }
+        tryScroll(CGFloat(p), left: 12)
+    }
+
+    /// The page may not be laid out yet right after launch: look for it every 0.4 s (up to 12 times), scroll once.
+    private static func tryScroll(_ points: CGFloat, left: Int) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + (left == 12 ? 1.4 : 0.4)) {
+            if !scrollDown(points), left > 1 { tryScroll(points, left: left - 1) }
+        }
+    }
+
+    /// Moves the page on show (the tallest scrolling page that is in a window and visible) down by `points`, never past its end.
+    private static func scrollDown(_ points: CGFloat) -> Bool {
+        var done = false
+        for scene in UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene }) {
+            for w in scene.windows {
+                var found: [UIScrollView] = []
+                func walk(_ v: UIView) {
+                    if v.isHidden || v.alpha < 0.01 { return }
+                    if let s = v as? UIScrollView, s.window != nil, s.bounds.height > 200 { found.append(s) }
+                    v.subviews.forEach(walk)
+                }
+                walk(w)
+                // The page on top of the stack is the last one found; an earlier page of the stack can still be in the window.
+                guard let page = found.last(where: { $0.contentSize.height > $0.bounds.height + 20 }) else { continue }
+                let room = max(0, page.contentSize.height + page.adjustedContentInset.bottom - page.bounds.height)
+                page.setContentOffset(CGPoint(x: page.contentOffset.x, y: min(room, page.contentOffset.y + points)), animated: false)
+                done = true
+            }
+        }
+        return done
     }
 }
 #endif

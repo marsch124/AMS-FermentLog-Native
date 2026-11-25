@@ -99,7 +99,7 @@ struct JarTimelineBlock: View {
         .padding(.vertical, 3)
         .background(alignment: .topLeading) {
             if !(first && last) {
-                Rectangle().fill(Theme.line).frame(width: 2)
+                Rectangle().fill(Area.jars.color.opacity(0.28)).frame(width: 2)
                     .frame(maxHeight: last ? 12 : .infinity, alignment: .top)
                     .padding(.top, first ? 10 : 0)
                     .padding(.leading, Self.timeWidth + Self.dotWidth / 2 - 1)
@@ -111,7 +111,7 @@ struct JarTimelineBlock: View {
 
     private func dot(_ kind: TimelineEntry.Kind) -> some View {
         ZStack {
-            Circle().fill(Theme.surface).frame(width: 14, height: 14)
+            Circle().fill(Theme.surface).frame(width: 11, height: 11)
             if kind == .taste {
                 Circle().stroke(Theme.ok, lineWidth: 2.5).frame(width: 9, height: 9)
             } else {

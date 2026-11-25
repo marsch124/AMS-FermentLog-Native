@@ -29,7 +29,7 @@ struct InsightsScreen: View {
                     Spacer(minLength: 0)
                 }
                 if view == "bakes" {
-                    BakeInsightsScreen()
+                    BakeInsightsScreen(embedded: true)
                 } else {
                     InsightsFermentsView(vegetable: vegetable)
                 }

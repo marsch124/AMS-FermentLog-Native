@@ -33,8 +33,9 @@ struct RecipeBlocks: View {
         let eq = Block(title: "Equipment", area: .recipes) { equipment(recipe.equipment) }
         if wide && !recipe.ingredients.isEmpty && !recipe.equipment.isEmpty {
             HStack(alignment: .top, spacing: Theme.gap) {
-                ing.frame(maxWidth: .infinity, alignment: .topLeading).layoutPriority(1)
-                eq.frame(maxWidth: 280, alignment: .topLeading)
+                // Two equal halves. (A priority on one of them squeezed the other to one letter per line.)
+                ing.frame(maxWidth: .infinity, alignment: .topLeading)
+                eq.frame(maxWidth: .infinity, alignment: .topLeading)
             }
         } else {
             ing

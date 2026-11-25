@@ -317,9 +317,9 @@ enum Human {
     }
 
     /// How long a step takes, in minutes, read from its words: "4–6 h (or overnight)" → 300, "15 min" → 15,
-    /// "1 h 30 min" → 90, "2 days" → 2880. A range counts as its middle. nil when no time is written.
+    /// "1 h 30 min" → 90, "2 days" → 2880, "1–3 weeks" → 20160. A range counts as its middle. nil when no time is written.
     static func minutes(from text: String) -> Double? {
-        let pattern = #"(\d+(?:[.,]\d+)?)(?:\s*[–—-]\s*(\d+(?:[.,]\d+)?))?\s*(days?|d|hours?|hrs?|h|minutes?|mins?|m)\b"#
+        let pattern = #"(\d+(?:[.,]\d+)?)(?:\s*[–—-]\s*(\d+(?:[.,]\d+)?))?\s*(weeks?|wks?|w|days?|d|hours?|hrs?|h|minutes?|mins?|m)\b"#
         guard let re = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive]) else { return nil }
         let ns = text as NSString
         var total = 0.0, found = false
@@ -331,7 +331,7 @@ enum Human {
             guard let a = num(1) else { continue }
             let amount = num(2).map { (a + $0) / 2 } ?? a
             let unit = ns.substring(with: m.range(at: 3)).lowercased()
-            let per: Double = unit.hasPrefix("d") ? 1440 : (unit.hasPrefix("h") ? 60 : 1)
+            let per: Double = unit.hasPrefix("w") ? 10080 : (unit.hasPrefix("d") ? 1440 : (unit.hasPrefix("h") ? 60 : 1))
             total += amount * per; found = true
         }
         return found ? total : nil

@@ -35,6 +35,7 @@ final class LookTests: XCTestCase {
         XCTAssertEqual(Human.minutes(from: "1 h 30 min"), 90)
         XCTAssertEqual(Human.minutes(from: "2 days"), 2880)
         XCTAssertEqual(Human.minutes(from: "45 minutes"), 45)
+        XCTAssertEqual(Human.minutes(from: "1–3 weeks"), 20160)
         XCTAssertNil(Human.minutes(from: "day 5"))
         XCTAssertNil(Human.minutes(from: "daily"))
         XCTAssertNil(Human.minutes(from: "350 ml water"))

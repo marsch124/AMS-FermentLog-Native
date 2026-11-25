@@ -88,7 +88,9 @@ struct JarDetailScreen: View {
     /// The facts as small tiles (only those that are filled in), then the spices and the notes.
     @ViewBuilder private func facts(_ b: Batch) -> some View {
         let brine = Logic.computeBrinePercent(salt: b.saltGrams, water: b.waterMl)
-        TileGrid(columns: 3) {
+        let count = [!b.vegetable.isEmpty, !b.form.isEmpty, brine != nil, b.roomTempC != nil, !b.lidType.isEmpty, !b.weightType.isEmpty, !b.loggedBy.isEmpty].filter { $0 }.count
+        // Seven tiles stand 4 + 3 on a wide page, so none is left alone on a third row; an iPhone keeps three across.
+        TileGrid(columns: count > 6 ? 4 : 3, compact: 3) {
             if !b.vegetable.isEmpty { Tile(label: "Vegetable", value: b.vegetable) }
             if !b.form.isEmpty { Tile(label: "Form", value: b.form) }
             if brine != nil { Tile(label: "Brine", value: JarStyle.brineText(b), valueColor: Logic.isBrineInRange(brine) ? Theme.ok : nil) }
@@ -98,7 +100,7 @@ struct JarDetailScreen: View {
             if !b.loggedBy.isEmpty { Tile(label: "Logged by", value: b.loggedBy) }
         }
         if !b.additions.isEmpty {
-            FlowLayout(spacing: 4) { ForEach(b.additions, id: \.self) { Tag(text: $0, color: Area.jars.color) } }
+            FlowLayout(spacing: 4) { ForEach(b.additions, id: \.self) { Tag(text: $0, color: Theme.muted) } }
         }
         if !b.notes.isEmpty {
             Block(title: "Notes", area: .jars) {

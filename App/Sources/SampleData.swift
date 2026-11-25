@@ -95,6 +95,30 @@ extension AppData {
         radish.createdAt = ago(4); radish.modifiedAt = ago(3)
         out.batches = [cabbage, carrots, beets, radish]
 
+        // Pictures of the charts ("-charts"): five more finished, rated jars, so Insights has something to draw.
+        if PictureArgs.has("charts") {
+            func done(_ n: Int, _ name: String, _ veg: String, _ form: String, _ lid: String, salt: Double, temp: Double, start: Int, days: Int, stars: Int, problems: [String] = []) -> Batch {
+                var b = Batch()
+                b.id = "b_sample_chart_\(n)"; b.name = name; b.vegetable = veg; b.form = form; b.lidType = lid
+                b.saltGrams = salt; b.waterMl = 1000; b.roomTempC = temp
+                b.startDate = day(start); b.movedToFridgeDate = day(start - days)
+                var o = Outcome()
+                o.recorded = true; o.success = stars >= 3
+                o.taste = stars; o.sourness = max(1, stars - 1); o.crunch = stars; o.overall = stars
+                o.problems = problems; o.recordedAt = ago(start - days - 1)
+                b.outcome = o
+                b.createdAt = ago(start); b.modifiedAt = ago(start - days - 1)
+                return b
+            }
+            out.batches += [
+                done(1, "Surkål", "Cabbage", "Shredded", "Airlock lid", salt: 24, temp: 20, start: 120, days: 21, stars: 5),
+                done(2, "Kimchi", "Cabbage", "Chopped", "Airlock lid", salt: 22, temp: 20, start: 90, days: 14, stars: 4),
+                done(3, "Carrot coins", "Carrot", "Slices", "Burping / self-venting lid", salt: 29, temp: 22, start: 70, days: 9, stars: 4, problems: ["Too salty"]),
+                done(4, "Garlic carrots", "Carrot", "Sticks", "Plain lid", salt: 16, temp: 23, start: 50, days: 6, stars: 2, problems: ["Mushy / soft", "Kahm yeast"]),
+                done(5, "Red cabbage", "Cabbage", "Shredded", "Plain lid", salt: 35, temp: 18, start: 40, days: 12, stars: 3, problems: ["Too salty"]),
+            ]
+        }
+
         // Recipes: the web app's sourdough example, and a sauerkraut.
         var sourdough = Recipe()
         sourdough.id = "r_sample_sourdough"

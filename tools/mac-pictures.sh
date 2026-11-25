@@ -49,10 +49,10 @@ SHOTS=(
 "15-recipe-edit-3|-part:recipes -open:recipe:$KRAUT -open:recipeEdit:$KRAUT -scrollDown:1300"
 "15-recipe-edit-4|-part:recipes -open:recipe:$KRAUT -open:recipeEdit:$KRAUT -scrollDown:1950"
 "16-recipe-new|-part:recipes -open:recipeNew"
-"17-insights-1|-part:insights -insightsView ferments"
-"17-insights-2|-part:insights -insightsView ferments -scrollDown:650"
-"17-insights-3|-part:insights -insightsView ferments -scrollDown:1300"
-"18-insights-bakes|-part:insights -insightsView bakes"
+"17-insights-1|-part:insights -insights:ferments -charts"
+"17-insights-2|-part:insights -insights:ferments -charts -scrollDown:650"
+"17-insights-3|-part:insights -insights:ferments -charts -scrollDown:1300"
+"18-insights-bakes|-part:insights -insights:bakes"
 "19-search-empty|-part:search"
 "20-search-cab|-part:search -search:cab"
 "21-settings-1|-part:settings"
@@ -71,18 +71,25 @@ SHOTS=(
 "26-settings-window-1|-part:jars -settingsWindow"
 "26-settings-window-2|-part:jars -settingsWindow -scrollDown:700"
 )
-ONLY="${ONLY:-}"     # ONLY=05-jar-edit → just the pictures whose name starts with that
+ONLY="${ONLY:-}"     # ONLY=05-jar-edit → just the pictures whose name starts with that; ONLY="01 02 14" → several
 for MODE in light dark; do
   mkdir -p "$OUT/$MODE"
   STYLE=Light; [ "$MODE" = dark ] && STYLE=Dark
   for S in "${SHOTS[@]}"; do
     NAME="${S%%|*}"; ARGS="${S#*|}"
-    [ -n "$ONLY" ] && [[ "$NAME" != $ONLY* ]] && continue
+    if [ -n "$ONLY" ]; then HIT=""; for O in $ONLY; do [[ "$NAME" == $O* ]] && HIT=1; done; [ -z "$HIT" ] && continue; fi
     [ -n "$KEEP" ] && [ -f "$OUT/$MODE/$NAME.png" ] && continue     # KEEP=1 → only the pictures still missing
     # shellcheck disable=SC2086
-    "$BIN" -uiTesting -sample -$MODE -tall -AppleInterfaceStyle $STYLE $ARGS >/dev/null 2>&1 &
-    PID=$!
-    sleep 3.4
+    if [ -n "$QUIET" ]; then
+      # QUIET=1 → the window opens BEHIND whatever he is working in and never takes his typing.
+      open -g -n "$APP" --args -uiTesting -sample -$MODE -tall -AppleInterfaceStyle $STYLE $ARGS
+      sleep 3.8
+      PID=$(pgrep -n -f "AMSFermentLog-macpictures/Build/Products/Debug/AMSFermentLog.app/Contents/MacOS/AMSFermentLog")
+    else
+      "$BIN" -uiTesting -sample -$MODE -tall -AppleInterfaceStyle $STYLE $ARGS >/dev/null 2>&1 &
+      PID=$!
+      sleep 3.4
+    fi
     N=0
     "$DD/winid" $PID | while read -r WID WNAME; do
       N=$((N+1)); SUFFIX=""; [ $N -gt 1 ] && SUFFIX="-window$N"

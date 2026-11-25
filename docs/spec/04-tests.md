@@ -38,3 +38,12 @@ These two files are being rewritten alongside the 6.0 texts; the list above is w
 | `-dark` | Night colours |
 | `-needsUpdate` | Pretend a newer version saved the file (red bar, nothing saved) |
 | `-saveProblem` | Pretend a save failed (red line in Settings › iCloud) |
+| `-charts` | With `-sample`: five more finished, rated jars, so Insights draws its charts (pictures only) |
+| `-insights:<view>` | Pick the Insights view: `ferments` or `bakes` (a separate word after `-insightsView` reaches the Mac as a file to open, and the app then shows no window) |
+| `-scrollDown:<points>` | Move the page down before the picture is taken — Mac and, since 6.1, iPhone and iPad |
+
+## Added in 6.1 (the Full colour look)
+
+- `Tests/LookTests.swift` — `LookTests` (4: a day in plain words, "in 3 days", minutes read from a step's words incl. weeks, the amount of an ingredient) and `JarLookTests` (2: the Timeline grouped by day with a shared time written once, the line to the next taste test).
+- `Tests/RibbonTests.swift` — 1: the widths of the recipe time ribbon.
+- Pictures without a screen test: `tools/mac-pictures.sh` (`QUIET=1` opens the windows behind his work, `ONLY="02 14"` picks pages) and the new `tools/phone-pictures.sh <simulator-udid>` for iPhone and iPad.

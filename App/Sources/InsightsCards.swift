@@ -17,10 +17,17 @@ struct InsightsRecommendation: View {
     var body: some View {
         if let rec {
             Hero(area: .insights) {
-                HStack(alignment: .firstTextBaseline, spacing: 6) {
-                    Text("Recommended recipe").font(.headline)
-                    Text("learned from \(rec.count) of your best jars").font(.caption).foregroundStyle(Look.heroSoft)
-                    Spacer(minLength: 0)
+                // Beside each other when both fit on one line; under each other on a narrow iPhone.
+                ViewThatFits(in: .horizontal) {
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        Text("Recommended recipe").font(.headline).lineLimit(1)
+                        Text("learned from \(rec.count) of your best jars").font(.caption).foregroundStyle(Look.heroSoft).lineLimit(1)
+                        Spacer(minLength: 0)
+                    }
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text("Recommended recipe").font(.headline)
+                        Text("learned from \(rec.count) of your best jars").font(.caption).foregroundStyle(Look.heroSoft)
+                    }
                 }
                 TileGrid(columns: 5, compact: 3) {
                     if let v = rec.vegetable { Tile(label: "Vegetable", value: v, area: .insights) }

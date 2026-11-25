@@ -254,10 +254,21 @@ struct Block<Content: View>: View {
     @ViewBuilder var content: Content
     var body: some View {
         VStack(alignment: .leading, spacing: Theme.gap) {
-            HStack(alignment: .firstTextBaseline, spacing: 6) {
+            if let note {
+                // Beside the heading when both fit on one line (Mac, iPad); under it on a narrow iPhone, so neither is broken in two.
+                ViewThatFits(in: .horizontal) {
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        SectionHeading(title, area).lineLimit(1)
+                        Text(note).font(.caption).foregroundStyle(Theme.muted).lineLimit(1)
+                        Spacer(minLength: 0)
+                    }
+                    VStack(alignment: .leading, spacing: 1) {
+                        SectionHeading(title, area)
+                        Text(note).font(.caption).foregroundStyle(Theme.muted)
+                    }
+                }
+            } else {
                 SectionHeading(title, area)
-                if let note { Text(note).font(.caption).foregroundStyle(Theme.muted) }
-                Spacer(minLength: 0)
             }
             content
         }

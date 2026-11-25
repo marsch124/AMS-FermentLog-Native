@@ -215,6 +215,16 @@ enum Logic {
         return daysBetween(start: b.startDate, end: end, now: now)
     }
 
+    /// Which day of its ferment a jar is on, as people say it: the day it was started is Day 1 (his pick, 25 Nov 2026, 6.1 build 4).
+    /// `fermentDays` stays what it was — the number of whole days gone by — for Insights, the charts and the spreadsheet.
+    static func dayNumber(_ b: Batch, now: Date = Date()) -> Int? { fermentDays(b, now: now).map { $0 + 1 } }
+
+    /// The day number of a calendar day for a jar started on `start` (the start day is 1); nil for a day before the start or an unreadable day.
+    static func dayNumber(of day: String, start: String) -> Int? {
+        guard !day.isEmpty, !start.isEmpty, day >= start else { return nil }
+        return daysBetween(start: start, end: day).map { $0 + 1 }
+    }
+
     static func batchStatus(_ b: Batch) -> JarStatus {
         if b.outcome?.recorded == true { return .done }
         if !b.movedToFridgeDate.isEmpty { return .fridge }

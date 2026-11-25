@@ -67,10 +67,23 @@ final class JarLookTests: XCTestCase {
             e("g", "2026-11-28", "09:10", .taste),
         ], start: "2026-11-25")
         XCTAssertEqual(days.map(\.date), ["2026-11-24", "2026-11-25", "2026-11-28"])
-        XCTAssertEqual(days.map(\.day), [nil, 0, 3])
+        XCTAssertEqual(days.map(\.day), [nil, 1, 4])   // the start day is Day 1
         XCTAssertEqual(days[1].lines.map(\.showTime), [true, false, true, false])
         XCTAssertEqual(days[2].lines.map(\.showTime), [true])
         XCTAssertTrue(Logic.timelineDays([], start: "2026-11-25").isEmpty)
+    }
+
+    func testStartDayIsDayOne() {
+        let f = DateFormatter(); f.locale = Locale(identifier: "en_US_POSIX"); f.dateFormat = "yyyy-MM-dd"
+        var b = Logic.newBatch(); b.startDate = "2026-11-25"
+        XCTAssertEqual(Logic.dayNumber(b, now: f.date(from: "2026-11-25")!), 1)
+        XCTAssertEqual(Logic.dayNumber(b, now: f.date(from: "2026-11-27")!), 3)
+        XCTAssertEqual(Logic.fermentDays(b, now: f.date(from: "2026-11-27")!), 2)   // whole days gone by: unchanged
+        b.movedToFridgeDate = "2026-12-02"
+        XCTAssertEqual(Logic.dayNumber(b, now: f.date(from: "2026-12-20")!), 8)     // stops on the day it went into the fridge
+        XCTAssertEqual(Logic.dayNumber(of: "2026-11-25", start: "2026-11-25"), 1)
+        XCTAssertNil(Logic.dayNumber(of: "2026-11-24", start: "2026-11-25"))
+        XCTAssertNil(Logic.dayNumber(Batch()))
     }
 
     func testTasteProgress() {

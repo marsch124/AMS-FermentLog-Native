@@ -3,7 +3,7 @@ import Foundation
 /// One day of a jar's Timeline: its heading (the day, and which day of the ferment it is) and its lines.
 struct TimelineDay: Equatable, Identifiable {
     var date: String
-    /// Days since the jar was started, counted as everywhere in the app (the start day is day 0); nil for a line dated before the start.
+    /// Which day of the ferment this is, counted as everywhere in the app (the start day is Day 1); nil for a line dated before the start.
     var day: Int?
     var lines: [TimelineLine]
     var id: String { date }
@@ -22,8 +22,7 @@ extension Logic {
         var out: [TimelineDay] = []
         for e in entries {
             if out.last?.date != e.date {
-                let n: Int? = (!e.date.isEmpty && !start.isEmpty && e.date >= start) ? daysBetween(start: start, end: e.date) : nil
-                out.append(TimelineDay(date: e.date, day: n, lines: []))
+                out.append(TimelineDay(date: e.date, day: dayNumber(of: e.date, start: start), lines: []))
             }
             let above = out[out.count - 1].lines.last?.entry.time
             out[out.count - 1].lines.append(TimelineLine(entry: e, showTime: !e.time.isEmpty && e.time != above))

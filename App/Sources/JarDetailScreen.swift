@@ -45,7 +45,7 @@ struct JarDetailScreen: View {
 
     /// The head card: the jar, its name, which day it is on, and how far it is to the next taste test.
     private func hero(_ b: Batch, _ status: JarStatus) -> some View {
-        let days = Logic.fermentDays(b)
+        let days = Logic.dayNumber(b)
         return Hero(area: .jars) {
             HStack(alignment: .center, spacing: 12) {
                 Mark(.jarBig).frame(width: 40, height: 40)

@@ -7,7 +7,7 @@ struct JarRow: View {
 
     var body: some View {
         let s = Logic.batchStatus(batch)
-        let days = Logic.fermentDays(batch)
+        let days = Logic.dayNumber(batch)
         HStack(spacing: Theme.gap) {
             thumb
             VStack(alignment: .leading, spacing: 3) {

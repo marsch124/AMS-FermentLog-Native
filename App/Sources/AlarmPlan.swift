@@ -24,14 +24,14 @@ enum AlarmPlan {
                     let c = cal.dateComponents([.year, .month, .day, .hour, .minute], from: slot)
                     let stamp = String(format: "%04d%02d%02d%02d%02d", c.year ?? 0, c.month ?? 0, c.day ?? 0, c.hour ?? 0, c.minute ?? 0)
                     let isMorning = Logic.clock(slot) == (morning.map(Logic.clock) ?? data.settings.burpMorning)
-                    let day = (Logic.daysBetween(start: b.startDate, end: Logic.isoDay(slot), now: slot) ?? 0)
+                    let day = Logic.dayNumber(of: Logic.isoDay(slot), start: b.startDate) ?? 1
                     out.append(Planned(id: "\(burpPrefix)\(b.id).\(stamp)", fireAt: slot, title: "Burp: \(b.title)",
                                        body: "\(isMorning ? "Morning" : "Evening") burp \u{00B7} day \(day). Tap Burped when it is done.",
                                        category: "BURP", batchID: b.id))
                 }
             }
             if tasteHere, let due = Logic.nextCheckDue(b), let at = Logic.date(fromDay: due, time: data.settings.burpMorning), at > now {
-                let day = (Logic.daysBetween(start: b.startDate, end: due, now: at) ?? 0)
+                let day = Logic.dayNumber(of: due, start: b.startDate) ?? 1
                 out.append(Planned(id: "\(tastePrefix)\(b.id).\(due)", fireAt: at, title: "Taste test: \(b.title)",
                                    body: "Day \(day) \u{2014} time to taste and write a line.", category: "TASTE", batchID: b.id))
             }

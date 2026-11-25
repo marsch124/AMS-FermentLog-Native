@@ -1,4 +1,4 @@
-# AMS FermentLog — specification, version 6.1, build 3 (25 Nov 2026)
+# AMS FermentLog — specification, version 6.1, build 4 (25 Nov 2026)
 
 This folder describes the app exactly as it is built in 6.0, written from the code. FermentLog 6.0 is a native app for iPhone, iPad and Mac that replaces the web app (last web version 5.25). The numbering simply continues: the native app starts at 6.0.
 

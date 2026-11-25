@@ -1,0 +1,13 @@
+What to look at in 6.3 (build 6) — tap a tile to show only those jars, and see a picture large. Check each point on iPhone, iPad and Mac, by day and by night.
+1. Jars list, under the tiles: a small grey line "Tap a tile to show only those jars". All jars are shown.
+2. Tap IN THE FRIDGE: only the jars in the fridge stay. The tile gets a blue outline. A line says "Showing only: In the fridge" with a button Show all.
+3. Tap the same tile again: every jar is back. Tap a tile, then Show all: every jar is back.
+4. Try FERMENTING (orange outline) and DONE (green outline). The Fermenting tile stays filled orange when not chosen; only the outline means chosen.
+5. Choose a group with no jars: the list says e.g. "No jars in the fridge."
+6. Close the app and open it again: all jars are shown (the choice is not kept).
+7. Open a jar with pictures, tap the picture on the orange head card: it opens large on a dark page with "1 of 3" at the top and a Done button.
+8. iPhone and iPad: swipe left and right through the pictures; the count follows. Mac: Previous and Next and the left and right arrow keys; Escape closes.
+9. The row of pictures on a jar, a recipe and a bake: tap any picture, it opens large. A small grey line under the row says "Tap a picture to see it large".
+10. The pages where you change something (Remove under each picture): a tap on a picture does nothing.
+11. Settings, How it works: Your jars, A jar's page, Recipes, Bakes and Signs in this app tell it. Settings, What's new: 6.3 (build 6) is at the top.
+12. Tell me anything that looks wrong, is cut off, too small to read, or has a word you do not understand.

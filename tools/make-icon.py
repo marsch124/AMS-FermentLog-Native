@@ -102,7 +102,7 @@ def draw(size):
     S = size * 4
     img = Image.new("RGB", (S, S), BG)
     dr = ImageDraw.Draw(img)
-    k = S * 0.58 / 24                      # the jar fills about two thirds of the tile
+    k = S * 0.80 / 24                      # the jar is a good half of the tile, as on his other app icons
     ox = oy = (S - 24 * k) / 2
     def stroke(d, w):
         r = w * k / 2

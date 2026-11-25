@@ -58,6 +58,12 @@ final class Store: ObservableObject {
         try? fm.createDirectory(at: photosURL, withIntermediateDirectories: true)
         load()
         if isTestRun && args.contains("-sample") { data = AppData.sample }
+        // Pictures: "-samplePhoto" gives the sample Cabbage jar a made-up picture (drawn here, no real photo).
+        if isTestRun && args.contains("-samplePhoto"), let jpeg = SamplePhoto.jpeg(),
+           let i = data.batches.firstIndex(where: { $0.id == "b_sample_cabbage" }) {
+            let name = addPhoto(jpeg)
+            if !name.isEmpty { data.batches[i].photos.insert(name, at: 0) }
+        }
         // Tests and pictures: as if a newer version had saved the file / as if a save had failed.
         if isTestRun && args.contains("-needsUpdate") { data.format = AppData.currentFormat + 1 }
         if isTestRun && args.contains("-saveProblem") { saveProblem = "The file could not be written." }

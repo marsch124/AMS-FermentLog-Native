@@ -48,10 +48,7 @@ struct JarDetailScreen: View {
         let days = Logic.dayNumber(b)
         return Hero(area: .jars) {
             HStack(alignment: .center, spacing: 12) {
-                Mark(.jarBig).frame(width: 40, height: 40)
-                    .frame(width: 56, height: 72)
-                    .background(Color.white.opacity(0.17), in: RoundedRectangle(cornerRadius: Look.tileRadius, style: .continuous))
-                    .accessibilityHidden(true)
+                headPicture(b)
                 VStack(alignment: .leading, spacing: 3) {
                     Text(b.title).font(.title3.weight(.bold)).fixedSize(horizontal: false, vertical: true)
                     HStack(alignment: .firstTextBaseline, spacing: 8) {
@@ -69,6 +66,24 @@ struct JarDetailScreen: View {
                 }
                 Spacer(minLength: 0)
             }
+        }
+    }
+
+    /// The jar's own first picture on the head card; the drawn jar when it has none.
+    @ViewBuilder private func headPicture(_ b: Batch) -> some View {
+        let frame = RoundedRectangle(cornerRadius: Look.tileRadius, style: .continuous)
+        if let p = b.photos.first {
+            PhotoImage(url: store.photoURL(p))
+                .frame(width: 60, height: 76)
+                .clipShape(frame)
+                .overlay(frame.stroke(Color.white.opacity(0.45), lineWidth: 1.5))
+                .accessibilityLabel("Picture of the jar")
+                .accessibilityIdentifier("jar-head-photo")
+        } else {
+            Mark(.jarBig).frame(width: 40, height: 40)
+                .frame(width: 60, height: 76)
+                .background(Color.white.opacity(0.17), in: frame)
+                .accessibilityHidden(true)
         }
     }
 

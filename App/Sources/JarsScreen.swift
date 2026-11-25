@@ -52,12 +52,13 @@ struct JarsScreen: View {
         let done = all.filter { Logic.batchStatus($0) == .done }.sorted { $0.startDate > $1.startDate }
         let due = Logic.dueBatches(all)
 
-        HStack(spacing: 14) {
-            stat(fermenting.count, "fermenting", Theme.brand)
-            stat(fridge.count, "in the fridge", JarStyle.fridge)
-            stat(done.count, "done", Theme.ok)
-            Spacer(minLength: 0)
+        // Three tiles in the colours of the jar states (the same as the pills): Fermenting filled orange, In the fridge blue, Done green.
+        TileGrid(columns: 3, compact: 3) {
+            StatTile(value: "\(fermenting.count)", label: "Fermenting", area: .jars, filled: true)
+            StatTile(value: "\(fridge.count)", label: "In the fridge", area: .jars, tint: JarStyle.fridge)
+            StatTile(value: "\(done.count)", label: "Done", area: .jars, tint: Theme.ok)
         }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("jars-stats")
         NavigationLink(value: Route.jarNew) { Text("Start a jar") }
             .buttonStyle(PrimaryButtonStyle(area: .jars))
@@ -99,14 +100,5 @@ struct JarsScreen: View {
                     .accessibilityIdentifier("jar-row-\(b.id)")
             }
         }
-    }
-
-    private func stat(_ n: Int, _ label: String, _ color: Color) -> some View {
-        HStack(spacing: 4) {
-            Text("\(n)").fontWeight(.bold).foregroundStyle(color)
-            Text(label).foregroundStyle(Theme.muted)
-        }
-        .font(.subheadline)
-        .accessibilityElement(children: .combine)
     }
 }

@@ -213,3 +213,46 @@ extension AppData {
         return out
     }
 }
+
+import CoreGraphics
+import ImageIO
+import UniformTypeIdentifiers
+
+/// A made-up picture for screenshots ("-samplePhoto"): a green-to-cream glass with darker shreds and a few bubbles.
+enum SamplePhoto {
+    static func jpeg(width: Int = 600, height: Int = 760) -> Data? {
+        let space = CGColorSpaceCreateDeviceRGB()
+        guard let ctx = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: 0,
+                                  space: space, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return nil }
+        let w = CGFloat(width), h = CGFloat(height)
+        // Background: a warm kitchen wall.
+        ctx.setFillColor(CGColor(red: 0.93, green: 0.86, blue: 0.76, alpha: 1)); ctx.fill(CGRect(x: 0, y: 0, width: w, height: h))
+        // The glass full of pale green cabbage.
+        let glass = CGRect(x: w * 0.18, y: h * 0.08, width: w * 0.64, height: h * 0.74)
+        let colors = [CGColor(red: 0.62, green: 0.74, blue: 0.40, alpha: 1), CGColor(red: 0.90, green: 0.92, blue: 0.70, alpha: 1)] as CFArray
+        if let g = CGGradient(colorsSpace: space, colors: colors, locations: [0, 1]) {
+            ctx.saveGState(); ctx.addPath(CGPath(roundedRect: glass, cornerWidth: 40, cornerHeight: 40, transform: nil)); ctx.clip()
+            ctx.drawLinearGradient(g, start: CGPoint(x: 0, y: glass.minY), end: CGPoint(x: 0, y: glass.maxY), options: [])
+            ctx.setStrokeColor(CGColor(red: 0.42, green: 0.55, blue: 0.25, alpha: 0.55)); ctx.setLineWidth(5); ctx.setLineCap(.round)
+            for k in 0..<26 {
+                let x = glass.minX + CGFloat((k * 37) % 300) / 300 * glass.width
+                let y = glass.minY + CGFloat((k * 53) % 400) / 400 * glass.height * 0.8
+                ctx.move(to: CGPoint(x: x, y: y)); ctx.addLine(to: CGPoint(x: x + 40, y: y + CGFloat(k % 5) * 6 - 12))
+            }
+            ctx.strokePath()
+            ctx.setFillColor(CGColor(red: 1, green: 1, blue: 1, alpha: 0.6))
+            for k in 0..<9 { ctx.fillEllipse(in: CGRect(x: glass.minX + CGFloat(k * 41 % 330), y: glass.minY + 30 + CGFloat(k * 67 % 420), width: 12, height: 12)) }
+            ctx.restoreGState()
+        }
+        ctx.setStrokeColor(CGColor(red: 1, green: 1, blue: 1, alpha: 0.8)); ctx.setLineWidth(8)
+        ctx.addPath(CGPath(roundedRect: glass, cornerWidth: 40, cornerHeight: 40, transform: nil)); ctx.strokePath()
+        // The lid.
+        ctx.setFillColor(CGColor(red: 0.55, green: 0.55, blue: 0.58, alpha: 1))
+        ctx.fill(CGRect(x: glass.minX + 30, y: glass.maxY - 4, width: glass.width - 60, height: 60))
+        guard let image = ctx.makeImage() else { return nil }
+        let out = NSMutableData()
+        guard let dest = CGImageDestinationCreateWithData(out, UTType.jpeg.identifier as CFString, 1, nil) else { return nil }
+        CGImageDestinationAddImage(dest, image, [kCGImageDestinationLossyCompressionQuality: 0.85] as CFDictionary)
+        return CGImageDestinationFinalize(dest) ? out as Data : nil
+    }
+}

@@ -100,12 +100,14 @@ struct Tile: View {
 struct TileBack: View {
     var area: Area = .jars
     var filled = false
+    /// A colour of its own instead of the part's (the jar states: blue In the fridge, green Done).
+    var tint: Color?
     @Environment(\.onHero) private var onHero
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: Look.tileRadius, style: .continuous)
-        if filled { shape.fill(area.hero) }
+        if filled { shape.fill(tint ?? area.hero) }
         else if onHero { shape.fill(Color.white.opacity(0.17)) }
-        else { shape.fill(Theme.surface).overlay(shape.fill(area.color.opacity(0.11))) }
+        else { shape.fill(Theme.surface).overlay(shape.fill((tint ?? area.color).opacity(0.11))) }
     }
 }
 
@@ -137,19 +139,22 @@ struct StatTile: View {
     var area: Area = .insights
     var filled = false
     var ring: Double?
+    /// A colour of its own instead of the part's (see TileBack).
+    var tint: Color?
     var body: some View {
+        let c = tint ?? area.color
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 6) {
                 Text(value).font(.title2.weight(.heavy))
-                    .foregroundStyle(filled ? Color.white : area.color).lineLimit(1).minimumScaleFactor(0.6)
-                if let ring { Ring(share: ring, color: filled ? .white : area.color).frame(width: 18, height: 18) }
+                    .foregroundStyle(filled ? Color.white : c).lineLimit(1).minimumScaleFactor(0.6)
+                if let ring { Ring(share: ring, color: filled ? .white : c).frame(width: 18, height: 18) }
             }
             Text(label.uppercased()).font(.caption2.weight(.semibold)).kerning(0.3)
                 .foregroundStyle(filled ? Look.heroSoft : Theme.muted).lineLimit(1).minimumScaleFactor(0.6)
         }
         .padding(.horizontal, 9).padding(.vertical, 6)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background { TileBack(area: area, filled: filled) }
+        .background { TileBack(area: area, filled: filled, tint: tint) }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(label) \(value)")
     }

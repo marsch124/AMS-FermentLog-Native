@@ -20,7 +20,7 @@ Every rule in `Logic.swift`, `AlarmPlan.swift`, `Alarms.swift`, `SettingsListEdi
 
 - `daysBetween(start, end)`: whole calendar days, never negative, nothing when the start is missing or unreadable; the end is the given day or today.
 - `fermentDays` (jar page, Insights, exports): start to the fridge day; else to the day the outcome was recorded; else to today.
-- **Status**: Done when an outcome is recorded; else In fridge when the fridge day is set; else Fermenting. The list's pill counts to the fridge day when there is one, otherwise to today (so a Done jar without a fridge day keeps counting in the list, while its page stops at the outcome day).
+- **Status**: Done when an outcome is recorded; else In fridge when the fridge day is set; else Fermenting. The list's pill and the jar page both use `fermentDays`, so they show the same day number.
 - **Overall rating of a jar**: the explicit Overall, else the average of Taste, Sourness and Crunch that are set; nothing when none. A bake: the explicit Overall, else the average of Crust, Crumb and Flavour. Stars are the rating rounded to a whole number, 0–5, "★" filled and "☆" empty; no rating shows "—".
 
 ## Taste-test reminder
@@ -42,8 +42,8 @@ Notification (`AlarmPlan`): one per due jar, id `taste.<jarid>.<due day>`, at th
 - **Burped** (`Logic.burped`): adds a Did line "Burped the jar" with kind "burp", today's date and the time of the tap. A burp counts only when it has this kind (a Did line typed by hand does not).
 - **Slots** (`burpSlots`): for the next 7 days from now, the morning and evening time of each day (today and the next 7), keeping only those after now and not later than now + 7 days; a slot is skipped when a burp was logged at or before it and not more than 3 hours before it. Seen at 09:00 a plain-lid jar has 14 slots: the evening of today, 6 whole days, and the morning of the 8th day.
 - **Plan** (`AlarmPlan.plan`): for every live jar: its burp slots when this device rings (`burpAlarmHere`), plus its taste reminder when `tasteAlarmHere`; sorted by time (then id); cut to 60 (iOS keeps 64 waiting). Burp id `burp.<jarid>.<yyyyMMddHHmm>`; title "Burp: <jar>"; body "Morning burp · day N. Tap Burped when it is done." or "Evening burp · …" (morning = the slot whose clock time equals the morning setting; N = days from the start to the slot's day).
-- **When it is re-planned** (`Alarms.reschedule`, after 0.5 s of quiet): at launch, each time the app becomes active, after any change to the data or to this device's settings, and after each action on a jar. It does nothing without notification permission, in UI tests, or in a test store. It removes waiting `burp.`/`taste.` requests that are no longer wanted, adds the missing ones, and removes delivered burp notifications older than the jar's last burp.
-- **Permission** is asked only: when a jar's switch is turned on, when "Ring on this …" is turned on while still not asked, and by the button "Allow notifications".
+- **When it is re-planned** (`Alarms.reschedule`, after 0.5 s of quiet): at launch, each time the app becomes active, after any change to the data or to this device's settings, and after each action on a jar. It does nothing in UI tests, or in a test store. It removes waiting `burp.`/`taste.` requests that are no longer wanted, adds the missing ones, and removes delivered burp notifications older than the jar's last burp.
+- **Permission**: `apply` asks the system by itself, once, the first time the plan is not empty while permission was never asked; also when a jar's switch is turned on, when "Ring on this …" is turned on while still not asked, and by the button "Allow notifications". Without permission nothing is planned.
 - **The button**: "Burped" on the notification adds the burp (as above), saves at once to disk, and re-plans. A tap on the notification itself opens the jar (a waiting route is handed over when the window is ready).
 
 ## Insights
@@ -93,4 +93,5 @@ Names listed = his remembered names plus those used by jars, not built in, sorte
 
 - **Counts line**: "7 jars, 2 bakes, 3 recipes, 4 lessons, 1 template, 12 pictures" — only kinds with at least one.
 - **Web import**: write "Before import", add the pictures, then `WebImport.merge`. **Own backup restore**: `parseBackup` accepts only a JSON object that has `format` and `batches`; a web backup (`app` = "fermentlog") is refused with "This backup comes from the old web app. Use “Bring your jars over from the web app” for it."; a higher format with "A newer FermentLog made this backup. Update this device first."; anything else "This is not a FermentLog backup."; then "Before restore" and `AppData.merged` (joined, not replaced).
+- **Logged by**: a new jar starts with the person who is logging, as bakes and lessons do.
 - **People**: the first name added becomes the person who is logging; removing the one who is logging makes the first of the rest the one.

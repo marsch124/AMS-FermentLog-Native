@@ -1,6 +1,6 @@
 What to try first on TestFlight (6.0, build 1)
-1. Settings: "Bring your jars over from the web app". Export the backup in the old app first (Settings, Backup & export), then choose the file here. Check the counts it shows, and that your jars, pictures and people are all there.
-2. Settings, Burp alarm: tap "Allow notifications". Open your cabbage jar, check the switch "Burp alarm" is on (plain lid) and the line says it rings at 08:00 and 20:00.
+1. Settings: "Bring your jars over from the web app". Update the old web app to 5.26 or newer first, then export the backup in it (Settings, Backup & export), then choose the file here. Check the counts it shows, and that your jars, pictures and people are all there.
+2. Settings, Burp alarm: when the phone asks to allow notifications, say Allow (Settings, Burp alarm, shows the state). Open your cabbage jar, check the switch "Burp alarm" is on (plain lid) and the line says it rings at 08:00 and 20:00.
 3. When the alarm rings: press and hold the notification and tap "Burped". Open the jar: a line "Burped the jar" with the time should be in the Timeline.
 4. Tap the "Burped" button on a jar page yourself. Check "Last burp" and the Undo bar.
 5. Open the same jar on the iPad and on the Mac. A change on one (a Taste line, say) should appear on the others within a minute; Settings, iCloud, "Sync now" speeds it up.

@@ -75,7 +75,10 @@ final class ScreenTests: XCTestCase {
         let app = launch(part: "settings")
         see(app, "settings-screen")
         let g = el(app, "settings-guide"); reveal(app, g)
-        see(app, "settings-whats-new", "settings-version")
+        see(app, "settings-whats-new")
+        // The version line is the last row of the list: scroll to it too. (25 Nov: on GitHub's Mac the scroll stopped with
+        // "How it works" just in view and the version row below it not drawn yet — "missing settings-version".)
+        let v = el(app, "settings-version"); reveal(app, v)
     }
 
     /// Burped → one new line; tick a plan step → progress changes; two typed lines → two more lines.

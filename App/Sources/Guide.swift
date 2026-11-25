@@ -2,7 +2,7 @@ import Foundation
 
 /// The single source for the version the app shows, "What's new" and "How it works".
 enum Guide {
-    static let appVersion = "6.1"
+    static let appVersion = "6.2"
 
     struct Release: Identifiable {
         let version: String
@@ -12,6 +12,11 @@ enum Guide {
     }
 
     static let releases: [Release] = [
+        Release(version: "6.2 (build 5)", date: "25 Nov 2026", lines: [
+            "Changed: the three numbers at the top of the Jars list. Before: one line of small words, “2 fermenting · 1 in the fridge · 1 done”, each number in its colour. Now: three small tiles side by side, each with a big number and its name under it in small capitals. FERMENTING is an orange tile filled with orange, with white words. IN THE FRIDGE is a pale blue tile with a blue number. DONE is a pale green tile with a green number. The colours are the same as the pills on each jar (orange Fermenting, blue In fridge, green Done). Under the tiles nothing changes: the button Start a jar, and the box “1 jar is due for a taste test”.",
+            "New: the jar’s own picture on its head card. Before: the orange card at the top of a jar’s page always showed a drawn jar, even when the jar had pictures. Now: when the jar has at least one picture, its first picture stands there instead, in a rounded frame. A jar with no pictures still shows the drawn jar. The row of pictures under the card is unchanged and shows all of them. The Jars list already showed the first picture as each row’s small picture; now the jar’s page matches it.",
+            "Updated: How it works (Your jars, A jar’s page, Signs in this app) and the written specification.",
+        ]),
         Release(version: "6.1 (build 4)", date: "25 Nov 2026", lines: [
             "Changed: how a jar’s day is counted wherever the app says “Day N”. Before: the day you started a jar was Day 0, so a jar started today said “Day 0” (and “DAY 0” in the Timeline), and the next day said Day 1. Now: the start day is Day 1, the next day is Day 2, and so on. Example: a jar started on Mon 23 Nov says Day 3 on Wed 25 Nov (before: Day 2). It shows in four places: the big “Day N” on the jar’s head card; the pill in the jar list (“Fermenting · day 3”); the day headings of the Timeline (“DAY 1  WED 25 NOV”); and the words of the two notifications (“Morning burp · day 3” and “Day 3 — time to taste and write a line”). For a jar in the fridge, or done, the number still stops on the day it went into the fridge (now one higher than before).",
             "Unchanged on purpose: “days fermented” as a length of time. Insights (the chart “Rating and days fermented” and “Days: about 12” in the recommended recipe) and the column “Days fermented” in the spreadsheet still count whole days gone by: started on Monday and into the fridge the next Monday is 7 days. Also unchanged: when a taste test is due (still counted from the last taste test, or from the start day).",
@@ -116,7 +121,7 @@ Settings › Appearance picks System, Light or Dark for this device only; on the
 """),
 
         Section(title: "Your jars", text: """
-The Jars list (Home on the iPhone, Jars at the side on iPad and Mac) starts with three numbers in their own colours: how many jars are fermenting, in the fridge and done. Under them is the full-colour button Start a jar. On the iPad and the Mac there is also New jar at the top right.
+The Jars list (Home on the iPhone, Jars at the side on iPad and Mac) starts with three small tiles side by side, each with a big number: FERMENTING (the orange tile), IN THE FRIDGE (the pale blue tile) and DONE (the pale green tile). The colours are the colours of the pills on the rows below. Under the tiles is the full-colour button Start a jar. On the iPad and the Mac there is also New jar at the top right.
 If any jar is due for a taste test, a tinted box says “2 jars are due for a taste test” and names them.
 Jars are in three groups, each with its count:
 • Fermenting — on the counter. Jars due for a taste test come first, the most overdue first; the others follow, newest first.
@@ -141,7 +146,7 @@ After Save, a new jar opens on its own page.
 
         Section(title: "A jar’s page", text: """
 At the top right: Edit. Then, from the top:
-• An orange head card: a drawn jar, the jar’s name, a big “Day 3” (Day 1 is the day you started the jar, Day 2 the next day, and so on), its state (Fermenting, In the fridge or Done), “started Wed 25 Nov”, and, while a taste test is coming, a slim line that fills from the start day to the next taste test with “Taste test Sat 28 Nov · in 3 days” under it (deep orange once the day has come).
+• An orange head card: the jar’s first picture in a rounded frame (a drawn jar when the jar has no pictures), the jar’s name, a big “Day 3” (Day 1 is the day you started the jar, Day 2 the next day, and so on), its state (Fermenting, In the fridge or Done), “started Wed 25 Nov”, and, while a taste test is coming, a slim line that fills from the start day to the next taste test with “Taste test Sat 28 Nov · in 3 days” under it (deep orange once the day has come).
 • Pictures, then six tiles: Vegetable, Form, Brine (green when it is 2–3 %), Room, Lid and Weight, plus Logged by when set; your spices as small tags, and your notes.
 • Burp (only while the jar is fermenting) — all on one row: the full-colour Burped button; beside it “Not burped yet” or “Last burp: today 08:12 · 2 today”; and the switch Burp alarm with its two times (“Rings at 08:00 and 20:00”) beside it (with “— switched off for this device in Settings” when this device does not ring). One tap on Burped writes the burp into the Timeline; a bar at the bottom says “Burp logged 08:12” with Undo for 4 seconds.
 • To do — from <recipe> (only when the jar was started from a recipe) — the recipe’s steps as round boxes, with “2 of 7 done” above them. Tap a box: it turns green with a tick, the step shows “done 14:05”, and a Did line with the step’s words and that time is written into the Timeline. Tap it again to take both back (if you have changed that Timeline line’s words or time in between, the line stays).
@@ -255,6 +260,7 @@ The built-in vegetables, cuts and spices are not listed.
         Section(title: "Signs in this app", text: """
 Every mark and colour that means something, and what it tells you.
 Pills (round-ended) and tags (small, square-cornered):
+• Orange, blue and green mean the state of a jar, on the pills and on the three tiles at the top of the Jars list: orange = Fermenting, blue = In the fridge, green = Done.
 • Orange pill “Fermenting · day 3” — the jar is on the counter; the number counts the days since it started, and the start day is Day 1.
 • Blue pill “In fridge · day 12” — the jar is in the fridge; the number stops at the day it went in.
 • Green pill “Done” — a verdict has been recorded.
@@ -276,7 +282,7 @@ Marks:
 • The green line beside “1 of 3 done” in To do — how many of the steps are ticked.
 • A slim bar under a name with stars (a jar’s Outcome, a bake’s How it turned out, the average ratings in Insights) — how many of the five stars; the stars or the figure stand right beside the name. A red slim bar is a problem: how often it came up, the longest bar being the most frequent one.
 • A number in a full-colour circle — the number of a recipe step, the same number as its piece in the time ribbon.
-• A number tile filled with colour (the first one in Insights) — only the first of the row; it means nothing more.
+• A number tile filled with colour (the first tile of a row: Fermenting in the Jars list, Jars in Insights) — it is filled only because it is the first; it means nothing more.
 • The small ring beside Success in Insights — the share of finished jars that were a success.
 • The shaded band in the brine chart — the usual range, 2 to 3 %; the words “shaded = the usual 2–3%” stand beside the chart’s heading.
 • The time ribbon above a recipe’s Method — one piece per step, as long as the step takes: a pale piece is a wait of 2 hours or more, a full-colour piece is a shorter step.

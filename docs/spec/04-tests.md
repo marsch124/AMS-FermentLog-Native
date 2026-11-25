@@ -39,6 +39,7 @@ These two files are being rewritten alongside the 6.0 texts; the list above is w
 | `-needsUpdate` | Pretend a newer version saved the file (red bar, nothing saved) |
 | `-saveProblem` | Pretend a save failed (red line in Settings › iCloud) |
 | `-charts` | With `-sample`: five more finished, rated jars, so Insights draws its charts (pictures only) |
+| `-samplePhoto` | With `-sample`: the Cabbage jar gets a made-up picture (pictures only) |
 | `-insights:<view>` | Pick the Insights view: `ferments` or `bakes` (a separate word after `-insightsView` reaches the Mac as a file to open, and the app then shows no window) |
 | `-scrollDown:<points>` | Move the page down before the picture is taken — Mac and, since 6.1, iPhone and iPad |
 

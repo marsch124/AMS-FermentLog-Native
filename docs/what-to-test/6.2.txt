@@ -1,0 +1,9 @@
+What to look at in 6.2 (build 5) — three number tiles on the Jars list, and the jar's own picture on its page. Check each point on iPhone, iPad and Mac, by day and by night.
+1. Jars list, top: three small tiles side by side with a big number each. FERMENTING is orange with white words, IN THE FRIDGE is pale blue with a blue number, DONE is pale green with a green number. The numbers match the jars below (before: one line of words "2 fermenting · 1 in the fridge · 1 done"). On the iPhone nothing is cut off.
+2. Under the tiles: the full-colour button Start a jar, and the box "1 jar is due for a taste test" when a jar is due.
+3. The tile colours are the same as the pills on the rows: orange Fermenting, blue In fridge, green Done.
+4. Open a jar that has pictures: on the orange head card its first picture stands in a rounded frame, where the drawn jar was. The row of pictures under the card still shows all of them.
+5. Open a jar without pictures: the head card still shows the drawn jar.
+6. Back in the list: each row still shows the jar's first picture as its small picture.
+7. Settings, How it works: Your jars, A jar's page and Signs in this app tell the new look. Settings, What's new: 6.2 (build 5) is at the top.
+8. Tell me anything that looks wrong, is cut off, too small to read, or has a word you do not understand.

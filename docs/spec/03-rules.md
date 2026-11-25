@@ -114,3 +114,8 @@ Names listed = his remembered names plus those used by jars, not built in, sorte
 - **Web import**: write "Before import", add the pictures, then `WebImport.merge`. **Own backup restore**: `parseBackup` accepts only a JSON object that has `format` and `batches`; a web backup (`app` = "fermentlog") is refused with "This backup comes from the old web app. Use “Bring your jars over from the web app” for it."; a higher format with "A newer FermentLog made this backup. Update this device first."; anything else "This is not a FermentLog backup."; then "Before restore" and `AppData.merged` (joined, not replaced).
 - **Logged by**: a new jar starts with the person who is logging, as bakes and lessons do.
 - **People**: the first name added becomes the person who is logging; removing the one who is logging makes the first of the rest the one.
+
+## Jars filter and picture viewer (6.3)
+
+- **`JarsFilter`**: `Logic.jars(_ batches:, showing: JarStatus?)` returns all live jars when `showing` is nil, otherwise only the jars whose `batchStatus` equals the choice. `JarsScreen` keeps the choice in `@State` (never stored, so every start shows all jars). Tapping the chosen tile again, or "Show all", sets it back to nil. Identifiers: `jars-filter-fermenting`, `jars-filter-fridge`, `jars-filter-done`, `jars-filter-showall`, `jars-filter-hint`.
+- **`PhotoViewer(names:start:)`** (`Photos.swift`): shows `names[start]` first; "N of M" counts from 1; identifiers `photo-viewer`, `photo-viewer-done`, `photo-viewer-previous`, `photo-viewer-next`, `photo-viewer-count`. Opened from `jar-head-photo` and from `photo-open-<n>` (n from 0) of `PhotoStrip(editable: false)`; iOS `.fullScreenCover`, Mac `.sheet` at least 720×560.

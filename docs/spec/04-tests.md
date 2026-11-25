@@ -48,3 +48,8 @@ These two files are being rewritten alongside the 6.0 texts; the list above is w
 - `Tests/LookTests.swift` — `LookTests` (4: a day in plain words, "in 3 days", minutes read from a step's words incl. weeks, the amount of an ingredient) and `JarLookTests` (2: the Timeline grouped by day with a shared time written once, the line to the next taste test).
 - `Tests/RibbonTests.swift` — 1: the widths of the recipe time ribbon.
 - Pictures without a screen test: `tools/mac-pictures.sh` (`QUIET=1` opens the windows behind his work, `ONLY="02 14"` picks pages) and the new `tools/phone-pictures.sh <simulator-udid>` for iPhone and iPad.
+
+## Added in 6.3 (tile filter and picture viewer)
+
+- `JarsFilterTests` — 1 data test: `Logic.jars(_:showing:)` returns every live jar for nil and only the jars of that status for a choice.
+- `ScreenTests.testPhotoViewer` — opens the Cabbage jar with `-samplePhoto`, taps the head picture (`jar-head-photo`), sees `photo-viewer`, taps Done (`photo-viewer-done`).

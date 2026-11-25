@@ -249,15 +249,19 @@ extension View {
 struct Block<Content: View>: View {
     let title: String
     var area: Area = .jars
+    /// A few small grey words right beside the heading ("each dot is one jar").
+    var note: String?
     @ViewBuilder var content: Content
     var body: some View {
         VStack(alignment: .leading, spacing: Theme.gap) {
-            SectionHeading(title, area)
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                SectionHeading(title, area)
+                if let note { Text(note).font(.caption).foregroundStyle(Theme.muted) }
+                Spacer(minLength: 0)
+            }
             content
         }
-        .padding(10)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Theme.surface, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .card()
     }
 }
 

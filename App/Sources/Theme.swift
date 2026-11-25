@@ -98,13 +98,14 @@ enum Theme {
 struct PrimaryButtonStyle: ButtonStyle {
     var area: Area = .jars
     @Environment(\.isEnabled) private var enabled
+    @Environment(\.onHero) private var onHero
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.body.weight(.semibold))
-            .foregroundStyle(.white)
+            .foregroundStyle(onHero ? area.hero : Color.white)
             .padding(.horizontal, 14).padding(.vertical, 8)
             .frame(minHeight: 36)
-            .background(area.fill, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .background(onHero ? Color.white : area.fill, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
             .opacity(configuration.isPressed ? 0.85 : (enabled ? 1 : 0.55))
     }
 }
@@ -112,13 +113,14 @@ struct PrimaryButtonStyle: ButtonStyle {
 /// The second button: the area's colour as words on a soft tint.
 struct QuietButtonStyle: ButtonStyle {
     var area: Area = .jars
+    @Environment(\.onHero) private var onHero
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.body.weight(.semibold))
-            .foregroundStyle(area.color)
+            .foregroundStyle(onHero ? Color.white : area.color)
             .padding(.horizontal, 12).padding(.vertical, 6)
             .frame(minHeight: 32)
-            .background(area.color.opacity(0.14), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .background(onHero ? Color.white.opacity(0.2) : area.color.opacity(0.14), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
             .opacity(configuration.isPressed ? 0.7 : 1)
     }
 }
@@ -127,12 +129,13 @@ struct QuietButtonStyle: ButtonStyle {
 struct Pill: View {
     let text: String
     let color: Color
+    @Environment(\.onHero) private var onHero
     var body: some View {
         Text(text)
             .font(.caption.weight(.bold))
-            .foregroundStyle(color)
+            .foregroundStyle(onHero ? Color.white : color)
             .padding(.horizontal, 8).padding(.vertical, 2)
-            .background(color.opacity(0.16), in: Capsule())
+            .background(onHero ? Color.white.opacity(0.22) : color.opacity(0.16), in: Capsule())
     }
 }
 

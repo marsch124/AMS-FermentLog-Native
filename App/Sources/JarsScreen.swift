@@ -15,6 +15,8 @@ enum JarStyle {
 /// The list of jars: fermenting first, then in the fridge, then done.
 struct JarsScreen: View {
     @EnvironmentObject var store: Store
+    /// The tile he tapped: only those jars are shown. Not remembered — the list opens with all jars.
+    @State private var showing: JarStatus?
 
     var body: some View {
         let all = store.data.liveBatches
@@ -53,13 +55,26 @@ struct JarsScreen: View {
         let due = Logic.dueBatches(all)
 
         // Three tiles in the colours of the jar states (the same as the pills): Fermenting filled orange, In the fridge blue, Done green.
+        // Each is a button: tap one and only those jars stay; a coloured outline marks the chosen one (like a chosen chip).
         TileGrid(columns: 3, compact: 3) {
-            StatTile(value: "\(fermenting.count)", label: "Fermenting", area: .jars, filled: true)
-            StatTile(value: "\(fridge.count)", label: "In the fridge", area: .jars, tint: JarStyle.fridge)
-            StatTile(value: "\(done.count)", label: "Done", area: .jars, tint: Theme.ok)
+            tile(fermenting.count, .fermenting, filled: true, tint: nil, id: "jars-filter-fermenting")
+            tile(fridge.count, .fridge, filled: false, tint: JarStyle.fridge, id: "jars-filter-fridge")
+            tile(done.count, .done, filled: false, tint: Theme.ok, id: "jars-filter-done")
         }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("jars-stats")
+        if let s = showing {
+            HStack(spacing: Theme.gap) {
+                Text("Showing only: \(Self.name(s))").font(.subheadline.weight(.semibold)).foregroundStyle(JarStyle.color(s))
+                Button("Show all") { showing = nil }
+                    .buttonStyle(QuietButtonStyle(area: .jars))
+                    .accessibilityIdentifier("jars-filter-showall")
+                Spacer(minLength: 0)
+            }
+        } else {
+            Text("Tap a tile to show only those jars").font(.caption).foregroundStyle(Theme.muted)
+                .accessibilityIdentifier("jars-filter-hint")
+        }
         NavigationLink(value: Route.jarNew) { Text("Start a jar") }
             .buttonStyle(PrimaryButtonStyle(area: .jars))
             .accessibilityIdentifier("jars-start")
@@ -72,9 +87,38 @@ struct JarsScreen: View {
             .background(Theme.brand.opacity(0.12), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
             .accessibilityIdentifier("jars-due")
         }
-        group("Fermenting", fermenting, .fermenting)
-        group("In the fridge", fridge, .fridge)
-        group("Done", done, .done)
+        if showing == nil || showing == .fermenting { group("Fermenting", fermenting, .fermenting) }
+        if showing == nil || showing == .fridge { group("In the fridge", fridge, .fridge) }
+        if showing == nil || showing == .done { group("Done", done, .done) }
+        if let s = showing, Logic.jars(all, showing: s).isEmpty {
+            Text(Self.empty(s)).font(.subheadline).foregroundStyle(Theme.muted).padding(.top, Theme.tight)
+                .accessibilityIdentifier("jars-filter-empty")
+        }
+    }
+
+    private static func name(_ s: JarStatus) -> String {
+        switch s { case .fermenting: "Fermenting"; case .fridge: "In the fridge"; case .done: "Done" }
+    }
+    private static func empty(_ s: JarStatus) -> String {
+        switch s { case .fermenting: "No jars fermenting."; case .fridge: "No jars in the fridge."; case .done: "No jars done yet." }
+    }
+
+    /// One tile as a button: tap to show only those jars, tap again for all.
+    private func tile(_ n: Int, _ s: JarStatus, filled: Bool, tint: Color?, id: String) -> some View {
+        let on = showing == s
+        let edge = s == .fermenting ? Theme.brandInk : (tint ?? Area.jars.color)
+        return Button { showing = on ? nil : s } label: {
+            StatTile(value: "\(n)", label: Self.name(s), area: .jars, filled: filled, tint: tint)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .overlay {
+            RoundedRectangle(cornerRadius: Look.tileRadius + 3, style: .continuous)
+                .stroke(on ? edge : Color.clear, lineWidth: 2)
+                .padding(-3)
+        }
+        .accessibilityAddTraits(on ? .isSelected : [])
+        .accessibilityIdentifier(id)
     }
 
     /// Jars due for a taste test first (most overdue first), then newest first.

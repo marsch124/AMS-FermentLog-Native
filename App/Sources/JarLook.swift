@@ -17,6 +17,12 @@ struct TimelineLine: Equatable, Identifiable {
 }
 
 extension Logic {
+    /// The jars the Jars list shows: all of them, or only one state when a tile was tapped (6.3).
+    static func jars(_ batches: [Batch], showing: JarStatus?) -> [Batch] {
+        guard let showing else { return batches }
+        return batches.filter { batchStatus($0) == showing }
+    }
+
     /// Groups the Timeline by day, in order, so the day is written once as a heading and a shared time only once.
     static func timelineDays(_ entries: [TimelineEntry], start: String) -> [TimelineDay] {
         var out: [TimelineDay] = []

@@ -5,12 +5,12 @@ import XCTest
 final class ScreenTests: XCTestCase {
     override func setUp() { continueAfterFailure = false }
 
-    private func launch(part: String? = nil) -> XCUIApplication {
+    private func launch(part: String? = nil, extra: [String] = []) -> XCUIApplication {
         #if os(iOS)
         XCUIDevice.shared.orientation = .portrait
         #endif
         let app = XCUIApplication()
-        app.launchArguments = ["-uiTesting", "-sample"] + ["-part:\(part ?? "jars")"]
+        app.launchArguments = ["-uiTesting", "-sample"] + extra + ["-part:\(part ?? "jars")"]
         app.launch()
         return app
     }
@@ -70,6 +70,16 @@ final class ScreenTests: XCTestCase {
         see(app, "search-field")
         let f = el(app, "search-field"); f.tap(); f.typeText("cab")
         XCTAssertTrue(withPrefix(app, "jar-row-").firstMatch.waitForExistence(timeout: 8) || withPrefix(app, "search-").count > 1)
+    }
+    /// 6.3: the jar's head picture opens large, and Done closes it.
+    func testPhotoViewer() {
+        let app = launch(extra: ["-samplePhoto"])
+        let row = el(app, "jar-row-b_sample_cabbage")
+        XCTAssertTrue(row.waitForExistence(timeout: 10)); row.tap()
+        let head = el(app, "jar-head-photo"); XCTAssertTrue(head.waitForExistence(timeout: 10)); head.tap()
+        see(app, "photo-viewer", "photo-viewer-done")
+        el(app, "photo-viewer-done").tap()
+        XCTAssertTrue(el(app, "jar-head-photo").waitForExistence(timeout: 8))
     }
     func testSettings() {
         let app = launch(part: "settings")

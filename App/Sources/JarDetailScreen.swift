@@ -4,6 +4,8 @@ import SwiftUI
 struct JarDetailScreen: View {
     let batchID: String
     @EnvironmentObject var store: Store
+    /// The head card's picture opened large.
+    @State private var viewing: Int?
 
     var body: some View {
         if let b = store.data.batch(batchID) {
@@ -32,6 +34,7 @@ struct JarDetailScreen: View {
             .page(.jars)
         }
         .backdrop(.jars)
+        .photoViewer(b.photos.map { store.photoURL($0) }, start: $viewing)
         .navigationTitle(b.title)
         #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
@@ -73,12 +76,15 @@ struct JarDetailScreen: View {
     @ViewBuilder private func headPicture(_ b: Batch) -> some View {
         let frame = RoundedRectangle(cornerRadius: Look.tileRadius, style: .continuous)
         if let p = b.photos.first {
-            PhotoImage(url: store.photoURL(p))
-                .frame(width: 60, height: 76)
-                .clipShape(frame)
-                .overlay(frame.stroke(Color.white.opacity(0.45), lineWidth: 1.5))
-                .accessibilityLabel("Picture of the jar")
-                .accessibilityIdentifier("jar-head-photo")
+            Button { viewing = 0 } label: {
+                PhotoImage(url: store.photoURL(p))
+                    .frame(width: 60, height: 76)
+                    .clipShape(frame)
+                    .overlay(frame.stroke(Color.white.opacity(0.45), lineWidth: 1.5))
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Picture of the jar — see it large")
+            .accessibilityIdentifier("jar-head-photo")
         } else {
             Mark(.jarBig).frame(width: 40, height: 40)
                 .frame(width: 60, height: 76)

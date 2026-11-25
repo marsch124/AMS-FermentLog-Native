@@ -97,3 +97,19 @@ final class JarLookTests: XCTestCase {
         XCTAssertNil(Logic.tasteProgress(b, now: f.date(from: "2026-11-26")!))
     }
 }
+
+
+/// The Jars list's tiles: tap one and only that state stays (6.3).
+final class JarsFilterTests: XCTestCase {
+    func testShowingOneState() {
+        var fresh = Logic.newBatch(); fresh.startDate = "2026-11-20"
+        var cold = Logic.newBatch(); cold.startDate = "2026-11-01"; cold.movedToFridgeDate = "2026-11-10"
+        var over = Logic.newBatch(); over.startDate = "2026-10-01"; var o = Outcome(); o.recorded = true; over.outcome = o
+        let all = [fresh, cold, over]
+        XCTAssertEqual(Logic.jars(all, showing: nil).count, 3)
+        XCTAssertEqual(Logic.jars(all, showing: .fermenting).map(\.id), [fresh.id])
+        XCTAssertEqual(Logic.jars(all, showing: .fridge).map(\.id), [cold.id])
+        XCTAssertEqual(Logic.jars(all, showing: .done).map(\.id), [over.id])
+        XCTAssertTrue(Logic.jars([fresh], showing: .done).isEmpty)
+    }
+}

@@ -120,16 +120,29 @@ struct PhotoStrip: View {
     var area: Area = .jars
     @State private var picked: [PhotosPickerItem] = []
     @State private var showCamera = false
+    /// The picture opened large (read-only rows only).
+    @State private var viewing: Int?
     var body: some View {
         VStack(alignment: .leading, spacing: Theme.gap) {
             if !names.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: Theme.gap) {
-                        ForEach(names, id: \.self) { n in
+                        ForEach(Array(names.enumerated()), id: \.element) { i, n in
                             VStack(spacing: 2) {
-                                PhotoImage(url: store.photoURL(n))
-                                    .frame(width: editable ? 88 : 120, height: editable ? 88 : 120)
-                                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                                if editable {
+                                    PhotoImage(url: store.photoURL(n))
+                                        .frame(width: 88, height: 88)
+                                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                                } else {
+                                    Button { viewing = i } label: {
+                                        PhotoImage(url: store.photoURL(n))
+                                            .frame(width: 120, height: 120)
+                                            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                                    }
+                                    .buttonStyle(.plain)
+                                    .accessibilityLabel("Picture \(i + 1) — see it large")
+                                    .accessibilityIdentifier("photo-open-\(i)")
+                                }
                                 if editable {
                                     Button("Remove") { names.removeAll { $0 == n } }
                                         .font(.caption).foregroundStyle(Theme.problem).buttonStyle(.plain)
@@ -138,6 +151,9 @@ struct PhotoStrip: View {
                             }
                         }
                     }
+                }
+                if !editable {
+                    Text("Tap a picture to see it large").font(.caption).foregroundStyle(Theme.muted)
                 }
             }
             if editable {
@@ -155,6 +171,7 @@ struct PhotoStrip: View {
                 }
             }
         }
+        .photoViewer(names.map { store.photoURL($0) }, start: $viewing)
         .onChange(of: picked) { _, items in
             guard !items.isEmpty else { return }
             Task {

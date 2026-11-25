@@ -16,7 +16,7 @@ enum JarStyle {
 struct JarsScreen: View {
     @EnvironmentObject var store: Store
     /// The tile he tapped: only those jars are shown. Not remembered — the list opens with all jars.
-    @State private var showing: JarStatus?
+    @State private var showing: JarStatus? = PictureArgs.value("jarsShowing").flatMap(JarStatus.init(rawValue:))   // pictures: "-jarsShowing:fridge"
 
     var body: some View {
         let all = store.data.liveBatches

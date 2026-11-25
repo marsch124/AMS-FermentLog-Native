@@ -21,6 +21,8 @@ SHOTS=(
 "02-jar-1|-part:jars -open:jar:$CAB"
 "02-jar-photo|-samplePhoto -part:jars -open:jar:$CAB"
 "01-jars-photo|-samplePhoto -part:jars"
+"01-jars-fridge|-part:jars -jarsShowing:fridge"
+"02-jar-viewer|-samplePhoto -part:jars -open:jar:$CAB -openViewer"
 "02-jar-2|-part:jars -open:jar:$CAB -scrollDown:650"
 "02-jar-3|-part:jars -open:jar:$CAB -scrollDown:1300"
 "02-jar-4|-part:jars -open:jar:$CAB -scrollDown:1950"

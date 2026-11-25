@@ -5,7 +5,7 @@ struct JarDetailScreen: View {
     let batchID: String
     @EnvironmentObject var store: Store
     /// The head card's picture opened large.
-    @State private var viewing: Int?
+    @State private var viewing: Int? = PictureArgs.has("openViewer") ? 0 : nil   // pictures: opens the head picture large
 
     var body: some View {
         if let b = store.data.batch(batchID) {

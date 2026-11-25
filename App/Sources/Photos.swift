@@ -91,7 +91,7 @@ extension View {
         #if os(iOS)
         return self.fullScreenCover(item: item) { s in PhotoViewer(urls: urls, start: s.id) }
         #else
-        return self.sheet(item: item) { s in PhotoViewer(urls: urls, start: s.id).frame(minWidth: 720, minHeight: 560) }
+        return self.sheet(item: item) { s in PhotoViewer(urls: urls, start: s.id).frame(minWidth: 720, idealWidth: 980, minHeight: 560, idealHeight: 760) }   // as large as the window allows
         #endif
     }
 }

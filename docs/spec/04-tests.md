@@ -53,3 +53,8 @@ These two files are being rewritten alongside the 6.0 texts; the list above is w
 
 - `JarsFilterTests` — 1 data test: `Logic.jars(_:showing:)` returns every live jar for nil and only the jars of that status for a choice.
 - `ScreenTests.testPhotoViewer` — opens the Cabbage jar with `-samplePhoto`, taps the head picture (`jar-head-photo`), sees `photo-viewer`, taps Done (`photo-viewer-done`).
+
+| Argument (6.3, pictures only) | Effect |
+|---|---|
+| `-jarsShowing:<state>` | Open the Jars list with one tile chosen: `fermenting`, `fridge` or `done` |
+| `-openViewer` | With `-open:jar:<id>`: open the jar's head picture large (use with `-samplePhoto`) |

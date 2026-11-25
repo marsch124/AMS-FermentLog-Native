@@ -16,7 +16,7 @@ struct SearchResultsList: View {
                 group("Bakes", results.bakes.count, "search-group-bakes") {
                     ForEach(results.bakes) { k in
                         SearchRow(kind: .bread, title: k.name.isEmpty ? k.category : k.name,
-                                  context: [k.bakeDate, k.category].filter { !$0.isEmpty }.joined(separator: " · "),
+                                  context: [Human.day(k.bakeDate), k.category].filter { !$0.isEmpty }.joined(separator: " · "),
                                   route: .bake(k.id), id: "search-row-\(k.id)")
                     }
                 }
@@ -56,8 +56,7 @@ struct SearchRow: View {
                 }
                 Spacer(minLength: 0)
             }
-            .padding(.vertical, 6).padding(.horizontal, 10)
-            .background(Theme.surface, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .card(padding: 8)
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier(id)

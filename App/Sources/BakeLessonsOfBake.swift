@@ -28,7 +28,7 @@ struct BakeLessonsOfBake: View {
             ForEach(lessons) { l in
                 VStack(alignment: .leading, spacing: 2) {
                     Text(l.text)
-                    Text([l.loggedBy, Logic.isoDay(l.createdAt)].filter { !$0.isEmpty }.joined(separator: " \u{00b7} "))
+                    Text([l.loggedBy, Human.day(Logic.isoDay(l.createdAt))].filter { !$0.isEmpty }.joined(separator: " \u{00b7} "))
                         .font(.caption).foregroundStyle(Theme.muted)
                 }
                 .accessibilityIdentifier("bake-lesson-\(l.id)")

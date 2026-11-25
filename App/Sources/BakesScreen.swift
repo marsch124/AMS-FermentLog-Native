@@ -29,9 +29,9 @@ struct BakesScreen: View {
                     .buttonStyle(QuietButtonStyle(area: .bakes))
                     .accessibilityIdentifier("bakes-insights")
             }
-            .page()
+            .page(.bakes)
         }
-        .background(Theme.bg)
+        .backdrop(.bakes)
     }
 }
 
@@ -49,7 +49,7 @@ struct BakeRow: View {
                         .font(.body.weight(.semibold)).foregroundStyle(Theme.ink)
                     HStack(spacing: Theme.gap) {
                         Pill(text: bake.category, color: Area.bakes.color)
-                        Text(bake.bakeDate).font(.caption).foregroundStyle(Theme.muted)
+                        Text(Human.day(bake.bakeDate)).font(.caption).foregroundStyle(Theme.muted)
                     }
                     if !bake.recipeTitle.isEmpty {
                         Text(bake.recipeTitle).font(.caption).foregroundStyle(Theme.muted)
@@ -62,9 +62,7 @@ struct BakeRow: View {
                 }
                 Spacer(minLength: 0)
             }
-            .padding(8)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Theme.surface, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .card(padding: 8)
         }
         .buttonStyle(.plain)
         .accessibilityIdentifier("bake-row-\(bake.id)")

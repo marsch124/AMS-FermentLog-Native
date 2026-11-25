@@ -1,0 +1,12 @@
+What to look at in 6.4 (build 7) — find a jar, and sort the jars. Check each point on iPhone, iPad and Mac, by day and by night.
+1. Jars list, under the three tiles: a box "Find a jar by name or vegetable" and next to it (under it on a narrow iPhone) a switch Sort with Start date and Name. The grey line "Tap a tile to show only those jars" is still there.
+2. Type a few letters of a jar's name: only matching jars stay, at once, in all three groups. Try a vegetable too.
+3. Capitals and accents do not matter: type "surkal" and Surkål is found.
+4. The word button Clear empties the box and every jar is back.
+5. Type letters no jar has, for example "xyz": the list says No jar matches "xyz".
+6. Tap the tile In the fridge and type a vegetable: only those jars in the fridge are shown.
+7. Sort on Start date: in Fermenting the jars due for a taste test come first, then the newest start. In the fridge and Done the newest start is first.
+8. Sort on Name: every group is A to Z. The box "jar is due for a taste test" stays on top.
+9. Choose Name, close the app and open it again: Name is still chosen. The find box is empty again.
+10. Settings, How it works: Your jars and Search tell it. Settings, What's new: 6.4 (build 7) is at the top.
+11. Tell me anything that looks wrong, is cut off, too small to read, or has a word you do not understand.

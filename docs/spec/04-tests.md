@@ -58,3 +58,12 @@ These two files are being rewritten alongside the 6.0 texts; the list above is w
 |---|---|
 | `-jarsShowing:<state>` | Open the Jars list with one tile chosen: `fermenting`, `fridge` or `done` |
 | `-openViewer` | With `-open:jar:<id>`: open the jar's head picture large (use with `-samplePhoto`) |
+
+## Added in 6.4 (find and sort jars)
+
+- `JarsFindSortTests` — 2 data tests: `Logic.jars(_:matching:)` (name or vegetable, capitals and accents ignored, empty or spaces-only text keeps all) and `Logic.sortJars(_:by:)` (`.startDate` keeps the old order with due jars first; `.name` is A to Z).
+
+| Argument (6.4, pictures only) | Effect |
+|---|---|
+| `-jarsFind:<text>` | Open the Jars list with that text in the find box |
+| `-jarsSort:name` | Open the Jars list sorted by Name |

@@ -61,13 +61,13 @@ struct RecipeRow: View {
             VStack(alignment: .leading, spacing: Theme.tight) {
                 Text(recipe.title.isEmpty ? "Untitled recipe" : recipe.title)
                     .font(.body.weight(.semibold)).foregroundStyle(Theme.ink).lineLimit(2)
-                HStack(spacing: Theme.gap) {
+                FlowLayout(spacing: Theme.gap) {
                     Pill(text: recipe.category, color: Area.recipes.color)
                     if !recipe.activeTime.isEmpty { Text("Hands-on \(recipe.activeTime)") }
                     if !recipe.totalTime.isEmpty { Text("Total \(recipe.totalTime)") }
                     if !recipe.steps.isEmpty { Text("\(recipe.steps.count) step\(recipe.steps.count == 1 ? "" : "s")") }
                 }
-                .font(.caption).foregroundStyle(Theme.muted).lineLimit(1)
+                .font(.caption).foregroundStyle(Theme.muted)
             }
             Spacer(minLength: 0)
         }

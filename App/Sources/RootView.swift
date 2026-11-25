@@ -165,7 +165,9 @@ struct RootView: View {
     private func applyLaunchArguments() {
         let args = ProcessInfo.processInfo.arguments
         guard let a = args.first(where: { $0.hasPrefix("-part:") }) else { return }
-        switch String(a.dropFirst(6)) {
+        let part = String(a.dropFirst(6))
+        if part != "bakes" { UserDefaults.standard.set("jars", forKey: "homeView") }   // the Home tab remembers its last view
+        switch part {
         case "bakes": UserDefaults.standard.set("bakes", forKey: "homeView"); area = .bakes; tab = .home
         case "recipes": area = .recipes; tab = .recipes
         case "insights": area = .insights; tab = .insights
@@ -174,6 +176,8 @@ struct RootView: View {
         case "new": tab = .new
         default: area = .jars; tab = .home
         }
+        // Pictures: "-openJar:<id>" lands on that jar's page.
+        if let j = args.first(where: { $0.hasPrefix("-openJar:") }) { push(.jar(String(j.dropFirst(9)))) }
     }
 }
 

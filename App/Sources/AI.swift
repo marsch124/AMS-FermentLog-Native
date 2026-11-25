@@ -163,7 +163,7 @@ enum AI {
 
     private static func call(_ system: String, _ schema: [String: Any], _ user: String) async throws -> Any {
         let k = key
-        guard !k.isEmpty else { throw Problem(text: "No key yet. Add one in Settings, under AI helper.") }
+        guard !k.isEmpty else { throw Problem(text: "No key yet. Add one in Settings, under AI assistant.") }
         let req = try makeRequest(system: system, schema: schema, user: user, key: k)
         let data: Data, resp: URLResponse
         do { (data, resp) = try await URLSession.shared.data(for: req) }

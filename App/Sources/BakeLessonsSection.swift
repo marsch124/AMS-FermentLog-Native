@@ -6,6 +6,8 @@ struct BakeLessonsSection: View {
     @State private var text = ""
     @State private var by = ""
     @State private var recipeID = ""
+    /// "batch:<id>" or "bake:<id>", or "" for none.
+    @State private var from = ""
 
     private var lessons: [Lesson] { store.data.liveLessons.sorted { $0.createdAt > $1.createdAt } }
 
@@ -37,6 +39,11 @@ struct BakeLessonsSection: View {
                 Text("None").tag("")
                 ForEach(store.data.liveRecipes) { Text($0.title.isEmpty ? "Untitled" : $0.title).tag($0.id) }
             }.accessibilityIdentifier("lesson-recipe")
+            Picker("From a jar or bake", selection: $from) {
+                Text("None").tag("")
+                ForEach(store.data.liveBatches) { Text("Jar: \($0.title)").tag("batch:\($0.id)") }
+                ForEach(store.data.liveBakes) { Text("Bake: \($0.name.isEmpty ? $0.category : $0.name)").tag("bake:\($0.id)") }
+            }.accessibilityIdentifier("lesson-from")
             Button("Add lesson") { add() }
                 .buttonStyle(PrimaryButtonStyle(area: .bakes))
                 .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
@@ -46,8 +53,11 @@ struct BakeLessonsSection: View {
     }
 
     private func add() {
-        store.save(Lesson.make(text: text, loggedBy: by, recipe: store.data.recipe(recipeID)))
-        text = ""; recipeID = ""
+        var type = "", id = "", label = ""
+        if from.hasPrefix("batch:"), let b = store.data.batch(String(from.dropFirst(6))) { type = "batch"; id = b.id; label = b.title }
+        if from.hasPrefix("bake:"), let k = store.data.bake(String(from.dropFirst(5))) { type = "bake"; id = k.id; label = k.name.isEmpty ? k.category : k.name }
+        store.save(Lesson.make(text: text, loggedBy: by, recipe: store.data.recipe(recipeID), linkType: type, linkID: id, linkLabel: label))
+        text = ""; recipeID = ""; from = ""
     }
 
     private func remove(_ l: Lesson) {

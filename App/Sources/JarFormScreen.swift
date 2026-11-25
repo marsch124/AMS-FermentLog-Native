@@ -200,6 +200,7 @@ struct JarFormScreen: View {
         } else if let draft {
             batch = draft
         }
+        if batchID == nil, batch.loggedBy.isEmpty { batch.loggedBy = store.data.settings.activePerson }
         vegPick = batch.vegetable; formPick = batch.form
     }
 

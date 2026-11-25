@@ -187,7 +187,7 @@ struct NewScreen: View {
         VStack(alignment: .leading, spacing: Theme.gap) {
             row("New jar", "Start a jar of vegetables to ferment.", .jarNew, .jars, "new-jar")
             row("New bake", "Log a loaf or another bake.", .bakeNew, .bakes, "new-bake")
-            row("New recipe", "Write one down, or bring one in from a web page.", .recipeNew, .recipes, "new-recipe")
+            row("New recipe", "Write one down, with its ingredients and timed steps.", .recipeNew, .recipes, "new-recipe")
             Spacer(minLength: 0)
         }
         .padding(16)

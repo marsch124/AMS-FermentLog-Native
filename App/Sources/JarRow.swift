@@ -7,7 +7,7 @@ struct JarRow: View {
 
     var body: some View {
         let s = Logic.batchStatus(batch)
-        let days = Logic.daysBetween(start: batch.startDate, end: batch.movedToFridgeDate.isEmpty ? nil : batch.movedToFridgeDate)
+        let days = Logic.fermentDays(batch)
         HStack(spacing: Theme.gap) {
             thumb
             VStack(alignment: .leading, spacing: 3) {
@@ -20,7 +20,7 @@ struct JarRow: View {
                 if Logic.isCheckDue(batch) || Logic.burpAlarmOn(batch) {
                     HStack(spacing: 4) {
                         if Logic.isCheckDue(batch) { Tag(text: "Taste test due", color: Theme.brandInk) }
-                        if Logic.burpAlarmOn(batch) { Tag(text: "Burp alarm on", color: JarStyle.fridge) }
+                        if Logic.burpAlarmOn(batch) { Tag(text: "Burp alarm on", color: Theme.muted) }
                     }
                 }
             }

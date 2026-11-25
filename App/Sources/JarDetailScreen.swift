@@ -62,7 +62,7 @@ struct JarDetailScreen: View {
             Fact(name: "Weight", value: b.weightType.isEmpty ? "—" : b.weightType)
             if !b.loggedBy.isEmpty { Fact(name: "Logged by", value: b.loggedBy) }
             if !b.additions.isEmpty {
-                FlowLayout(spacing: 4) { ForEach(b.additions, id: \.self) { Tag(text: $0, color: Theme.brandInk) } }
+                FlowLayout(spacing: 4) { ForEach(b.additions, id: \.self) { Tag(text: $0, color: Theme.muted) } }
                     .padding(.top, 2)
             }
             if !b.notes.isEmpty {

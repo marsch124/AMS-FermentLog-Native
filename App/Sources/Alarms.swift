@@ -65,8 +65,11 @@ enum Alarms {
     }
 
     private static func apply(store: Store) async {
-        guard await permission() == .allowed else { return }
         let plan = AlarmPlan.plan(data: store.data, burpHere: store.device.burpAlarmHere, tasteHere: store.device.tasteAlarmHere, now: Date())
+        // The first time something should ring on this device, the system asks once whether it may.
+        // (An alarm that is "on" but may never ring would be a silent failure.)
+        if !plan.isEmpty, await permission() == .notAsked { await askPermission() }
+        guard await permission() == .allowed else { return }
         let wanted = Set(plan.map(\.id))
         let pending = await center.pendingNotificationRequests()
         let have = Set(pending.map(\.identifier))

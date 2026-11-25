@@ -30,7 +30,7 @@ struct SearchScreen: View {
                 .background(Theme.surface, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
 
                 if q.isEmpty {
-                    Text("Search looks through names, vegetables, spices, taste notes, the steps you did, problems, ingredients, equipment and recipe steps.")
+                    Text("Search looks through names, vegetables, spices, taste notes, the steps you did, bake problems, ingredients, equipment and recipe steps.")
                         .foregroundStyle(Theme.muted)
                         .accessibilityIdentifier("search-hint")
                 } else if r.total == 0 {

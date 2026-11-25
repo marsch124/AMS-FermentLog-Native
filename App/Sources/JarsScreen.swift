@@ -22,9 +22,9 @@ struct JarsScreen: View {
             VStack(alignment: .leading, spacing: Theme.gap) {
                 if all.isEmpty { empty } else { content(all) }
             }
-            .page()
+            .page(.jars)
         }
-        .background(Theme.bg)
+        .backdrop(.jars)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 if !all.isEmpty && !DeviceSettings.onPhone {

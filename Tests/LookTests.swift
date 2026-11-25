@@ -52,3 +52,34 @@ final class LookTests: XCTestCase {
         XCTAssertNil(Human.amount("Salt to taste"))
     }
 }
+
+/// The Timeline as a rail: one heading per day, a shared time written once; and the line to the next taste test.
+final class JarLookTests: XCTestCase {
+    private func e(_ id: String, _ date: String, _ time: String, _ kind: TimelineEntry.Kind = .did) -> TimelineEntry {
+        TimelineEntry(kind: kind, id: id, date: date, time: time, text: id, isBurp: false)
+    }
+
+    func testTimelineDays() {
+        let days = Logic.timelineDays([
+            e("a", "2026-11-24", "18:00"),
+            e("b", "2026-11-25", "14:45"), e("c", "2026-11-25", "14:45"), e("d", "2026-11-25", "20:00"), e("f", "2026-11-25", ""),
+            e("g", "2026-11-28", "09:10", .taste),
+        ], start: "2026-11-25")
+        XCTAssertEqual(days.map(\.date), ["2026-11-24", "2026-11-25", "2026-11-28"])
+        XCTAssertEqual(days.map(\.day), [nil, 0, 3])
+        XCTAssertEqual(days[1].lines.map(\.showTime), [true, false, true, false])
+        XCTAssertEqual(days[2].lines.map(\.showTime), [true])
+        XCTAssertTrue(Logic.timelineDays([], start: "2026-11-25").isEmpty)
+    }
+
+    func testTasteProgress() {
+        let f = DateFormatter(); f.locale = Locale(identifier: "en_US_POSIX"); f.dateFormat = "yyyy-MM-dd"
+        var b = Logic.newBatch()
+        b.startDate = "2026-11-25"; b.remindEveryDays = 3
+        XCTAssertEqual(Logic.tasteProgress(b, now: f.date(from: "2026-11-25")!), 0)
+        XCTAssertEqual(Logic.tasteProgress(b, now: f.date(from: "2026-11-26")!) ?? -1, 1.0 / 3, accuracy: 0.001)
+        XCTAssertEqual(Logic.tasteProgress(b, now: f.date(from: "2026-12-05")!), 1)
+        b.remindEveryDays = 0
+        XCTAssertNil(Logic.tasteProgress(b, now: f.date(from: "2026-11-26")!))
+    }
+}

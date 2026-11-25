@@ -6,15 +6,16 @@ struct HomeScreen: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Picker("Show", selection: $view) {
-                Text("Jars").tag("jars")
-                Text("Bakes").tag("bakes")
+            HStack {
+                Segments(selection: $view, options: [("jars", "Jars"), ("bakes", "Bakes")], area: view == "bakes" ? .bakes : .jars, id: "home-switch")
+                    .accessibilityElement(children: .contain)
+                    .accessibilityIdentifier("home-switch")
+                Spacer(minLength: 0)
             }
-            .pickerStyle(.segmented)
-            .padding(.horizontal, 16).padding(.vertical, Theme.gap)
-            .accessibilityIdentifier("home-switch")
+            .padding(.horizontal, 12).padding(.top, Theme.gap)
             if view == "bakes" { BakesScreen() } else { JarsScreen() }
         }
+        .background(AreaBackdrop(area: view == "bakes" ? .bakes : .jars))
         .navigationTitle(view == "bakes" ? "Bakes" : "Jars")
         .toolbar {
             ToolbarItem(placement: .primaryAction) {

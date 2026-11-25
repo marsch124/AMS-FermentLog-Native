@@ -16,10 +16,10 @@ struct JarOutcomeBlock: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background((o.success ? Theme.ok : Theme.problem).opacity(0.14), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
                     .accessibilityIdentifier("jar-verdict")
-                Fact(name: "Taste", value: stars(o.taste))
-                Fact(name: "Sourness", value: stars(o.sourness))
-                Fact(name: "Crunch", value: stars(o.crunch))
-                Fact(name: "Overall", value: stars(o.overall))
+                rating("Taste", o.taste)
+                rating("Sourness", o.sourness)
+                rating("Crunch", o.crunch)
+                rating("Overall", o.overall)
                 if !o.problems.isEmpty {
                     FlowLayout(spacing: 4) { ForEach(o.problems, id: \.self) { Tag(text: $0, color: Theme.problem) } }
                 }
@@ -35,6 +35,12 @@ struct JarOutcomeBlock: View {
     }
 
     private func stars(_ n: Int?) -> String { Logic.ratingStars(n.map(Double.init)) }
+
+    /// A rating as a slim bar with its stars right beside its name; a plain line when it was not rated.
+    @ViewBuilder private func rating(_ name: String, _ n: Int?) -> some View {
+        if let n { BarRow(name: name, figure: stars(n), share: Double(n) / 5, area: .jars) }
+        else { Fact(name: name, value: stars(nil)) }
+    }
 }
 
 struct JarOutcomeForm: View {

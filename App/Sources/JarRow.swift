@@ -26,9 +26,7 @@ struct JarRow: View {
             }
             Spacer(minLength: 0)
         }
-        .padding(8)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Theme.surface, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .card(padding: 8)
         .contentShape(Rectangle())
     }
 
@@ -37,7 +35,7 @@ struct JarRow: View {
             PhotoImage(url: store.photoURL(p)).frame(width: 48, height: 48).clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
         } else {
             Mark(.jar).frame(width: 28, height: 28).foregroundStyle(Area.jars.color)
-                .frame(width: 48, height: 48).background(Theme.surface2, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+                .frame(width: 48, height: 48).background { TileBack(area: .jars) }
         }
     }
 }

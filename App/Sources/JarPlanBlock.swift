@@ -8,8 +8,12 @@ struct JarPlanBlock: View {
     var body: some View {
         let p = Logic.planProgress(batch)
         Block(title: "To do — from \(batch.recipeTitle.isEmpty ? "a recipe" : batch.recipeTitle)", area: .jars) {
-            Text("\(p.done) of \(p.total) done").font(.subheadline).foregroundStyle(Theme.muted)
-                .accessibilityIdentifier("jar-plan-progress")
+            HStack(spacing: Theme.gap) {
+                Text("\(p.done) of \(p.total) done").font(.subheadline).foregroundStyle(Theme.muted).fixedSize()
+                    .accessibilityIdentifier("jar-plan-progress")
+                ProgressLine(share: p.total == 0 ? 0 : Double(p.done) / Double(p.total), color: Theme.ok).frame(maxWidth: 160)
+                Spacer(minLength: 0)
+            }
             ForEach(batch.plan) { step in row(step) }
             Text("Tick a step when you have done it — it is written into the Timeline with the time.")
                 .font(.caption).foregroundStyle(Theme.muted)

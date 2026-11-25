@@ -17,16 +17,9 @@ struct JarDetailScreen: View {
 
     private func content(_ b: Batch) -> some View {
         let status = Logic.batchStatus(b)
-        let days = Logic.fermentDays(b)
         return ScrollView {
             VStack(alignment: .leading, spacing: Theme.gap) {
-                Pill(text: Logic.statusLabel(status) + (days.map { " · day \($0)" } ?? ""), color: JarStyle.color(status))
-                    .accessibilityIdentifier("jar-status")
-                if let due = Logic.nextCheckDue(b) {
-                    Text("Taste test due \(due)").font(.subheadline.weight(.semibold))
-                        .foregroundStyle(Logic.isCheckDue(b) ? Theme.brandInk : Theme.muted)
-                        .accessibilityIdentifier("jar-due")
-                }
+                hero(b, status)
                 if !b.photos.isEmpty { PhotoStrip(names: .constant(b.photos), editable: false, area: .jars) }
                 facts(b)
                 if status == .fermenting { JarBurpBlock(batch: b) }
@@ -36,9 +29,9 @@ struct JarDetailScreen: View {
                 JarOutcomeBlock(batch: b)
                 JarActionsBlock(batch: b)
             }
-            .page()
+            .page(.jars)
         }
-        .background(Theme.bg)
+        .backdrop(.jars)
         .navigationTitle(b.title)
         #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
@@ -50,26 +43,68 @@ struct JarDetailScreen: View {
         }
     }
 
-    private func facts(_ b: Batch) -> some View {
-        let brine = Logic.computeBrinePercent(salt: b.saltGrams, water: b.waterMl)
-        return VStack(alignment: .leading, spacing: 3) {
-            Fact(name: "Vegetable", value: b.vegetable)
-            Fact(name: "Form", value: b.form.isEmpty ? "—" : b.form)
-            Fact(name: "Brine", value: JarStyle.brineText(b), valueColor: Logic.isBrineInRange(brine) ? Theme.ok : Theme.ink)
-            Fact(name: "Room temp", value: b.roomTempC.map { String(format: "%g °C", $0) } ?? "—")
-            Fact(name: "Started", value: b.startDate)
-            Fact(name: "Lid", value: b.lidType.isEmpty ? "—" : b.lidType)
-            Fact(name: "Weight", value: b.weightType.isEmpty ? "—" : b.weightType)
-            if !b.loggedBy.isEmpty { Fact(name: "Logged by", value: b.loggedBy) }
-            if !b.additions.isEmpty {
-                FlowLayout(spacing: 4) { ForEach(b.additions, id: \.self) { Tag(text: $0, color: Theme.muted) } }
-                    .padding(.top, 2)
-            }
-            if !b.notes.isEmpty {
-                Text(b.notes).font(.subheadline).padding(.top, 2).accessibilityIdentifier("jar-notes")
+    /// The head card: the jar, its name, which day it is on, and how far it is to the next taste test.
+    private func hero(_ b: Batch, _ status: JarStatus) -> some View {
+        let days = Logic.fermentDays(b)
+        return Hero(area: .jars) {
+            HStack(alignment: .center, spacing: 12) {
+                Mark(.jarBig).frame(width: 40, height: 40)
+                    .frame(width: 56, height: 72)
+                    .background(Color.white.opacity(0.17), in: RoundedRectangle(cornerRadius: Look.tileRadius, style: .continuous))
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(b.title).font(.title3.weight(.bold)).fixedSize(horizontal: false, vertical: true)
+                    HStack(alignment: .firstTextBaseline, spacing: 8) {
+                        if let days { Text("Day \(days)").font(.title.weight(.heavy)).accessibilityIdentifier("jar-day") }
+                        Pill(text: Logic.statusLabel(status), color: JarStyle.color(status))
+                            .accessibilityIdentifier("jar-status")
+                    }
+                    Text(sinceLine(b)).font(.caption).foregroundStyle(Look.heroSoft)
+                    if let due = Logic.nextCheckDue(b) {
+                        ProgressLine(share: Logic.tasteProgress(b) ?? 0, area: .jars).padding(.top, 2)
+                        Text(dueLine(b, due)).font(.caption.weight(.semibold))
+                            .foregroundStyle(Logic.isCheckDue(b) ? Color.white : Look.heroSoft)
+                            .accessibilityIdentifier("jar-due")
+                    }
+                }
+                Spacer(minLength: 0)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func sinceLine(_ b: Batch) -> String {
+        var t = b.startDate.isEmpty ? "" : "started \(Human.day(b.startDate))"
+        if !b.movedToFridgeDate.isEmpty { t += (t.isEmpty ? "" : " \u{00b7} ") + "in the fridge since \(Human.day(b.movedToFridgeDate))" }
+        return t
+    }
+
+    private func dueLine(_ b: Batch, _ due: String) -> String {
+        if Logic.isCheckDue(b) {
+            return due == Logic.isoDay(Date()) ? "Taste test due today" : "Taste test due since \(Human.day(due))"
+        }
+        return "Taste test \(Human.day(due))" + (Human.fromNow(due).map { " \u{00b7} \($0)" } ?? "")
+    }
+
+    /// The facts as small tiles (only those that are filled in), then the spices and the notes.
+    @ViewBuilder private func facts(_ b: Batch) -> some View {
+        let brine = Logic.computeBrinePercent(salt: b.saltGrams, water: b.waterMl)
+        TileGrid(columns: 3) {
+            if !b.vegetable.isEmpty { Tile(label: "Vegetable", value: b.vegetable) }
+            if !b.form.isEmpty { Tile(label: "Form", value: b.form) }
+            if brine != nil { Tile(label: "Brine", value: JarStyle.brineText(b), valueColor: Logic.isBrineInRange(brine) ? Theme.ok : nil) }
+            if let t = b.roomTempC { Tile(label: "Room", value: String(format: "%g °C", t)) }
+            if !b.lidType.isEmpty { Tile(label: "Lid", value: b.lidType) }
+            if !b.weightType.isEmpty { Tile(label: "Weight", value: b.weightType) }
+            if !b.loggedBy.isEmpty { Tile(label: "Logged by", value: b.loggedBy) }
+        }
+        if !b.additions.isEmpty {
+            FlowLayout(spacing: 4) { ForEach(b.additions, id: \.self) { Tag(text: $0, color: Area.jars.color) } }
+        }
+        if !b.notes.isEmpty {
+            Block(title: "Notes", area: .jars) {
+                Text(b.notes).font(.subheadline).accessibilityIdentifier("jar-notes")
+            }
+        }
     }
 
     private func fridgeButton(_ b: Batch) -> some View {

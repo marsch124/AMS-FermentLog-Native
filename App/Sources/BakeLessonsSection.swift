@@ -1,0 +1,57 @@
+import SwiftUI
+
+/// "Lessons learned and improvements": the notebook, newest first, and the form to add to it.
+struct BakeLessonsSection: View {
+    @EnvironmentObject var store: Store
+    @State private var text = ""
+    @State private var by = ""
+    @State private var recipeID = ""
+
+    private var lessons: [Lesson] { store.data.liveLessons.sorted { $0.createdAt > $1.createdAt } }
+
+    var body: some View {
+        Block(title: "Lessons learned and improvements", area: .bakes) {
+            Text("Your running notebook: jot what you learn, and say who noticed it and which recipe it is about.")
+                .font(.caption).foregroundStyle(Theme.muted)
+            if lessons.isEmpty { Text("No lessons yet. Add what you learn as you bake.").font(.subheadline).foregroundStyle(Theme.muted) }
+            ForEach(lessons) { l in
+                HStack(alignment: .top, spacing: Theme.gap) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(l.text)
+                        let meta = [l.loggedBy, l.recipeTitle.isEmpty ? "" : "Recipe: \(l.recipeTitle)",
+                                    l.linkLabel.isEmpty ? "" : "From: \(l.linkLabel)", Logic.isoDay(l.createdAt)].filter { !$0.isEmpty }
+                        Text(meta.joined(separator: " \u{00b7} ")).font(.caption).foregroundStyle(Theme.muted)
+                    }
+                    Spacer(minLength: 0)
+                    Button("Remove") { remove(l) }
+                        .font(.caption).foregroundStyle(Theme.problem).buttonStyle(.plain)
+                        .accessibilityIdentifier("lesson-remove-\(l.id)")
+                }
+                .accessibilityIdentifier("lesson-row-\(l.id)")
+            }
+            Divider()
+            TextField("e.g. A longer cold proof gives a tangier, more open crumb", text: $text, axis: .vertical)
+                .textFieldStyle(.roundedBorder).accessibilityIdentifier("lesson-text")
+            LoggedByPicker(name: $by)
+            Picker("Recipe", selection: $recipeID) {
+                Text("None").tag("")
+                ForEach(store.data.liveRecipes) { Text($0.title.isEmpty ? "Untitled" : $0.title).tag($0.id) }
+            }.accessibilityIdentifier("lesson-recipe")
+            Button("Add lesson") { add() }
+                .buttonStyle(PrimaryButtonStyle(area: .bakes))
+                .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                .accessibilityIdentifier("lesson-add")
+        }
+        .onAppear { if by.isEmpty { by = store.data.settings.activePerson } }
+    }
+
+    private func add() {
+        store.save(Lesson.make(text: text, loggedBy: by, recipe: store.data.recipe(recipeID)))
+        text = ""; recipeID = ""
+    }
+
+    private func remove(_ l: Lesson) {
+        store.remove(lesson: l.id)
+        store.showToast("Lesson removed", undo: { store.restore(lesson: l.id) })
+    }
+}

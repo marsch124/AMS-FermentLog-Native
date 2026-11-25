@@ -19,6 +19,8 @@ CAB="b_sample_cabbage"; BEET="b_sample_beets"; KRAUT="r_sample_sauerkraut"; BAKE
 SHOTS=(
 "01-jars|-part:jars"
 "02-jar-1|-part:jars -open:jar:$CAB"
+"02-jar-photo|-samplePhoto -part:jars -open:jar:$CAB"
+"01-jars-photo|-samplePhoto -part:jars"
 "02-jar-2|-part:jars -open:jar:$CAB -scrollDown:650"
 "02-jar-3|-part:jars -open:jar:$CAB -scrollDown:1300"
 "02-jar-4|-part:jars -open:jar:$CAB -scrollDown:1950"

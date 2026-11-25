@@ -54,6 +54,8 @@ enum MacPictures {
     static func apply() {
         guard PictureArgs.on else { return }
         if PictureArgs.has("dark") { NSApp.appearance = NSAppearance(named: .darkAqua) }   // as if the Mac itself were in dark mode
+        // As if the Mac were in light mode. (25 Nov: after sunset his Mac turned dark by itself, and "light" pictures came out dark.)
+        if PictureArgs.has("light") { NSApp.appearance = NSAppearance(named: .aqua) }
         if PictureArgs.has("tall") {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 for w in NSApp.windows where w.isVisible && w.styleMask.contains(.titled) && !w.isSheet {   // never a pop-up form: it keeps its own size

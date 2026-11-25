@@ -23,7 +23,7 @@ final class AlarmPlanTests: XCTestCase {
         XCTAssertEqual(p.first?.title, "Burp: Cabbage jar")
         XCTAssertEqual(p.first?.category, "BURP")
         XCTAssertEqual(p.first?.id, "burp.b1.202611252000")
-        XCTAssertEqual(p.first?.body, "Evening burp \u{00B7} day 3. Tap Burped when it is done.")
+        XCTAssertEqual(p.first?.body, "Evening burp \u{00B7} day 2. Tap Burped when it is done.")
         XCTAssertTrue(p[1].body.hasPrefix("Morning burp"))
         XCTAssertEqual(p.map(\.fireAt), p.map(\.fireAt).sorted())
     }
@@ -62,7 +62,7 @@ final class AlarmPlanTests: XCTestCase {
         XCTAssertEqual(p[0].id, "taste.b1.2026-11-26")
         XCTAssertEqual(p[0].fireAt, at(2026, 11, 26, 8, 0))
         XCTAssertEqual(p[0].title, "Taste test: Cabbage jar")
-        XCTAssertEqual(p[0].body, "Day 4 \u{2014} time to taste and write a line.")
+        XCTAssertEqual(p[0].body, "Day 3 \u{2014} time to taste and write a line.")
         XCTAssertTrue(plan(b, taste: false).isEmpty)
     }
 

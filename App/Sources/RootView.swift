@@ -40,6 +40,9 @@ struct RootView: View {
     @State private var area: Area? = .jars
     @State private var tabPaths: [HomeTab: NavigationPath] = [:]
     @State private var areaPaths: [Area: NavigationPath] = [:]
+    #if os(macOS)
+    @Environment(\.openSettings) private var openSettings
+    #endif
 
     private var wide: Bool {
         #if os(macOS)
@@ -178,6 +181,12 @@ struct RootView: View {
         }
         // Pictures: "-openJar:<id>" lands on that jar's page.
         if let j = args.first(where: { $0.hasPrefix("-openJar:") }) { push(.jar(String(j.dropFirst(9)))) }
+        // Pictures: "-open:<page>" lands on any page, e.g. -open:jarEdit:<id>, -open:guide (several = pushed in turn).
+        for r in PictureArgs.values("open").compactMap(Route.init(argument:)) { push(r) }
+        #if os(macOS)
+        if PictureArgs.has("settingsWindow") { openSettings() }
+        MacPictures.apply()
+        #endif
     }
 }
 

@@ -3,7 +3,7 @@ import SwiftUI
 /// One search over jars, bakes and recipes, results as you type.
 struct SearchScreen: View {
     @EnvironmentObject var store: Store
-    @State private var query = ""
+    @State private var query = PictureArgs.value("search") ?? ""   // pictures: "-search:cab"
     @FocusState private var focused: Bool
 
     var body: some View {

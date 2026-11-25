@@ -4,7 +4,7 @@ import SwiftUI
 struct JarOutcomeBlock: View {
     @EnvironmentObject var store: Store
     let batch: Batch
-    @State private var showForm = false
+    @State private var showForm = PictureArgs.has("sheetOutcome")   // pictures: opens the form at once
 
     var body: some View {
         Block(title: "Outcome", area: .jars) {

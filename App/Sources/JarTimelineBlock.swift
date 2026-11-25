@@ -49,6 +49,7 @@ struct JarTimelineBlock: View {
             if kind == .taste && AI.hasKey { voice }
         }
         .sheet(item: $editing) { e in JarLineEditor(batch: batch, entry: e) }
+        .onAppear { if PictureArgs.has("sheetLine"), editing == nil { editing = Logic.timelineEntries(batch).first } }   // pictures
     }
 
     private func line(_ e: TimelineEntry) -> some View {

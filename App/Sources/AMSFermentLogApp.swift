@@ -3,6 +3,7 @@ import SwiftUI
 @main
 struct AMSFermentLogApp: App {
     @StateObject private var store = Store()
+    @Environment(\.scenePhase) private var phase
 
     var body: some Scene {
         // 🚨 Mac: NO modifiers on the view inside the WindowGroup that change its type between launches,
@@ -11,6 +12,13 @@ struct AMSFermentLogApp: App {
             RootView()
                 .environmentObject(store)
         }
+        // Alarm hooks sit on the scene, never on the window's view (a Mac trap). `initial: true` = once at launch.
+        .onChange(of: phase, initial: true) { _, now in
+            Alarms.setUp(store: store)
+            if now == .active { Alarms.reschedule(store: store); Task { try? await Task.sleep(nanoseconds: 500_000_000); Alarms.deliverPendingRoute() } }
+        }
+        .onChange(of: store.data) { _, _ in Alarms.reschedule(store: store) }
+        .onChange(of: store.device) { _, _ in Alarms.reschedule(store: store) }
         #if os(macOS)
         .defaultSize(width: 1040, height: 720)
         .commands {

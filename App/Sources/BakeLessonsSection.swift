@@ -21,7 +21,7 @@ struct BakeLessonsSection: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(l.text)
                         let meta = [l.loggedBy, l.recipeTitle.isEmpty ? "" : "Recipe: \(l.recipeTitle)",
-                                    l.linkLabel.isEmpty ? "" : "From: \(l.linkLabel)", Logic.isoDay(l.createdAt)].filter { !$0.isEmpty }
+                                    l.linkLabel.isEmpty ? "" : "From: \(l.linkLabel)", Human.day(Logic.isoDay(l.createdAt))].filter { !$0.isEmpty }
                         Text(meta.joined(separator: " \u{00b7} ")).font(.caption).foregroundStyle(Theme.muted)
                     }
                     Spacer(minLength: 0)

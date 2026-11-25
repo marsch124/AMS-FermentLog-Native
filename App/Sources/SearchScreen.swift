@@ -41,9 +41,9 @@ struct SearchScreen: View {
                     SearchResultsList(results: r)
                 }
             }
-            .page()
+            .page(.search)
         }
-        .background(Theme.bg)
+        .backdrop(.search)
         .navigationTitle("Search")
         .onAppear { focused = true }
     }

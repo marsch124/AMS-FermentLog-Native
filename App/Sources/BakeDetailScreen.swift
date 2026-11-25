@@ -15,23 +15,26 @@ struct BakeDetailScreen: View {
                     .onAppear { dismiss() }
             }
         }
-        .background(Theme.bg)
     }
 
     private func content(_ bake: Bake) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Theme.gap) {
-                HStack(spacing: Theme.gap) {
-                    Pill(text: bake.category, color: Area.bakes.color)
-                    Text(bake.bakeDate).font(.subheadline).foregroundStyle(Theme.muted)
-                }
-                if let rid = Optional(bake.recipeID), !rid.isEmpty {
-                    if let r = store.data.recipe(rid) {
-                        NavigationLink(value: Route.recipe(rid)) { Text("Recipe: \(r.title)") }
-                            .foregroundStyle(Area.recipes.color).font(.subheadline.weight(.semibold))
-                            .accessibilityIdentifier("bake-recipe-link")
-                    } else if !bake.recipeTitle.isEmpty {
-                        Fact(name: "Recipe", value: bake.recipeTitle)
+                Hero(area: .bakes) {
+                    FlowLayout(spacing: Theme.gap) {
+                        Text(bake.name.isEmpty ? bake.category : bake.name).font(.title3.weight(.bold))
+                        Pill(text: bake.category, color: Area.bakes.color)
+                    }
+                    TileGrid(columns: 3, compact: 2) {
+                        Tile(label: "Day", value: Human.day(bake.bakeDate), area: .bakes)
+                        if !bake.recipeID.isEmpty, let r = store.data.recipe(bake.recipeID) {
+                            NavigationLink(value: Route.recipe(bake.recipeID)) { Tile(label: "Recipe", value: r.title, area: .bakes) }
+                                .buttonStyle(.plain)
+                                .accessibilityIdentifier("bake-recipe-link")
+                        } else if !bake.recipeTitle.isEmpty {
+                            Tile(label: "Recipe", value: bake.recipeTitle, area: .bakes)
+                        }
+                        if !bake.loggedBy.isEmpty { Tile(label: "Logged by", value: bake.loggedBy, area: .bakes) }
                     }
                 }
                 if !bake.photos.isEmpty { PhotoStrip(names: .constant(bake.photos), editable: false, area: .bakes) }
@@ -46,7 +49,6 @@ struct BakeDetailScreen: View {
                 if !bake.notes.isEmpty {
                     Block(title: "Notes", area: .bakes) { Text(bake.notes).font(.body) }
                 }
-                if !bake.loggedBy.isEmpty { Fact(name: "Logged by", value: bake.loggedBy) }
                 BakeLessonsOfBake(bake: bake)
                 HStack(spacing: Theme.gap) {
                     Button("Duplicate") { duplicate(bake) }
@@ -55,8 +57,12 @@ struct BakeDetailScreen: View {
                         .buttonStyle(QuietButtonStyle(area: .bakes)).accessibilityIdentifier("bake-share")
                 }
             }
-            .page()
+            .page(.bakes)
         }
+        .backdrop(.bakes)
+        #if os(iOS)
+        .navigationBarTitleDisplayMode(.inline)
+        #endif
         .navigationTitle(bake.name.isEmpty ? bake.category : bake.name)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -66,13 +72,10 @@ struct BakeDetailScreen: View {
         }
     }
 
-    private func ratingRow(_ name: String, _ v: Double?) -> some View {
-        HStack(spacing: 6) {
-            Text(name).foregroundStyle(Theme.muted).frame(minWidth: 64, alignment: .leading)
-            Stars(value: v, area: .bakes)
-            Spacer(minLength: 0)
+    @ViewBuilder private func ratingRow(_ name: String, _ v: Double?) -> some View {
+        if let v {
+            BarRow(name: name, figure: BakeText.stars(v), share: min(1, max(0, v / 5)), area: .bakes)
         }
-        .font(.subheadline).accessibilityElement(children: .combine)
     }
 
     private func duplicate(_ bake: Bake) {

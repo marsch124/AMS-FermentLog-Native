@@ -1,5 +1,12 @@
 import Foundation
 
+/// How the Jars list orders each group (6.4); remembered per device.
+enum JarSort: String {
+    case startDate, name
+    /// In the fridge and Done: newest start first (no taste test is due there), or A to Z.
+    var fridgeAndDone: JarSort { self }
+}
+
 /// One day of a jar's Timeline: its heading (the day, and which day of the ferment it is) and its lines.
 struct TimelineDay: Equatable, Identifiable {
     var date: String
@@ -17,6 +24,34 @@ struct TimelineLine: Equatable, Identifiable {
 }
 
 extension Logic {
+    /// The jars whose name or vegetable contains `text` (big/small letters and accents ignored); all of them for empty text (6.4).
+    static func jars(_ batches: [Batch], matching text: String) -> [Batch] {
+        let t = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !t.isEmpty else { return batches }
+        let opts: String.CompareOptions = [.caseInsensitive, .diacriticInsensitive]
+        return batches.filter { $0.title.range(of: t, options: opts) != nil || $0.vegetable.range(of: t, options: opts) != nil }
+    }
+
+    /// One group of the Jars list in the chosen order (6.4).
+    /// Start date: jars due for a taste test first (the most overdue first), then the newest start.
+    /// Name: A to Z the way the device's language sorts (Swedish puts Å Ä Ö after Z), big/small letters ignored, "2" before "10".
+    static func sortJars(_ batches: [Batch], by sort: JarSort, today: Date = Date()) -> [Batch] {
+        switch sort {
+        case .name:
+            return batches.sorted { a, b in
+                let r = a.title.localizedStandardCompare(b.title)
+                return r == .orderedSame ? a.startDate > b.startDate : r == .orderedAscending
+            }
+        case .startDate:
+            return batches.sorted { a, b in
+                let ad = isCheckDue(a, today: today), bd = isCheckDue(b, today: today)
+                if ad != bd { return ad }
+                if ad { return (nextCheckDue(a) ?? "") < (nextCheckDue(b) ?? "") }
+                return a.startDate > b.startDate
+            }
+        }
+    }
+
     /// The jars the Jars list shows: all of them, or only one state when a tile was tapped (6.3).
     static func jars(_ batches: [Batch], showing: JarStatus?) -> [Batch] {
         guard let showing else { return batches }

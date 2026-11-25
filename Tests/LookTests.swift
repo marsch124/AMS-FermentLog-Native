@@ -113,3 +113,24 @@ final class JarsFilterTests: XCTestCase {
         XCTAssertTrue(Logic.jars([fresh], showing: .done).isEmpty)
     }
 }
+
+/// The Jars list's find box and sort switch (6.4).
+final class JarsFindSortTests: XCTestCase {
+    private func jar(_ name: String, _ veg: String, start: String) -> Batch {
+        var b = Logic.newBatch(); b.name = name; b.vegetable = veg; b.startDate = start; b.remindEveryDays = 0; return b
+    }
+    func testFindByNameOrVegetable() {
+        let all = [jar("Surkål", "Cabbage", start: "2026-11-01"), jar("Spicy sticks", "Carrot", start: "2026-11-05"), jar("", "Beetroot", start: "2026-11-09")]
+        XCTAssertEqual(Logic.jars(all, matching: "surkal").map(\.title), ["Surkål"])
+        XCTAssertEqual(Logic.jars(all, matching: "CARROT").map(\.title), ["Spicy sticks"])
+        XCTAssertEqual(Logic.jars(all, matching: "beet").map(\.title), ["Beetroot"])     // a jar without a name is found by its vegetable
+        XCTAssertEqual(Logic.jars(all, matching: "  ").count, 3)
+        XCTAssertTrue(Logic.jars(all, matching: "kimchi").isEmpty)
+    }
+    func testSortByStartDateOrName() {
+        // Names sort the way the device's language does (in Swedish Å Ä Ö come after Z), so the test avoids those letters.
+        let all = [jar("Dill pickles", "Cucumber", start: "2026-11-09"), jar("beetroot", "Beetroot", start: "2026-11-01"), jar("Carrot 2", "Carrot", start: "2026-11-05"), jar("Carrot 10", "Carrot", start: "2026-11-03")]
+        XCTAssertEqual(Logic.sortJars(all, by: .startDate).map(\.startDate), ["2026-11-09", "2026-11-05", "2026-11-03", "2026-11-01"])
+        XCTAssertEqual(Logic.sortJars(all, by: .name).map(\.title), ["beetroot", "Carrot 2", "Carrot 10", "Dill pickles"])   // big/small letters ignored, numbers as numbers
+    }
+}

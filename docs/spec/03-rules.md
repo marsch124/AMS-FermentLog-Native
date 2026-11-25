@@ -20,7 +20,8 @@ Every rule in `Logic.swift`, `AlarmPlan.swift`, `Alarms.swift`, `SettingsListEdi
 
 - `daysBetween(start, end)`: whole calendar days, never negative, nothing when the start is missing or unreadable; the end is the given day or today.
 - `fermentDays` (jar page, Insights, exports): start to the fridge day; else to the day the outcome was recorded; else to today.
-- **Status**: Done when an outcome is recorded; else In fridge when the fridge day is set; else Fermenting. The list's pill and the jar page both use `fermentDays`, so they show the same day number.
+- **Day number** (6.1 build 4): `Logic.dayNumber(_ batch)` = `fermentDays + 1`, so the start day is Day 1 (before: Day 0). `Logic.dayNumber(of: day, start:)` gives the same for any day (start day = 1, nil before the start). Used by the head card's big "Day N", the list pill, `Logic.timelineDays` (the "DAY N" headings) and the two texts of `AlarmPlan` ("Morning burp · day N", "Day N — time to taste and write a line"). `fermentDays` (whole days gone by) stays for Insights, the charts and the spreadsheet column "Days fermented"; the taste-test due day is unchanged.
+- **Status**: Done when an outcome is recorded; else In fridge when the fridge day is set; else Fermenting. The list's pill and the jar page both use `Logic.dayNumber`, so they show the same day number.
 - **Overall rating of a jar**: the explicit Overall, else the average of Taste, Sourness and Crunch that are set; nothing when none. A bake: the explicit Overall, else the average of Crust, Crumb and Flavour. Stars are the rating rounded to a whole number, 0–5, "★" filled and "☆" empty; no rating shows "—".
 
 ## Taste-test reminder

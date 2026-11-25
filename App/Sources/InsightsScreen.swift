@@ -2,26 +2,41 @@ import SwiftUI
 
 /// Statistics over the jars (and, by the switch at the top, over the bakes).
 struct InsightsScreen: View {
+    @EnvironmentObject var store: Store
     @AppStorage("insightsView") private var view = "ferments"
+    @State private var vegetable = ""
 
     var body: some View {
+        let allVegs = Logic.summarizeStats(store.data.liveBatches).vegetables
         ScrollView {
             VStack(alignment: .leading, spacing: Theme.gap) {
-                Picker("Show", selection: $view) {
-                    Text("Ferments").tag("ferments")
-                    Text("Bakes").tag("bakes")
+                HStack(spacing: Theme.gap) {
+                    Segments(selection: $view,
+                             options: [(value: "ferments", title: "Ferments"), (value: "bakes", title: "Bakes")],
+                             area: view == "bakes" ? .bakes : .insights, id: "insights-switch")
+                        .accessibilityElement(children: .contain)
+                        .accessibilityIdentifier("insights-switch")
+                    if view != "bakes" && allVegs.count > 1 {
+                        Picker("Vegetable", selection: $vegetable) {
+                            Text("All vegetables").tag("")
+                            ForEach(allVegs, id: \.self) { Text($0).tag($0) }
+                        }
+                        .pickerStyle(.menu)
+                        .labelsHidden()
+                        .tint(Area.insights.color)
+                        .accessibilityIdentifier("insights-vegetable")
+                    }
+                    Spacer(minLength: 0)
                 }
-                .pickerStyle(.segmented)
-                .accessibilityIdentifier("insights-switch")
                 if view == "bakes" {
                     BakeInsightsScreen()
                 } else {
-                    InsightsFermentsView()
+                    InsightsFermentsView(vegetable: vegetable)
                 }
             }
-            .page()
+            .page(view == "bakes" ? .bakes : .insights)
         }
-        .background(Theme.bg)
+        .backdrop(view == "bakes" ? .bakes : .insights)
         .navigationTitle("Insights")
     }
 }
@@ -29,7 +44,7 @@ struct InsightsScreen: View {
 /// The ferments view: headline numbers, a vegetable filter and the charts.
 struct InsightsFermentsView: View {
     @EnvironmentObject var store: Store
-    @State private var vegetable = ""
+    let vegetable: String
 
     var body: some View {
         let all = store.data.liveBatches
@@ -37,17 +52,8 @@ struct InsightsFermentsView: View {
         let stats = Logic.summarizeStats(all, vegetable: veg)
         let pool = veg == nil ? all : all.filter { $0.vegetable == veg }
         let rec = Logic.recommendation(pool)
-        let allVegs = Logic.summarizeStats(all).vegetables
 
         VStack(alignment: .leading, spacing: Theme.gap) {
-            if allVegs.count > 1 {
-                Picker("Show", selection: $vegetable) {
-                    Text("All vegetables").tag("")
-                    ForEach(allVegs, id: \.self) { Text($0).tag($0) }
-                }
-                .tint(Area.insights.color)
-                .accessibilityIdentifier("insights-vegetable")
-            }
             InsightsNumbers(stats: stats)
             if stats.ratingOverTime.count < 2 {
                 Block(title: "Not enough yet", area: .insights) {
@@ -65,17 +71,19 @@ struct InsightsFermentsView: View {
     }
 }
 
-/// Total jars, active now, success rate, average rating — compact, two columns.
+/// Total jars, active now, success rate, average rating.
 struct InsightsNumbers: View {
     let stats: BatchStats
     var body: some View {
-        Block(title: "Your jars", area: .insights) {
-            LazyVGrid(columns: [GridItem(.flexible(), alignment: .leading), GridItem(.flexible(), alignment: .leading)], spacing: Theme.tight) {
-                Fact(name: "Jars", value: "\(stats.total)").accessibilityIdentifier("insights-total")
-                Fact(name: "Active now", value: "\(stats.active)").accessibilityIdentifier("insights-active")
-                Fact(name: "Success rate", value: stats.successRate.map { "\(Int(($0 * 100).rounded()))%" } ?? "—").accessibilityIdentifier("insights-success")
-                Fact(name: "Average rating", value: stats.avgRating.map { String(format: "%.1f", $0) } ?? "—").accessibilityIdentifier("insights-average")
-            }
+        TileGrid(columns: 4, compact: 2) {
+            StatTile(value: "\(stats.total)", label: "Jars", area: .insights, filled: true)
+                .accessibilityIdentifier("insights-total")
+            StatTile(value: "\(stats.active)", label: "Active now", area: .insights)
+                .accessibilityIdentifier("insights-active")
+            StatTile(value: stats.successRate.map { "\(Int(($0 * 100).rounded()))%" } ?? "—", label: "Success", area: .insights, ring: stats.successRate)
+                .accessibilityIdentifier("insights-success")
+            StatTile(value: stats.avgRating.map { String(format: "%.1f ★", $0) } ?? "—", label: "Average rating", area: .insights)
+                .accessibilityIdentifier("insights-average")
         }
     }
 }

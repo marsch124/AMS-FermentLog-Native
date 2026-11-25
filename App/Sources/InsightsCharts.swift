@@ -6,40 +6,50 @@ struct InsightsCharts: View {
     let stats: BatchStats
     var body: some View {
         VStack(alignment: .leading, spacing: Theme.gap) {
-            InsightsScatter(title: "Rating and brine strength", xTitle: "Brine %", points: stats.ratingVsBrine, id: "brine")
-            InsightsScatter(title: "Rating and room temperature", xTitle: "Temperature °C", points: stats.ratingVsTemp, id: "temperature")
-            InsightsScatter(title: "Rating and days fermented", xTitle: "Days", points: stats.ratingVsDays, id: "days")
+            InsightsScatter(title: "Rating and brine strength", xTitle: "Brine", unit: "%", points: stats.ratingVsBrine, id: "brine")
+            InsightsScatter(title: "Rating and room temperature", xTitle: "Temperature", unit: " °C", points: stats.ratingVsTemp, id: "temperature")
+            InsightsScatter(title: "Rating and days fermented", xTitle: "Days", unit: " d", points: stats.ratingVsDays, id: "days")
             InsightsTrend(points: stats.ratingOverTime)
-            InsightsBars(title: "Average rating by vegetable", rows: stats.byVegetable, id: "vegetable")
-            if !stats.byForm.isEmpty { InsightsBars(title: "Average rating by form", rows: stats.byForm, id: "form") }
-            InsightsBars(title: "Average rating by lid", rows: stats.byLid, id: "lid")
+            InsightsBars(title: "Average rating by vegetable", rows: stats.byVegetable, id: "vegetable", note: "out of 5 stars")
+            TileGrid(columns: 2, compact: 1) {
+                if !stats.byForm.isEmpty { InsightsBars(title: "Average rating by form", rows: stats.byForm, id: "form") }
+                InsightsBars(title: "Average rating by lid", rows: stats.byLid, id: "lid")
+            }
             InsightsProblems(rows: stats.problems)
         }
     }
 }
 
-private extension View {
-    func ratingAxis() -> some View {
-        chartYScale(domain: 0...5)
-            .chartYAxis { AxisMarks(values: [1, 2, 3, 4, 5]) }
-            .chartYAxisLabel("Rating")
-    }
-}
-
 struct InsightsScatter: View {
-    let title: String, xTitle: String, points: [XYPoint], id: String
+    let title: String, xTitle: String, unit: String, points: [XYPoint], id: String
     var body: some View {
-        Block(title: title, area: .insights) {
+        Block(title: title, area: .insights, note: "each dot is one jar") {
             if points.isEmpty {
                 Text("Nothing to show yet.").foregroundStyle(Theme.muted)
             } else {
-                Chart(Array(points.enumerated()), id: \.offset) { _, p in
-                    PointMark(x: .value(xTitle, p.x), y: .value("Rating", p.y))
-                        .foregroundStyle(Area.insights.color)
+                let isBrine = id == "brine"
+                let hi = points.map(\.x).max() ?? 0
+                let lo = points.map(\.x).min() ?? 0
+                let pad = max(0.5, (hi - lo) * 0.08)
+                Chart {
+                    if isBrine {
+                        RectangleMark(xStart: .value("From", Logic.BRINE_MIN), xEnd: .value("To", Logic.BRINE_MAX),
+                                      yStart: .value("Low", 0.5), yEnd: .value("High", 5.5))
+                            .foregroundStyle(Area.insights.color.opacity(0.10))
+                            .annotation(position: .bottomLeading, alignment: .bottomLeading, spacing: 2) {
+                                Text("usual range 2–3%").font(.caption2).foregroundStyle(Area.insights.color)
+                                    .fixedSize().padding(.leading, 2)
+                            }
+                    }
+                    ForEach(Array(points.enumerated()), id: \.offset) { _, p in
+                        PointMark(x: .value(xTitle, p.x), y: .value("Rating", p.y))
+                            .symbol { ChartDot(color: Area.insights.color) }
+                    }
                 }
-                .ratingAxis()
-                .chartXAxisLabel(xTitle)
-                .frame(height: 160)
+                .calmRatingAxis()
+                .chartXScale(domain: isBrine ? 0...max(3.2, hi * 1.05) : (lo - pad)...(hi + pad))
+                .calmXAxis(unit: unit)
+                .frame(height: 150)
             }
         }
         .accessibilityIdentifier("insights-chart-\(id)")
@@ -49,38 +59,27 @@ struct InsightsScatter: View {
 struct InsightsTrend: View {
     let points: [XYPoint]
     var body: some View {
-        Block(title: "Rating over your attempts", area: .insights) {
-            Chart(Array(points.enumerated()), id: \.offset) { _, p in
-                LineMark(x: .value("Attempt", p.x), y: .value("Rating", p.y))
-                    .foregroundStyle(Area.insights.color)
-                PointMark(x: .value("Attempt", p.x), y: .value("Rating", p.y))
-                    .foregroundStyle(Area.insights.color)
-            }
-            .ratingAxis()
-            .chartXAxisLabel("Attempt, oldest to newest")
-            .chartXAxis { AxisMarks(values: .automatic(desiredCount: 5)) }
-            .frame(height: 160)
+        Block(title: "Rating over your attempts", area: .insights, note: "oldest to newest") {
+            RatingTrendChart(points: points, area: .insights, xName: "Attempt")
         }
         .accessibilityIdentifier("insights-chart-trend")
     }
 }
 
-/// Horizontal bars; each row's name carries its value, written beside it on the left.
+/// Slim bars; each row's name carries its value, written beside it on the left.
 struct InsightsBars: View {
     let title: String, rows: [LabelValue], id: String
+    var note: String?
     var body: some View {
-        Block(title: title, area: .insights) {
+        Block(title: title, area: .insights, note: note) {
             if rows.isEmpty {
                 Text("Nothing to show yet.").foregroundStyle(Theme.muted)
             } else {
-                let named = rows.map { (name: "\($0.label)  \(String(format: "%.1f", $0.value))", value: $0.value) }
-                Chart(named, id: \.name) { r in
-                    BarMark(x: .value("Rating", r.value), y: .value("Name", r.name))
-                        .foregroundStyle(Area.insights.color)
+                VStack(alignment: .leading, spacing: Theme.gap) {
+                    ForEach(rows, id: \.label) { r in
+                        BarRow(name: r.label, figure: String(format: "%.1f ★", r.value), share: r.value / 5, area: .insights)
+                    }
                 }
-                .chartXScale(domain: 0...5)
-                .chartXAxisLabel("Average rating")
-                .frame(height: max(160, CGFloat(rows.count) * 30))
             }
         }
         .accessibilityIdentifier("insights-chart-\(id)")
@@ -94,13 +93,13 @@ struct InsightsProblems: View {
             if rows.isEmpty {
                 Text("No problems recorded.").foregroundStyle(Theme.muted)
             } else {
-                let named = rows.map { (name: "\($0.label)  \($0.value)", value: $0.value) }
-                Chart(named, id: \.name) { r in
-                    BarMark(x: .value("Jars", r.value), y: .value("Problem", r.name))
-                        .foregroundStyle(Theme.problem)
+                let top = Double(max(1, rows.map(\.value).max() ?? 1))
+                VStack(alignment: .leading, spacing: Theme.gap) {
+                    ForEach(rows, id: \.label) { r in
+                        BarRow(name: r.label, figure: r.value == 1 ? "1 jar" : "\(r.value) jars",
+                               share: Double(r.value) / top, area: .insights, color: Theme.problem)
+                    }
                 }
-                .chartXAxisLabel("Number of jars")
-                .frame(height: max(160, CGFloat(rows.count) * 30))
             }
         }
         .accessibilityIdentifier("insights-chart-problems")

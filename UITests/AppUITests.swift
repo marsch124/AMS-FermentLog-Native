@@ -27,6 +27,7 @@ final class AppUITests: XCTestCase {
         let app = launch()
         let tab = app.descendants(matching: .any)["tab-home"].firstMatch
         let side = app.descendants(matching: .any)["sidebar-jars"].firstMatch
-        XCTAssertTrue(tab.waitForExistence(timeout: 10) || side.waitForExistence(timeout: 2))
+        // 30 s: the first launch on GitHub's shared Mac can take long (6.6's run timed out at 10 s while the other 74 passed).
+        XCTAssertTrue(tab.waitForExistence(timeout: 30) || side.waitForExistence(timeout: 2))
     }
 }

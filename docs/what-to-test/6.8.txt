@@ -1,0 +1,5 @@
+FermentLog 6.8 (build 11) - what to test
+
+Only words and sample data changed: the sample jars no longer use real names. The app works as before.
+
+1. Open the app. Your own jars and settings should look exactly as before.

@@ -1,4 +1,4 @@
-# AMS FermentLog — specification, version 6.4, build 7 (25 Nov 2026)
+# AMS FermentLog — specification, version 6.8, build 11 (26 Nov 2026)
 
 This folder describes the app exactly as it is built in 6.0, written from the code. FermentLog 6.0 is a native app for iPhone, iPad and Mac that replaces the web app (last web version 5.25). The numbering simply continues: the native app starts at 6.0.
 
@@ -40,3 +40,7 @@ One file and two folders in iCloud Drive (container Documents, shown in Files as
 - Every version that adds a stored field raises `AppData.currentFormat` (now 2 since 6.7) by one. A device on an older version then says "Update this device first" and writes nothing (see `01-data.md`).
 - Releases: `tools/build.sh` generates the project and builds for the simulator; `tools/release.sh` archives iPhone/iPad and Mac and uploads to TestFlight.
 - The repository is public: no real data is ever put in it. `SampleData.swift` holds invented sample jars used only by tests (`-sample`).
+
+## History (latest)
+
+- 6.8 (build 11, 26 Nov 2026): only words and sample data. The sample people are now "Sam" and "Eva". No rule, screen or stored field changed.

@@ -2,7 +2,7 @@ import Foundation
 
 /// The single source for the version the app shows, "What's new" and "How it works".
 enum Guide {
-    static let appVersion = "6.7"
+    static let appVersion = "6.8"
 
     struct Release: Identifiable {
         let version: String
@@ -12,6 +12,9 @@ enum Guide {
     }
 
     static let releases: [Release] = [
+        Release(version: "6.8 (build 11)", date: "26 Nov 2026", lines: [
+            "Changed: only words and sample data. The sample jars no longer use real names. The app works as before.",
+        ]),
         Release(version: "6.7 (build 10)", date: "26 Nov 2026", lines: [
             "New: pictures on Timeline lines. Before (6.6): a Timeline line was only words; pictures could only belong to the whole jar (Edit jar › Photos). Now: any “What I did” line and any taste test can carry pictures, so you can record the whole process with the camera. Where: on a jar’s page, in the adding area of the Timeline. As before there is the switch What I did | Taste test, “When”, and the text box. New, under the text box: the pictures you picked show as small squares with the word Remove under each. Under them is one row: Add pictures (pick up to 6 from Photos), Take a picture (iPhone and iPad only, where there is a camera) and the full-colour Add button.",
             "Changed: Add works with words, with pictures, or with both. Before: Add stayed off until you had written something. Now: a picture alone is a line too. Example: take a picture of the brine, press Add, and the Timeline gets a line with just that picture.",

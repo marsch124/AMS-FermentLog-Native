@@ -8,7 +8,7 @@ final class ImportTests: XCTestCase {
     }
     private let webBackup = """
     {"app":"fermentlog","version":3,"batches":[
-      {"id":"w1","vegetable":"Carrot","form":"Sticks","startDate":"2026-10-01","additions":["Dill","Juniper"],"loggedBy":"Anna",
+      {"id":"w1","vegetable":"Carrot","form":"Sticks","startDate":"2026-10-01","additions":["Dill","Juniper"],"loggedBy":"Eva",
        "photos":["data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ=="]},
       {"id":"w2","vegetable":"Kohlrabi","startDate":"2026-10-05"}],
      "recipes":[{"id":"r1","title":"Sauerkraut"}],"bakeLessons":[{"id":"l1","text":"More salt"}]}

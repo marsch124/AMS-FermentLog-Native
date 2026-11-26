@@ -340,12 +340,12 @@ final class LogicTests: XCTestCase {
      "batches":[{"id":"b_1","name":"Kraut","vegetable":"Kohlrabi","form":"Slices","startDate":"2026-11-01","saltGrams":"25","waterMl":"","roomTempC":20,
         "jarSizeMl":null,"additions":["Turmeric","Garlic"],"vesselType":"Glass jar","weightType":"None","lidType":"Plain lid","remindEveryDays":"3",
         "checkIns":[{"date":"2026-11-04","tasteNote":"Tangy"}],"movedToFridgeDate":"","outcome":null,
-        "photos":["data:image/jpeg;base64,/9j/4AAQSkZJRg=="],"notes":"hi","loggedBy":"Anna","createdAt":"2026-11-01T09:30:00.123Z"},
+        "photos":["data:image/jpeg;base64,/9j/4AAQSkZJRg=="],"notes":"hi","loggedBy":"Eva","createdAt":"2026-11-01T09:30:00.123Z"},
        {"id":"b_2","name":"Old","vegetable":"Carrot","startDate":"2026-10-01","outcome":{"recorded":true,"success":true,"overall":4,"recordedAt":"2026-10-10T10:00:00.000Z","problems":["Mould"]}}],
      "presets":[{"id":"p_1","name":"Mine","vegetable":"Carrot","form":"Cubes","saltGrams":25,"additions":[]}],
      "recipes":[{"id":"r_1","title":"Loaf","category":"Sourdough","ingredients":["flour"],"steps":[{"title":"Mix","detail":"d","time":"5 min"}],"photos":[],"createdAt":"2026-11-02T10:00:00.000Z"}],
-     "bakes":[{"id":"k_1","name":"Loaf 1","category":"Sourdough","bakeDate":"2026-11-05","recipeId":"r_1","recipeTitle":"Loaf","ratings":{"crust":"4","overall":null},"problems":[],"loggedBy":"Martin","createdAt":"2026-11-05T10:00:00.000Z"}],
-     "bakeLessons":[{"id":"l_1","text":"Longer proof","createdAt":"2026-11-06T10:00:00.000Z","loggedBy":"Anna","recipeId":"r_1","recipeTitle":"Loaf","linkKind":"bake","linkId":"k_1","linkLabel":"Loaf 1"}]}
+     "bakes":[{"id":"k_1","name":"Loaf 1","category":"Sourdough","bakeDate":"2026-11-05","recipeId":"r_1","recipeTitle":"Loaf","ratings":{"crust":"4","overall":null},"problems":[],"loggedBy":"Sam","createdAt":"2026-11-05T10:00:00.000Z"}],
+     "bakeLessons":[{"id":"l_1","text":"Longer proof","createdAt":"2026-11-06T10:00:00.000Z","loggedBy":"Eva","recipeId":"r_1","recipeTitle":"Loaf","linkKind":"bake","linkId":"k_1","linkLabel":"Loaf 1"}]}
     """
 
     func testWebImportReadsTolerantly() throws {
@@ -367,7 +367,7 @@ final class LogicTests: XCTestCase {
         // what the web kept in localStorage is derived
         XCTAssertEqual(res.data.settings.customVegetables, ["Kohlrabi"]); XCTAssertEqual(res.data.settings.customSpices, ["Turmeric"])
         XCTAssertEqual(res.data.settings.customForms, [])
-        XCTAssertEqual(res.data.settings.people, ["Anna", "Martin"])
+        XCTAssertEqual(res.data.settings.people, ["Eva", "Sam"])
     }
 
     func testWebImportTwiceDoesNotDuplicateAndNativeEditsWin() throws {

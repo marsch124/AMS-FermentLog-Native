@@ -14,8 +14,8 @@ extension AppData {
             return String(format: "%04d-%02d-%02d", c.year ?? 2026, c.month ?? 1, c.day ?? 1)
         }
         var out = AppData()
-        out.settings.people = ["Martin", "Anna"]
-        out.settings.activePerson = "Martin"
+        out.settings.people = ["Sam", "Eva"]
+        out.settings.activePerson = "Sam"
         out.settings.modifiedAt = now
 
         // 1. The Cabbage jar: two days old, on a plain lid, with nine Did steps (two burps), a taste check and a plan.
@@ -26,7 +26,7 @@ extension AppData {
         cabbage.additions = ["Caraway seeds", "Juniper berries"]
         cabbage.vesselType = "Glass jar"; cabbage.weightType = "Glass weight"; cabbage.lidType = "Plain lid"
         cabbage.recipeID = "r_sample_sauerkraut"; cabbage.recipeTitle = "Sauerkraut"
-        cabbage.loggedBy = "Martin"
+        cabbage.loggedBy = "Sam"
         cabbage.steps = [
             Step(date: day(2), time: "09:10", text: "Shredded 1.2 kg of cabbage"),
             Step(date: day(2), time: "09:25", text: "Salted and massaged until it released its juice"),
@@ -53,7 +53,7 @@ extension AppData {
         carrots.name = "Carrot sticks"; carrots.vegetable = "Carrot"; carrots.form = "Sticks"
         carrots.startDate = day(9); carrots.saltGrams = 25; carrots.waterMl = 1000; carrots.roomTempC = 20; carrots.jarSizeMl = 1000
         carrots.additions = ["Garlic", "Dill"]
-        carrots.lidType = "Burping / self-venting lid"; carrots.loggedBy = "Anna"
+        carrots.lidType = "Burping / self-venting lid"; carrots.loggedBy = "Eva"
         carrots.movedToFridgeDate = day(2)
         carrots.steps = [
             Step(date: day(9), time: "18:00", text: "Packed carrot sticks with garlic and dill"),
@@ -68,7 +68,7 @@ extension AppData {
         beets.id = "b_sample_beets"
         beets.name = "Beetroot"; beets.vegetable = "Beetroot"; beets.form = "Sliced"
         beets.startDate = day(30); beets.saltGrams = 30; beets.waterMl = 1000; beets.roomTempC = 21; beets.jarSizeMl = 1000
-        beets.lidType = "Plain lid"; beets.loggedBy = "Martin"; beets.movedToFridgeDate = day(21)
+        beets.lidType = "Plain lid"; beets.loggedBy = "Sam"; beets.movedToFridgeDate = day(21)
         beets.steps = [
             Step(date: day(30), text: "Sliced and packed the beetroot"),
             Step(date: day(21), text: "Moved to the fridge"),
@@ -87,7 +87,7 @@ extension AppData {
         radish.name = "Radish pickles"; radish.vegetable = "Radish"; radish.form = "Whole"
         radish.startDate = day(4); radish.saltGrams = 18; radish.waterMl = 700; radish.roomTempC = 22; radish.jarSizeMl = 750
         radish.additions = ["Chilli"]
-        radish.lidType = "Airlock lid"; radish.loggedBy = "Anna"
+        radish.lidType = "Airlock lid"; radish.loggedBy = "Eva"
         radish.steps = [
             Step(date: day(4), time: "12:00", text: "Packed whole radishes with chilli"),
             Step(date: day(3), time: "12:30", text: "Airlock bubbling every few seconds"),
@@ -174,27 +174,27 @@ extension AppData {
         bake1.recipeID = sourdough.id; bake1.recipeTitle = sourdough.title
         bake1.ratings.crust = 4; bake1.ratings.crumb = 3; bake1.ratings.flavour = 4; bake1.ratings.overall = 4
         bake1.problems = ["Dense crumb"]; bake1.notes = "Rose well, but the crumb was a little tight. Longer bulk next time."
-        bake1.loggedBy = "Martin"; bake1.createdAt = ago(5); bake1.modifiedAt = ago(5)
+        bake1.loggedBy = "Sam"; bake1.createdAt = ago(5); bake1.modifiedAt = ago(5)
         var bake2 = Bake()
         bake2.id = "k_sample_2"
         bake2.name = "Seeded sourdough"; bake2.category = "Sourdough"; bake2.bakeDate = day(12)
         bake2.recipeID = sourdough.id; bake2.recipeTitle = sourdough.title
         bake2.ratings.crust = 5; bake2.ratings.crumb = 5; bake2.ratings.flavour = 4; bake2.ratings.overall = 5
         bake2.notes = "Added sunflower and pumpkin seeds. Best one so far."
-        bake2.loggedBy = "Anna"; bake2.createdAt = ago(12); bake2.modifiedAt = ago(12)
+        bake2.loggedBy = "Eva"; bake2.createdAt = ago(12); bake2.modifiedAt = ago(12)
         out.bakes = [bake1, bake2]
 
         // Lessons
         var l1 = Lesson()
         l1.id = "l_sample_1"
         l1.text = "Press the cabbage down again after the first day; it keeps everything under the brine."
-        l1.loggedBy = "Martin"; l1.linkType = "batch"; l1.linkID = cabbage.id; l1.linkLabel = cabbage.title
+        l1.loggedBy = "Sam"; l1.linkType = "batch"; l1.linkID = cabbage.id; l1.linkLabel = cabbage.title
         l1.recipeID = kraut.id; l1.recipeTitle = kraut.title
         l1.createdAt = ago(1); l1.modifiedAt = ago(1)
         var l2 = Lesson()
         l2.id = "l_sample_2"
         l2.text = "Give the bulk fermentation an extra hour when the kitchen is cold."
-        l2.loggedBy = "Anna"; l2.linkType = "bake"; l2.linkID = bake1.id; l2.linkLabel = bake1.name
+        l2.loggedBy = "Eva"; l2.linkType = "bake"; l2.linkID = bake1.id; l2.linkLabel = bake1.name
         l2.recipeID = sourdough.id; l2.recipeTitle = sourdough.title
         l2.createdAt = ago(5); l2.modifiedAt = ago(5)
         out.lessons = [l1, l2]

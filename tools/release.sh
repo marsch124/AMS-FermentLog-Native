@@ -1,6 +1,6 @@
 #!/bin/bash
 # Archives and uploads AMS FermentLog to TestFlight from this Mac.   tools/release.sh <build e.g. 0.1.1> [ios|mac|both]
-# Uses Martin's ADMIN App Store Connect key (cloud signing); the issuer ID is read from his memory note by asc.py.
+# Uses the owner's ADMIN App Store Connect key (cloud signing); the issuer ID is read from his memory note by asc.py.
 set -e
 cd "$(dirname "$0")/.."
 BUILD="${1:?build number, e.g. 0.1.1}"; WHAT="${2:-both}"

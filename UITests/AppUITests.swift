@@ -1,6 +1,6 @@
 import XCTest
 
-/// UI tests: every control is found by its accessibility identifier, never by its words (Martin's rule).
+/// UI tests: every control is found by its accessibility identifier, never by its words (the owner's rule).
 final class AppUITests: XCTestCase {
     override func setUp() { continueAfterFailure = false }
 

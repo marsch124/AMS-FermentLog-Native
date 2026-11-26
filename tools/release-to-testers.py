@@ -85,7 +85,7 @@ if not build_id:
     sys.exit(f"::error::build {VERSION} never appeared in App Store Connect")
 
 # --- "What to Test" -----------------------------------------------------------
-# TestFlight shows a build's "What to Test" when the update arrives — Martin
+# TestFlight shows a build's "What to Test" when the update arrives — the owner
 # missed it in 0.2 (the other apps set it). The text is the newest What's new
 # entry in App/Sources/Guide.swift, so the app and TestFlight say the same.
 def whats_new_from_guide() -> str:

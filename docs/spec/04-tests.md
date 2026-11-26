@@ -33,7 +33,7 @@ These two files are being rewritten alongside the 6.0 texts; the list above is w
 | Argument | Effect |
 |---|---|
 | `-uiTesting` | Fresh temporary data folder and a separate test `UserDefaults`; alarms and notification permission switched off; no live file watcher |
-| `-sample` | Fill the data with the invented sample (Cabbage jar `b_sample_cabbage` with a To-do list, a recipe `r_sample_sauerkraut`, a bake `k_sample_1`, the person "Martin"); only with `-uiTesting` |
+| `-sample` | Fill the data with the invented sample (Cabbage jar `b_sample_cabbage` with a To-do list, a recipe `r_sample_sauerkraut`, a bake `k_sample_1`, the persons "Sam" and "Eva"); only with `-uiTesting` |
 | `-part:<name>` | Open on an area: `bakes`, `recipes`, `insights`, `settings`, `search`, `new`; anything else opens Jars |
 | `-macLike` | Use the side list even at a compact width |
 | `-dark` | Night colours |
@@ -79,3 +79,6 @@ These two files are being rewritten alongside the 6.0 texts; the list above is w
 - `testOldLinesReadWithoutPictures` — a format 1 file reads in, lines have no pictures; `currentFormat` is 2.
 - `testLineWordsInText` — Share / spreadsheet words: "(1 picture)", "(2 pictures)", picture-only "(1 picture)".
 
+## Changed in 6.8
+
+No new tests. The sample and test data use the invented names "Sam" and "Eva" instead of real names; the tests keep their meaning.

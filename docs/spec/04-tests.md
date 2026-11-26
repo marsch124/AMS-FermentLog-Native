@@ -68,3 +68,14 @@ These two files are being rewritten alongside the 6.0 texts; the list above is w
 |---|---|
 | `-jarsFind:<text>` | Open the Jars list with that text in the find box |
 | `-jarsSort:name` | Open the Jars list sorted by Name |
+
+## Added in 6.7 (pictures on Timeline lines)
+
+`Tests/TimelinePhotosTests.swift` — 6 data tests:
+- `testAddLineWithPictures` — a Did line with words and pictures, a picture-only Did line, a picture-only Taste line, and a pasted list (the pictures go on the last new step only).
+- `testPhotoStoryOrderAndCaptions` — the story lists the Timeline pictures oldest first; captions such as "Day 3 · Wed 25 Nov 08:12 — Taste: tangy, still crunchy", a picture-only caption without words, a line without a time.
+- `testHeadPhotoIsNewest` — the newest Timeline picture wins; with none, the jar's first picture; with neither, nothing.
+- `testPhotoFilesIncludeLinePictures` — the list of pictures in use (safety copies, counts) contains line pictures.
+- `testOldLinesReadWithoutPictures` — a format 1 file reads in, lines have no pictures; `currentFormat` is 2.
+- `testLineWordsInText` — Share / spreadsheet words: "(1 picture)", "(2 pictures)", picture-only "(1 picture)".
+

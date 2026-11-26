@@ -42,11 +42,14 @@ struct Step: Codable, Equatable, Identifiable {
     var text = ""
     /// "burp" when the line came from the Burped button or the alarm's button; "" otherwise.
     var kind = ""
-    init(date: String, time: String = "", text: String, kind: String = "") { self.date = date; self.time = time; self.text = text; self.kind = kind }
-    enum CodingKeys: String, CodingKey { case id, date, time, text, kind }
+    /// Names of picture files in the Photos folder taken with this line (6.7). The words may be empty when there are pictures.
+    var photos: [String] = []
+    init(date: String, time: String = "", text: String, kind: String = "", photos: [String] = []) { self.date = date; self.time = time; self.text = text; self.kind = kind; self.photos = photos }
+    enum CodingKeys: String, CodingKey { case id, date, time, text, kind, photos }
     init(from d: Decoder) throws {
         let c = try d.container(keyedBy: CodingKeys.self)
         id = c.get(.id, UUID().uuidString); date = c.get(.date, ""); time = c.get(.time, ""); text = c.get(.text, ""); kind = c.get(.kind, "")
+        photos = c.get(.photos, [])
     }
 }
 
@@ -56,11 +59,14 @@ struct CheckIn: Codable, Equatable, Identifiable {
     var date = ""
     var time = ""
     var tasteNote = ""
-    init(date: String, time: String = "", tasteNote: String) { self.date = date; self.time = time; self.tasteNote = tasteNote }
-    enum CodingKeys: String, CodingKey { case id, date, time, tasteNote }
+    /// Names of picture files in the Photos folder taken with this taste test (6.7). The note may be empty when there are pictures.
+    var photos: [String] = []
+    init(date: String, time: String = "", tasteNote: String, photos: [String] = []) { self.date = date; self.time = time; self.tasteNote = tasteNote; self.photos = photos }
+    enum CodingKeys: String, CodingKey { case id, date, time, tasteNote, photos }
     init(from d: Decoder) throws {
         let c = try d.container(keyedBy: CodingKeys.self)
         id = c.get(.id, UUID().uuidString); date = c.get(.date, ""); time = c.get(.time, ""); tasteNote = c.get(.tasteNote, "")
+        photos = c.get(.photos, [])
     }
 }
 
@@ -323,7 +329,7 @@ struct AppData: Codable, Equatable {
     /// field to anything in here: a device still on an older version then says "Update this device first"
     /// and does not write the file — it would save it without the fields it does not know.
     var format = AppData.currentFormat
-    static let currentFormat = 1   // 6.0: the first native format
+    static let currentFormat = 2   // 6.0: 1, the first native format · 6.7: 2, pictures on Timeline lines (Step/CheckIn.photos)
     init() {}
     enum CodingKeys: String, CodingKey { case batches, presets, recipes, bakes, lessons, settings, savedAt, format }
     init(from d: Decoder) throws {

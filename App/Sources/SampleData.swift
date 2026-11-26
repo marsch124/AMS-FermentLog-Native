@@ -220,7 +220,8 @@ import UniformTypeIdentifiers
 
 /// A made-up picture for screenshots ("-samplePhoto"): a green-to-cream glass with darker shreds and a few bubbles.
 enum SamplePhoto {
-    static func jpeg(width: Int = 600, height: Int = 760) -> Data? {
+    /// `shade` 0…1 turns the cabbage from green to purple, so several sample pictures look different (6.7).
+    static func jpeg(width: Int = 600, height: Int = 760, shade: Double = 0) -> Data? {
         let space = CGColorSpaceCreateDeviceRGB()
         guard let ctx = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: 0,
                                   space: space, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return nil }
@@ -229,7 +230,7 @@ enum SamplePhoto {
         ctx.setFillColor(CGColor(red: 0.93, green: 0.86, blue: 0.76, alpha: 1)); ctx.fill(CGRect(x: 0, y: 0, width: w, height: h))
         // The glass full of pale green cabbage.
         let glass = CGRect(x: w * 0.18, y: h * 0.08, width: w * 0.64, height: h * 0.74)
-        let colors = [CGColor(red: 0.62, green: 0.74, blue: 0.40, alpha: 1), CGColor(red: 0.90, green: 0.92, blue: 0.70, alpha: 1)] as CFArray
+        let colors = [CGColor(red: 0.62 + 0.1 * shade, green: 0.74 - 0.45 * shade, blue: 0.40 + 0.25 * shade, alpha: 1), CGColor(red: 0.90, green: 0.92 - 0.2 * shade, blue: 0.70 + 0.1 * shade, alpha: 1)] as CFArray
         if let g = CGGradient(colorsSpace: space, colors: colors, locations: [0, 1]) {
             ctx.saveGState(); ctx.addPath(CGPath(roundedRect: glass, cornerWidth: 40, cornerHeight: 40, transform: nil)); ctx.clip()
             ctx.drawLinearGradient(g, start: CGPoint(x: 0, y: glass.minY), end: CGPoint(x: 0, y: glass.maxY), options: [])

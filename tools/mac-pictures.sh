@@ -76,6 +76,13 @@ SHOTS=(
 "25-whats-new-2|-part:settings -open:whatsNew -scrollDown:650"
 "26-settings-window-1|-part:jars -settingsWindow"
 "26-settings-window-2|-part:jars -settingsWindow -scrollDown:700"
+"27-jars-line-photos|-lineSamplePhotos -part:jars"
+"27-jar-line-photos-1|-lineSamplePhotos -part:jars -open:jar:$CAB"
+"27-jar-line-photos-2|-lineSamplePhotos -part:jars -open:jar:$CAB -scrollDown:650"
+"27-jar-line-photos-3|-lineSamplePhotos -part:jars -open:jar:$CAB -scrollDown:1300"
+"27-jar-line-photos-4|-lineSamplePhotos -part:jars -open:jar:$CAB -scrollDown:1950"
+"28-jar-story|-lineSamplePhotos -part:jars -open:jar:$CAB -openStory"
+"29-jar-photo-line-editor|-lineSamplePhotos -part:jars -open:jar:$CAB -sheetPhotoLine"
 )
 ONLY="${ONLY:-}"     # ONLY=05-jar-edit → just the pictures whose name starts with that; ONLY="01 02 14" → several
 for MODE in light dark; do

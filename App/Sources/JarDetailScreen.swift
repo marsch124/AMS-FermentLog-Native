@@ -34,7 +34,7 @@ struct JarDetailScreen: View {
             .page(.jars)
         }
         .backdrop(.jars)
-        .photoViewer(b.photos.map { store.photoURL($0) }, start: $viewing)
+        .photoViewer(viewer.map { store.photoURL($0.name) }, start: $viewing, captions: viewer.map(\.caption))
         .navigationTitle(b.title)
         #if os(iOS)
         .navigationBarTitleDisplayMode(.inline)
@@ -72,11 +72,18 @@ struct JarDetailScreen: View {
         }
     }
 
-    /// The jar's own first picture on the head card; the drawn jar when it has none.
+    /// What the head card's picture opens: the photo story when the picture came from the Timeline, else the jar's own pictures.
+    private var viewer: [StoryPhoto] {
+        guard let b = store.data.batch(batchID) else { return [] }
+        let story = Logic.photoStory(b)
+        return story.isEmpty ? b.photos.map { StoryPhoto(name: $0, entryID: "", caption: "") } : story
+    }
+
+    /// The newest Timeline picture on the head card (6.7), else the jar's own first picture; the drawn jar when it has none.
     @ViewBuilder private func headPicture(_ b: Batch) -> some View {
         let frame = RoundedRectangle(cornerRadius: Look.tileRadius, style: .continuous)
-        if let p = b.photos.first {
-            Button { viewing = 0 } label: {
+        if let p = Logic.headPhoto(b) {
+            Button { viewing = Logic.photoStory(b).isEmpty ? 0 : viewer.count - 1 } label: {     // the story opens on its newest picture
                 PhotoImage(url: store.photoURL(p))
                     .frame(width: 60, height: 76)
                     .clipShape(frame)

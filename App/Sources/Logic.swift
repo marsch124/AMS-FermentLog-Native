@@ -19,6 +19,15 @@ struct TimelineEntry: Equatable, Identifiable {
     var text: String
     /// True for a "Did" line written by the Burped button / alarm.
     var isBurp: Bool
+    /// Picture file names taken with this line (6.7).
+    var photos: [String] = []
+}
+
+/// One picture of a jar's photo story (6.7): the file, the line it belongs to, and the words under it in the large view.
+struct StoryPhoto: Equatable {
+    var name: String
+    var entryID: String
+    var caption: String
 }
 
 struct XYPoint: Equatable { var x: Double; var y: Double; var name: String }
@@ -287,8 +296,8 @@ enum Logic {
     /// The jar's whole diary, oldest first. A line without a time ends its day; equal keys keep entry order.
     static func timelineEntries(_ b: Batch) -> [TimelineEntry] {
         var out: [TimelineEntry] = []
-        for s in b.steps { out.append(TimelineEntry(kind: .did, id: s.id, date: s.date, time: s.time, text: s.text, isBurp: s.kind == "burp")) }
-        for c in b.checkIns { out.append(TimelineEntry(kind: .taste, id: c.id, date: c.date, time: c.time, text: c.tasteNote, isBurp: false)) }
+        for s in b.steps { out.append(TimelineEntry(kind: .did, id: s.id, date: s.date, time: s.time, text: s.text, isBurp: s.kind == "burp", photos: s.photos)) }
+        for c in b.checkIns { out.append(TimelineEntry(kind: .taste, id: c.id, date: c.date, time: c.time, text: c.tasteNote, isBurp: false, photos: c.photos)) }
         func key(_ e: TimelineEntry) -> String { "\(e.date) \(e.time.isEmpty ? "99:99" : e.time)" }
         return out.enumerated().sorted { l, r in
             let a = key(l.element), c = key(r.element)
@@ -299,8 +308,63 @@ enum Logic {
     /// The "Did" lines as plain text ("2026-11-25 10:30 \u{2014} Chopped the cabbage"), for sharing and export.
     static func stepsText(_ b: Batch) -> String {
         timelineEntries(b).filter { $0.kind == .did }
-            .map { "\([$0.date, $0.time].filter { !$0.isEmpty }.joined(separator: " ")) \u{2014} \($0.text)" }
+            .map { "\([$0.date, $0.time].filter { !$0.isEmpty }.joined(separator: " ")) \u{2014} \(lineWords($0))" }
             .joined(separator: "\n")
+    }
+
+    // MARK: Pictures on Timeline lines (6.7)
+
+    /// A line's words for plain text (Share, spreadsheet): "Packed carrots (2 pictures)"; a picture-only line reads "(1 picture)".
+    static func lineWords(_ e: TimelineEntry) -> String {
+        let n = e.photos.count
+        guard n > 0 else { return e.text }
+        let count = "(\(n) \(n == 1 ? "picture" : "pictures"))"
+        return e.text.isEmpty ? count : "\(e.text) \(count)"
+    }
+
+    /// The jar with a new Timeline line, or nil when there is nothing to add (no words and no pictures).
+    /// "What I did": one step per line of words (as before); the pictures go with the LAST new step; pictures alone make one step
+    /// without words. "Taste test": the words on one line; pictures alone make a taste test without words.
+    static func addingLine(to b: Batch, kind: TimelineKind, text: String, photos: [String], date: String, time: String) -> Batch? {
+        var n = b
+        if kind == .did {
+            var added = stepsFromText(text, date: date, time: time)
+            if added.isEmpty {
+                guard !photos.isEmpty else { return nil }
+                added = [Step(date: date, time: time, text: "", photos: photos)]
+            } else if !photos.isEmpty {
+                added[added.count - 1].photos = photos
+            }
+            n.steps += added
+        } else {
+            let note = text.replacingOccurrences(of: "\\s*\\n\\s*", with: " ", options: .regularExpression).trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !note.isEmpty || !photos.isEmpty else { return nil }
+            n.checkIns.append(CheckIn(date: date, time: time, tasteNote: note, photos: photos))
+        }
+        return n
+    }
+
+    /// Every Timeline picture of the jar, in Timeline order (oldest first), each with its caption:
+    /// "Day 3 · Wed 25 Nov 08:12 — Taste: tangy, still crunchy". No words → no "—" part; no time → no time.
+    static func photoStory(_ b: Batch, now: Date = Date()) -> [StoryPhoto] {
+        var out: [StoryPhoto] = []
+        for e in timelineEntries(b) where !e.photos.isEmpty {
+            var head: [String] = []
+            if let d = dayNumber(of: e.date, start: b.startDate) { head.append("Day \(d)") }
+            let when = [e.date.isEmpty ? "" : Human.day(e.date, now: now), e.time].filter { !$0.isEmpty }.joined(separator: " ")
+            if !when.isEmpty { head.append(when) }
+            var caption = head.joined(separator: " \u{00b7} ")
+            let words = e.kind == .taste ? (e.text.isEmpty ? "Taste" : "Taste: \(e.text)") : e.text
+            if !words.isEmpty { caption += caption.isEmpty ? words : " \u{2014} \(words)" }
+            for name in e.photos where !name.isEmpty { out.append(StoryPhoto(name: name, entryID: e.id, caption: caption)) }
+        }
+        return out
+    }
+
+    /// The picture that stands for the jar (head card, Jars list): the newest Timeline picture — the last picture of the latest
+    /// line that has pictures — else the jar's own first picture; nil = draw the jar.
+    static func headPhoto(_ b: Batch) -> String? {
+        photoStory(b).last?.name ?? b.photos.first
     }
 
     // MARK: Stats
@@ -722,7 +786,7 @@ enum Logic {
         ing += b.additions.filter { !$0.isEmpty }
         r.ingredients = ing
         r.equipment = [b.vesselType, b.weightType == "None" ? "" : b.weightType, b.lidType].filter { !$0.isEmpty }
-        r.steps = timelineEntries(b).filter { $0.kind == .did && !$0.isBurp }.map { RecipeStep(title: $0.text) }
+        r.steps = timelineEntries(b).filter { $0.kind == .did && !$0.isBurp && !$0.text.isEmpty }.map { RecipeStep(title: $0.text) }
         return r
     }
 

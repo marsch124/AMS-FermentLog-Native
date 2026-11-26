@@ -12,8 +12,8 @@ settings:
     DEVELOPMENT_TEAM: D24ENP83QQ
     CODE_SIGN_STYLE: Automatic
     SWIFT_VERSION: "5.0"
-    MARKETING_VERSION: "6.6"
-    CURRENT_PROJECT_VERSION: "9"
+    MARKETING_VERSION: "6.7"
+    CURRENT_PROJECT_VERSION: "10"
 packages:
   # The shared AMS icon hub (SVG path reader, hand-drawn icons), pinned to one commit so a hub change never arrives by surprise.
   AMSIcons:

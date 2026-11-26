@@ -64,6 +64,16 @@ final class Store: ObservableObject {
             let name = addPhoto(jpeg)
             if !name.isEmpty { data.batches[i].photos.insert(name, at: 0) }
         }
+        // Pictures on Timeline lines (6.7): "-lineSamplePhotos" gives the sample Cabbage jar's lines made-up pictures —
+        // two on "Packed it into the jar", one on the taste test, and one line that is only a picture.
+        if isTestRun && args.contains("-lineSamplePhotos"), let i = data.batches.firstIndex(where: { $0.id == "b_sample_cabbage" }) {
+            func pic(_ shade: Double) -> String { SamplePhoto.jpeg(shade: shade).map { addPhoto($0) } ?? "" }
+            var b = data.batches[i]
+            if let j = b.steps.firstIndex(where: { $0.text.hasPrefix("Packed") }) { b.steps[j].photos = [pic(0), pic(0.3)] }
+            if let d = b.checkIns.last?.date { b.steps.append(Step(date: d, time: "08:20", text: "", photos: [pic(0.9)])) }
+            if !b.checkIns.isEmpty { b.checkIns[b.checkIns.count - 1].photos = [pic(0.6)] }
+            data.batches[i] = b
+        }
         // Tests and pictures: as if a newer version had saved the file / as if a save had failed.
         if isTestRun && args.contains("-needsUpdate") { data.format = AppData.currentFormat + 1 }
         if isTestRun && args.contains("-saveProblem") { saveProblem = "The file could not be written." }
@@ -341,7 +351,11 @@ final class Store: ObservableObject {
     /// Every picture file the data still points at.
     static func photoFiles(in d: AppData) -> Set<String> {
         var names = Set<String>()
-        for b in d.batches { names.formUnion(b.photos) }
+        for b in d.batches {
+            names.formUnion(b.photos)
+            for s in b.steps { names.formUnion(s.photos) }      // 6.7: pictures on Timeline lines
+            for c in b.checkIns { names.formUnion(c.photos) }
+        }
         for r in d.recipes { names.formUnion(r.photos) }
         for k in d.bakes { names.formUnion(k.photos) }
         names.remove("")

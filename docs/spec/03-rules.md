@@ -34,8 +34,8 @@ Notification (`AlarmPlan`): one per due jar, id `taste.<jarid>.<due day>`, at th
 
 - `timelineEntries`: all Did lines (steps) and Taste lines (check-ins) in one list, oldest first by "date time"; a line without a time sorts as 99:99 (the end of its day); equal keys keep their entry order (Did before Taste).
 - `parseStepLines` (adding a Did line): one step per line; leading bullets and dashes ("•", "·", "*", "-", "–", "—") and list numbers like "3." or "4)" up to 3 digits are removed; empty lines are dropped; "2% salt" and "2.5 kg" stay. All lines get the same date and time (the When box). A Taste line is one note: line breaks are turned into single spaces.
-- Changing a line: day, time (or none) and words; words may not be empty; line breaks become spaces.
-- `stepsText` (for Share and the spreadsheet's "What I did"): each Did line as "date time — words".
+- Changing a line: day, time (or none), words and (6.7) pictures; the line must have words or at least one picture (before 6.7 words could not be empty); line breaks become spaces; removing a picture only takes its name off the line.
+- `stepsText` (for Share and the spreadsheet's "What I did"): each Did line as "date time — words"; since 6.7 a line with pictures gets " (1 picture)" / " (2 pictures)" after its words and a picture-only line reads "date time — (1 picture)". The pictures themselves are not in the text or the spreadsheet. The same suffix is used in the Share text's Timeline.
 
 ## Burp alarm
 
@@ -87,7 +87,7 @@ Words split on spaces; every word must appear (lower-case match, anywhere) in th
 
 ## Steps → recipe (`Logic.recipe(fromStepsOf:)`)
 
-Title = the jar's name (else its vegetable). Category "Vegetable ferment". Description "From the jar started <start date>.". Ingredients, in order: vegetable (with ", <form in lower case>" when there is a form), "<salt> g salt", "<water> ml water" (numbers without needless decimals), then the spices. Equipment: vessel, weight (not when "None"), lid, empty ones left out. Steps: every Did line that is not a burp, in Timeline order, each as a step whose title is the line's words (no detail, no time). The recipe is a draft in the form; nothing is saved before Save.
+Title = the jar's name (else its vegetable). Category "Vegetable ferment". Description "From the jar started <start date>.". Ingredients, in order: vegetable (with ", <form in lower case>" when there is a form), "<salt> g salt", "<water> ml water" (numbers without needless decimals), then the spices. Equipment: vessel, weight (not when "None"), lid, empty ones left out. Steps: every Did line that is not a burp and (6.7) has words (picture-only lines are skipped), in Timeline order, each as a step whose title is the line's words (no detail, no time). The recipe is a draft in the form; nothing is saved before Save.
 
 ## Recipe → jar (`Logic.batch(from:)`)
 
@@ -122,3 +122,14 @@ Names listed = his remembered names plus those used by jars, not built in, sorte
 - **`PhotoViewer(names:start:)`** (`Photos.swift`): shows `names[start]` first; "N of M" counts from 1; identifiers `photo-viewer`, `photo-viewer-done`, `photo-viewer-previous`, `photo-viewer-next`, `photo-viewer-count`. Opened from `jar-head-photo` and from `photo-open-<n>` (n from 0) of `PhotoStrip(editable: false)`; iOS `.fullScreenCover`, Mac `.sheet` at least 720×560.
 - **`JarsFind`** (6.4): `Logic.jars(_ batches:, matching text: String)` keeps the jars whose `title` or `vegetable` contains the text, compared with `.caseInsensitive` and `.diacriticInsensitive` ("surkal" finds "Surkål"); empty or spaces-only text keeps all. It is applied together with `Logic.jars(_:showing:)` (a chosen tile). `JarsScreen` keeps the text in `@State find` (never stored). Identifiers: `jars-find`, `jars-find-clear`, `jars-find-empty` ("No jar matches “xyz”."). The Search page is unchanged and still looks in jars, bakes, recipes and lessons.
 - **`JarSort`** (6.4): `Logic.sortJars(_ batches:, by: JarSort)`. `.startDate` is the old rule: in Fermenting the jars due for a taste test come first, the most overdue first, then the newest start; In the fridge and Done newest start first. `.name` compares `title` with `localizedStandardCompare`, A to Z in every group in the order of the device's language (Swedish: Å Ä Ö after Z), big/small letters ignored, "2" before "10"; the taste-test-due order does not apply. `jars-due` (the box on top) is the same for both. The choice is `@AppStorage("jarsSort")`, remembered per device (iPhone, iPad and Mac each keep their own). Identifiers: `jars-sort`, `jars-sort-Start date`, `jars-sort-Name`.
+
+## Pictures on Timeline lines (6.7)
+
+- **Adding**: the Add button works when the text is not empty or at least one picture is picked (up to 6 per press from Photos, or one from the camera on iPhone and iPad; each is stored with `Store.addPhoto`). Did with several lines of words: `parseStepLines` makes one step per line as before and all picked pictures go on the LAST new step. Did with pictures only: one step with empty words. Taste with pictures only: one check-in with an empty `tasteNote`. A Taste line is still one note. A Taste line still moves the next taste-test reminder (the picture-only one too); burps and the 3-hour rule are unchanged. After Add the text and the picked pictures are cleared.
+- **Timeline pictures** (`Logic.photoStory(batch)` → `[StoryPhoto]`: name, entryID, caption): for each line in `timelineEntries` order, each of its `photos` in order; the same list feeds the photo story. Each entry has a caption `Day N · <weekday> <d MMM> [<HH:mm>][ — <words>]`, N = `Logic.dayNumber(of:start:)` (the start day is Day 1), words = the step text, or "Taste: " + the note for a check-in; no words part when empty; no time when the line has none.
+- **Head picture** (`Logic.headPhoto(batch)`): the last picture of the latest line (in Timeline order) that has pictures; when no line has one, `photos.first`; else nil (drawn jar). Used by the jar page head card and `JarRow`. Tapping the head card picture opens the photo story at that picture when it came from the Timeline, else a viewer of the jar's own `photos` at index 0.
+- **Change this line**: Save needs words or pictures; Remove only takes the name off the line.
+- **Save steps as a recipe**: picture-only Did lines are skipped; the button shows when there is a Did line with words besides burps.
+- **Duplicate jar**: the copy has no lines, so no line pictures. Deleting a line keeps the picture files (like all removed pictures).
+- **Unchanged**: the jar's own `photos` (Edit jar › Photos and the picture row), recipe and bake pictures, Burped lines, the To do list.
+

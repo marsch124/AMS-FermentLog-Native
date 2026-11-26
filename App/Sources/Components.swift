@@ -118,6 +118,8 @@ struct PhotoStrip: View {
     @Binding var names: [String]
     var editable = true
     var area: Area = .jars
+    /// Something at the right end of the "Add pictures" row while editing — the Timeline puts its Add button there (6.7).
+    var accessory: AnyView? = nil
     @State private var picked: [PhotosPickerItem] = []
     @State private var showCamera = false
     /// The picture opened large (read-only rows only).
@@ -168,6 +170,7 @@ struct PhotoStrip: View {
                             .accessibilityIdentifier("photo-camera")
                     }
                     #endif
+                    if let accessory { Spacer(minLength: 0); accessory }
                 }
             }
         }

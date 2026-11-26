@@ -86,12 +86,13 @@ struct ViewerStart: Identifiable { let id: Int }
 
 extension View {
     /// Opens the pictures large when `start` gets a number: full screen on iPhone and iPad, a large window-sheet on the Mac.
-    func photoViewer(_ urls: [URL], start: Binding<Int?>) -> some View {
+    /// `captions` (6.7): one line of words under each picture (the photo story); empty = none.
+    func photoViewer(_ urls: [URL], start: Binding<Int?>, captions: [String] = []) -> some View {
         let item = Binding<ViewerStart?>(get: { start.wrappedValue.map(ViewerStart.init) }, set: { start.wrappedValue = $0?.id })
         #if os(iOS)
-        return self.fullScreenCover(item: item) { s in PhotoViewer(urls: urls, start: s.id) }
+        return self.fullScreenCover(item: item) { s in PhotoViewer(urls: urls, start: s.id, captions: captions) }
         #else
-        return self.sheet(item: item) { s in PhotoViewer(urls: urls, start: s.id).frame(minWidth: 720, idealWidth: 980, minHeight: 560, idealHeight: 760) }   // as large as the window allows
+        return self.sheet(item: item) { s in PhotoViewer(urls: urls, start: s.id, captions: captions).frame(minWidth: 720, idealWidth: 980, minHeight: 560, idealHeight: 760) }   // as large as the window allows
         #endif
     }
 }
@@ -100,13 +101,18 @@ extension View {
 /// iPhone/iPad: swipe left and right. Mac: Previous / Next (and the arrow keys); Escape closes.
 struct PhotoViewer: View {
     let urls: [URL]
+    /// Words under each picture (the jar's photo story, 6.7); empty = none.
+    var captions: [String] = []
     @State private var index: Int
     @Environment(\.dismiss) private var dismiss
 
-    init(urls: [URL], start: Int) {
+    init(urls: [URL], start: Int, captions: [String] = []) {
         self.urls = urls
+        self.captions = captions
         _index = State(initialValue: min(max(0, start), max(0, urls.count - 1)))
     }
+
+    private var caption: String { captions.indices.contains(index) ? captions[index] : "" }
 
     var body: some View {
         ZStack {
@@ -120,13 +126,18 @@ struct PhotoViewer: View {
             .tabViewStyle(.page(indexDisplayMode: .never))
             .ignoresSafeArea()
             #else
-            if urls.indices.contains(index) { PhotoImage(url: urls[index], contentMode: .fit, backdrop: .black).padding(.vertical, 44) }
+            if urls.indices.contains(index) { PhotoImage(url: urls[index], contentMode: .fit, backdrop: .black).padding(.top, 44).padding(.bottom, captions.isEmpty ? 44 : 84) }
             #endif
         }
         .overlay(alignment: .top) { topBar }
-        #if os(macOS)
-        .overlay(alignment: .bottom) { if urls.count > 1 { macButtons } }
-        #endif
+        .overlay(alignment: .bottom) {
+            VStack(spacing: 8) {
+                if !caption.isEmpty { captionLine }
+                #if os(macOS)
+                if urls.count > 1 { macButtons }
+                #endif
+            }
+        }
         .environment(\.colorScheme, .dark)
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("photo-viewer")
@@ -147,6 +158,20 @@ struct PhotoViewer: View {
                 .accessibilityIdentifier("photo-viewer-done")
         }
         .padding(.horizontal, 16).padding(.vertical, 10)
+    }
+
+    /// The words under a picture of the photo story: its day, time and the line's words.
+    private var captionLine: some View {
+        Text(caption)
+            .font(.subheadline).foregroundStyle(.white)
+            .multilineTextAlignment(.center).lineLimit(3)
+            .padding(.horizontal, 14).padding(.vertical, 8)
+            .background(Color.black.opacity(0.55), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .padding(.horizontal, 16)
+            #if os(iOS)
+            .padding(.bottom, 8)
+            #endif
+            .accessibilityIdentifier("photo-viewer-caption")
     }
 
     #if os(macOS)

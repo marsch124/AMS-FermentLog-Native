@@ -22,14 +22,14 @@ Every type decodes tolerantly: a missing key takes its default, an unknown key i
 
 ### AppData (the file)
 
-`batches` [Batch], `presets` [Preset], `recipes` [Recipe], `bakes` [Bake], `lessons` [Lesson], `settings` AppSettings, `savedAt` Date, `format` Int (6.0 = 1).
+`batches` [Batch], `presets` [Preset], `recipes` [Recipe], `bakes` [Bake], `lessons` [Lesson], `settings` AppSettings, `savedAt` Date, `format` Int (6.0 = 1; 6.7 = 2).
 
 ### Batch (a jar)
 
 `id` ("b_<ms>_<6 hex>" for new ones; web ids kept on import), `name`, `vegetable` (default "Carrot"), `form` ("Sticks"), `startDate` day, `saltGrams` (25), `waterMl` (1000), `roomTempC` (20), `jarSizeMl` (1000) — all four optional numbers, `additions` [String] (the spices), `vesselType` ("Glass jar"), `weightType` ("Glass weight"), `lidType` ("Burping / self-venting lid"), `remindEveryDays` (3; 0 = taste reminder off), `checkIns` [CheckIn], `steps` [Step], `plan` [PlanStep], `recipeID`, `recipeTitle`, `movedToFridgeDate` day or "", `outcome` Outcome?, `photos` [file names], `notes`, `loggedBy`, `burpAlarm` Bool? (nil = follow the lid; true/false = the owner's own choice for this jar), `createdAt`, `modifiedAt`, `deletedAt`. Computed: `title` = name, else vegetable.
 
-- **Step** (a "Did" line): `id` (uuid), `date`, `time` ("" = no time), `text`, `kind` ("burp" when written by the Burped button or the notification button; "" otherwise).
-- **CheckIn** (a "Taste" line): `id`, `date`, `time`, `tasteNote`.
+- **Step** (a "Did" line): `id` (uuid), `date`, `time` ("" = no time), `text`, `kind` ("burp" when written by the Burped button or the notification button; "" otherwise), `photos` [file names] (6.7; picture files taken with this line; missing = none).
+- **CheckIn** (a "Taste" line): `id`, `date`, `time`, `tasteNote`, `photos` [file names] (6.7; as on Step).
 - **PlanStep** (a To-do step from a recipe): `id`, `title`, `detail`, `time` (the recipe's hint, e.g. "3 min"), `doneAt` Date? (nil = still to do).
 - **Outcome**: `recorded`, `success`, `taste`, `sourness`, `crunch`, `overall` (Int? 1–5), `problems` [String], `recordedAt`.
 
@@ -73,7 +73,7 @@ Removing a record sets `deletedAt` and `modifiedAt` = now and keeps the record; 
 
 ## The format number
 
-`AppData.currentFormat` = 1 ("the first native format"). Rule: raise it by one in every version that adds a stored field to anything in `AppData`. A device with `data.format > currentFormat` (`Store.needsUpdate`) shows the red bar "Update this device first" and the same words in Settings › iCloud, never writes the file, writes no safety copies (`writeCopy` returns false), and has Restore, Import, "Make a safety copy now", the people list and "Your lists" switched off. A web backup is not subject to this; an own backup file with a higher format is refused with "A newer FermentLog made this backup. Update this device first."
+`AppData.currentFormat` = 2 (1 = the first native format, 6.0 to 6.6; 2 since 6.7, because Step and CheckIn gained `photos`). A device still on 6.6 sees format 2 as newer and shows "Update this device first"; files of format 1 read in fine (lines without pictures). Rule: raise it by one in every version that adds a stored field to anything in `AppData`. A device with `data.format > currentFormat` (`Store.needsUpdate`) shows the red bar "Update this device first" and the same words in Settings › iCloud, never writes the file, writes no safety copies (`writeCopy` returns false), and has Restore, Import, "Make a safety copy now", the people list and "Your lists" switched off. A web backup is not subject to this; an own backup file with a higher format is refused with "A newer FermentLog made this backup. Update this device first."
 
 ## Safety copies
 
@@ -104,3 +104,7 @@ Reads the web app's backup `{ app: "fermentlog", version, exportedAt, batches, p
 - Pictures: each web data URL (`data:…;base64,…`) is decoded to a file named from a UUID made from the bytes (two FNV-1a runs), so the same picture always has the same name and a second import adds no files; an existing file is never overwritten.
 - Settings the web kept in the browser are rebuilt: `customVegetables` = vegetables of the jars and templates that are not built in; `customSpices` likewise; `customForms` = forms not built in; `people` = every `loggedBy` of jars, bakes and lessons. They are merged into the current settings as a union (`WebImport.merge`), never replacing.
 - Importing the same file twice changes nothing (stable ids, stable picture names).
+
+### Timeline line pictures (6.7)
+
+`Step.photos` and `CheckIn.photos` hold file names in the same `Photos/` folder (same `Store.addPhoto` rules: 1600 px, JPEG 0.8), synced through iCloud like all pictures. `Store.photoFiles` (the list of every picture in use, which decides what is copied into `Safety copies/Photos/`, what is counted in the import counts line, and what is kept when a record is purged) includes the line pictures. Restore copies missing line pictures back from `Safety copies/Photos/`. A line with no `photos` key decodes as an empty list.

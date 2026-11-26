@@ -37,6 +37,6 @@ One file and two folders in iCloud Drive (container Documents, shown in Files as
 
 - `Guide.appVersion` in `App/Sources/Guide.swift` is the single source of the version the app shows (Settings, last row: "Version 6.0 (1)"). The build settings carry the same `MARKETING_VERSION` 6.0 and `CURRENT_PROJECT_VERSION` 1; `tools/release.sh <build>` passes the build number.
 - Every new version adds a What's new entry at the top of `Guide.releases` (what was there before, what is there now, with numbers), updates every How it works section that changed (and "Signs in this app"), and updates these pages.
-- Every version that adds a stored field raises `AppData.currentFormat` (now 1) by one. A device on an older version then says "Update this device first" and writes nothing (see `01-data.md`).
+- Every version that adds a stored field raises `AppData.currentFormat` (now 2 since 6.7) by one. A device on an older version then says "Update this device first" and writes nothing (see `01-data.md`).
 - Releases: `tools/build.sh` generates the project and builds for the simulator; `tools/release.sh` archives iPhone/iPad and Mac and uploads to TestFlight.
 - The repository is public: no real data is ever put in it. `SampleData.swift` holds invented sample jars used only by tests (`-sample`).

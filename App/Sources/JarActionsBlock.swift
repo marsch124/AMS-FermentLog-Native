@@ -91,7 +91,7 @@ enum JarSummary {
         let tl = Logic.timelineEntries(b)
         if !tl.isEmpty {
             lines += ["", "Timeline:"]
-            lines += tl.map { "\([$0.date, $0.time].filter { !$0.isEmpty }.joined(separator: " ")) · \($0.kind == .did ? "Did" : "Taste") · \($0.text)" }
+            lines += tl.map { "\([$0.date, $0.time].filter { !$0.isEmpty }.joined(separator: " ")) · \($0.kind == .did ? "Did" : "Taste") · \(Logic.lineWords($0))" }
         }
         return lines.joined(separator: "\n")
     }

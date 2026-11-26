@@ -1,0 +1,18 @@
+FermentLog 6.7 (build 10) - what to test
+
+New: pictures on any line of a jar's Timeline (What I did and Taste test). Tap a picture to see the jar's photo story.
+
+1. Update the iPhone, the iPad and the Mac to 6.7 first. (A device still on 6.6 says "Update this device first" and saves nothing.)
+2. Open a jar. In the Timeline, choose Taste test, write "tangy", tap Take a picture (iPhone or iPad), then Add. The line shows the picture under its words.
+3. Add a picture alone, with no words (What I did). The line says "Picture" in grey with the picture under it.
+4. Add words and a picture together. Then paste 3 lines in What I did and add 1 picture: the picture should sit on the last line only.
+5. Tap a picture: the photo story opens. Swipe left and right (Mac: Previous, Next or the arrow keys). Check "3 of 8" at the top and the caption at the bottom, for example "Day 3 · Wed 25 Nov 08:12 - Taste: tangy". A picture-only line has no words in its caption. Done (Escape on the Mac) closes it.
+6. Tap a line's words: Change this line. See the Pictures section; add one, remove one (Remove), Save. Also try a line with only pictures and no words: Save should work.
+7. The jar's orange head card and the small picture in the Jars list show the newest Timeline picture. A jar with no Timeline pictures still shows its own first picture.
+8. The note beside Timeline says "... tap a line to change it, a picture to see it large" when a line has a picture.
+9. Take a picture on one device: it shows on the other devices after a moment.
+
+Also check:
+- Edit jar > Photos and the picture row under the head card work as before.
+- Share on a jar says "(1 picture)" after a line with a picture.
+- Burped, the To do list and the taste-test reminder behave as before.

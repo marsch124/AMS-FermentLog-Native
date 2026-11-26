@@ -31,7 +31,7 @@ struct JarRow: View {
     }
 
     @ViewBuilder private var thumb: some View {
-        if let p = batch.photos.first {
+        if let p = Logic.headPhoto(batch) {     // 6.7: the newest Timeline picture, else the jar's own first
             PhotoImage(url: store.photoURL(p)).frame(width: 48, height: 48).clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
         } else {
             Mark(.jar).frame(width: 28, height: 28).foregroundStyle(Area.jars.color)

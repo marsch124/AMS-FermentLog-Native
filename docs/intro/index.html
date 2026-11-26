@@ -1,0 +1,773 @@
+<title>FermentLog Tour</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* FermentLog Tour: chapter rail on the left, coach card + a pretend iPhone on the right. Same engine as the other AMS tours.
+   Written for AMS FermentLog 6.7 (build 10). Update this tour in the release that changes a taught screen. */
+:root {
+  --bg: #FAF6F0; --panel: #FFFFFF; --fg: #2C2620; --muted: #6F655A; --line: #ECE3D6;
+  --accent: #B8551A; --accent-soft: #FBE9DC; --accent-btn: #C2561A; --good: #2F7A41; --good-soft: #E3F4E8; --warn: #C2410C;
+  --shadow: 0 18px 40px rgba(44,38,32,.2);
+  --pbg:#FAF6F0; --pcard:#FFFFFF; --pink:#2C2620; --pmuted:#8A7F72; --pline:#ECE3D6; --pfield:rgba(120,120,128,.14);
+  --brand:#E8722C; --brandink:#B8551A; --hero:#DC6520; --jfill:#E8722C; --ok:#4A9D5B; --prob:#D1495B; --fridge:#3A7CA5;
+  --bake:#A9751C; --bakefill:#9A6816; --rec:#6B46A8; --recfill:#6B46A8; --ins:#1E7F8F; --insfill:#1E7F8F; --setc:#66788C; --setfill:#5A6C80; --srch:#4F6490;
+  --f-display: "Avenir Next", "Helvetica Neue", system-ui, sans-serif;
+  --f-body: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --f-phone: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg:#1A1713; --panel:#241F1A; --fg:#F0E9DF; --muted:#A89B8C; --line:#38302A;
+  --accent:#F5A367; --accent-soft:#3A2517; --accent-btn:#D9651F; --good:#86EFAC; --good-soft:#15301F; --warn:#FDBA74;
+  --shadow: 0 18px 40px rgba(0,0,0,.55);
+  --pbg:#1A1713; --pcard:#241F1A; --pink:#F0E9DF; --pmuted:#A89B8C; --pline:#38302A; --pfield:rgba(120,120,128,.3);
+  --brand:#F0873E; --brandink:#F5A367; --hero:#C65A1B; --jfill:#D9651F; --ok:#5FB470; --prob:#E5677A; --fridge:#7DB7DC;
+  --bake:#E0AE4F; --bakefill:#A97B22; --rec:#C7AEF0; --recfill:#7A56BA; --ins:#55BCCB; --insfill:#238FA0; --setc:#A4B3C4; --setfill:#6B7D91; --srch:#9DB1DD;
+  color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg:#1A1713; --panel:#241F1A; --fg:#F0E9DF; --muted:#A89B8C; --line:#38302A;
+  --accent:#F5A367; --accent-soft:#3A2517; --accent-btn:#D9651F; --good:#86EFAC; --good-soft:#15301F; --warn:#FDBA74;
+  --shadow: 0 18px 40px rgba(0,0,0,.55);
+  --pbg:#1A1713; --pcard:#241F1A; --pink:#F0E9DF; --pmuted:#A89B8C; --pline:#38302A; --pfield:rgba(120,120,128,.3);
+  --brand:#F0873E; --brandink:#F5A367; --hero:#C65A1B; --jfill:#D9651F; --ok:#5FB470; --prob:#E5677A; --fridge:#7DB7DC;
+  --bake:#E0AE4F; --bakefill:#A97B22; --rec:#C7AEF0; --recfill:#7A56BA; --ins:#55BCCB; --insfill:#238FA0; --setc:#A4B3C4; --setfill:#6B7D91; --srch:#9DB1DD;
+  color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 15px; line-height: 1.45; margin: 0 }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 20px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; grid-template-columns: 230px minmax(0,1fr); gap: 22px; }
+svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none }
+svg.g { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none }
+
+/* Rail */
+.rail { display: flex; flex-direction: column; gap: 4px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); align-self: start; }
+.brand { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.brand h1 { font-family: var(--f-display); font-size: 19px; line-height: 1.1; margin: 0; text-wrap: balance }
+.brand small { color: var(--muted); font-size: 12px }
+.logo { width: 40px; height: 40px; border-radius: 10px; background: #E8722C; color: #fff; display: grid; place-items: center; flex: none }
+.chap { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 9px; border: 0; background: none; color: var(--fg); font: inherit; text-align: left; cursor: pointer; }
+.chap:hover { background: var(--accent-soft) }
+.chap:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.chap .n { color: var(--muted); font-size: 12px; margin-left: auto; font-variant-numeric: tabular-nums; white-space: nowrap }
+.chap.cur { background: var(--accent-soft); color: var(--accent); font-weight: 600 }
+.chap.done .n { color: var(--good) }
+.bar { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; margin: 10px 2px 2px }
+.bar i { display: block; height: 100%; background: var(--accent-btn); width: 0; transition: width .4s }
+.railnote { color: var(--muted); font-size: 12px; margin: 4px 2px }
+
+/* Coach */
+.main { display: grid; grid-template-columns: minmax(0,1fr); gap: 14px; min-width: 0; align-content: start }
+.topnote { margin: 0; padding: 8px 12px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); font-weight: 600; font-size: 13.5px }
+.coach { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 8px 16px; align-items: center; }
+.coach .eyebrow { grid-column: 1 / -1; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); font-weight: 600; display: flex; gap: 8px; align-items: center }
+.coach .eyebrow .kind { color: var(--muted); font-weight: 500 }
+.coach h2 { font-family: var(--f-display); font-size: 23px; line-height: 1.2; margin: 0; text-wrap: balance }
+.coach p { margin: 4px 0 0; color: var(--fg); max-width: 62ch }
+.coach .btns { display: flex; gap: 8px; align-items: center }
+.btn { font: inherit; font-weight: 600; border-radius: 9px; padding: 8px 16px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); cursor: pointer }
+.btn.main-b { background: var(--accent-btn); border-color: var(--accent-btn); color: #fff }
+.btn.main-b:disabled { opacity: .45; cursor: default }
+.btn.ghost { border-color: transparent; color: var(--muted) }
+.answers { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px }
+.ans { font: inherit; padding: 8px 14px; border-radius: 9px; border: 1.5px solid var(--line); background: var(--panel); color: var(--fg); cursor: pointer; text-align: left }
+.ans:hover { border-color: var(--accent) }
+.ans.right { border-color: var(--good); background: var(--good-soft); color: var(--good); font-weight: 600 }
+.ans.wrong { border-color: var(--warn); color: var(--warn); text-decoration: line-through }
+.feedback { grid-column: 1 / -1; font-weight: 600; color: var(--good); min-height: 1.4em; margin: 0 }
+.feedback.no { color: var(--warn) }
+
+/* Stage = pretend iPhone, 390 x 760, scaled to fit */
+.stagebox { position: relative; width: min(100%, 390px); aspect-ratio: 390 / 760; border-radius: 40px; overflow: hidden; box-shadow: 0 0 0 6px #1f1f23, var(--shadow); justify-self: center; background: var(--pbg) }
+.stage { position: absolute; left: 0; top: 0; width: 390px; height: 760px; transform-origin: 0 0; font-family: var(--f-phone); font-size: 15px; line-height: 1.3; color: var(--pink); background: var(--pbg); overflow: hidden; -webkit-user-select: none; user-select: none }
+:where(.stage button) { font: inherit; color: inherit }
+:where(.stage input, .stage select) { font: inherit; color: var(--pink); -webkit-user-select: text; user-select: text }
+.fl-sbar { position: absolute; left: 0; right: 0; top: 0; height: 44px; display: flex; align-items: flex-end; justify-content: space-between; padding: 0 30px 6px 34px; font-weight: 600; font-size: 15px; z-index: 40; pointer-events: none; background: linear-gradient(var(--pbg) 70%, transparent) }
+.fl-bat { width: 25px; height: 12px; border: 1.5px solid var(--pink); border-radius: 4px; position: relative; opacity: .8 }
+.fl-bat::after { content: ""; position: absolute; left: 1.5px; top: 1.5px; bottom: 1.5px; width: 70%; background: var(--pink); border-radius: 2px }
+.scr { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; padding: 46px 12px 84px; scrollbar-width: none }
+.scr::-webkit-scrollbar { display: none }
+.fl-sp { flex: 1; min-width: 0 }
+.fl-mut { color: var(--pmuted) }
+
+/* Tab bar: five tabs, like the app */
+.fl-tabs { position: absolute; left: 0; right: 0; bottom: 0; height: 64px; background: var(--pcard); border-top: 1px solid var(--pline); display: flex; align-items: flex-start; padding-top: 6px; z-index: 30 }
+.fl-tabs button { flex: 1; border: 0; background: none; display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 10.5px; color: var(--pmuted); cursor: pointer; padding: 0 }
+.fl-tabs button svg { width: 24px; height: 24px }
+.fl-tabs button.on { font-weight: 600 }
+
+/* Navigation */
+.fl-nav { display: flex; align-items: center; min-height: 40px; gap: 8px }
+.fl-nb { display: flex; align-items: center; border: 0; background: none; color: var(--brandink); font-size: 16px; padding: 4px 0; cursor: pointer; min-height: 40px }
+.fl-nb svg { width: 20px; height: 20px }
+.fl-nlink { display: flex; align-items: center; gap: 4px; border: 0; background: none; font-size: 16px; cursor: pointer; padding: 4px 2px; font-weight: 500 }
+.fl-nlink svg { width: 18px; height: 18px }
+.fl-title { margin: 0 0 6px; font-size: 32px; line-height: 1.12; font-weight: 700 }
+.fl-ntitle { flex: 1; text-align: center; font-weight: 600; font-size: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.fl-seg { display: inline-flex; padding: 2px; border-radius: 9px; background: var(--pfield) }
+.fl-seg button { border: 0; background: none; border-radius: 7px; min-height: 28px; padding: 0 14px; font-weight: 500; font-size: 14px; cursor: pointer; white-space: nowrap }
+.fl-seg button.on { background: var(--pcard); font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,.15) }
+.fl-cap { color: var(--pmuted); font-size: 12px; margin: 4px 0 }
+.fl-h { font-size: 17px; font-weight: 600; margin: 8px 0 5px; display: flex; gap: 6px; align-items: baseline }
+.fl-h small { font-size: 15px; font-weight: 400; color: var(--pmuted) }
+
+/* Tiles, pills, tags */
+.fl-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 6px 0 }
+.fl-tile { border: 0; border-radius: 12px; padding: 6px 9px; text-align: left; cursor: pointer; background: rgba(232,114,44,.12); position: relative }
+.fl-tile b { display: block; font-size: 22px; font-weight: 800; line-height: 1.2 }
+.fl-tile small { font-size: 10.5px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; opacity: .9 }
+.fl-tile.sel { box-shadow: 0 0 0 2px var(--pbg), 0 0 0 4px currentColor }
+.fl-pill { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 99px }
+.fl-tag { display: inline-block; font-size: 12px; padding: 1px 6px; border-radius: 5px }
+.fl-find { display: flex; align-items: center; gap: 6px; background: var(--pcard); border: 1px solid var(--pline); border-radius: 9px; padding: 6px 8px; flex: 1; min-width: 0 }
+.fl-find svg { width: 16px; height: 16px; color: var(--pmuted) }
+.fl-find input { border: 0; background: none; flex: 1; min-width: 0; font-size: 15px; outline: none }
+.fl-find button { border: 0; background: none; font-weight: 600; color: var(--brandink); cursor: pointer; font-size: 14px }
+.fl-qb { border: 0; border-radius: 10px; min-height: 32px; padding: 6px 12px; font-weight: 600; font-size: 15px; cursor: pointer }
+.fl-pb { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; border: 0; border-radius: 10px; min-height: 36px; padding: 8px 14px; font-weight: 600; font-size: 16px; color: #fff; cursor: pointer }
+.fl-pb:disabled { opacity: .55; cursor: default }
+.fl-pb svg { width: 18px; height: 18px }
+.fl-due { background: rgba(232,114,44,.12); border-radius: 10px; padding: 8px; margin: 6px 0 }
+.fl-due b { display: block; font-size: 15px; color: var(--brandink) }
+.fl-due small { color: var(--pmuted); font-size: 12px }
+.fl-row { display: flex; align-items: center; gap: 8px; width: 100%; border: 0; background: var(--pcard); border-radius: 14px; padding: 8px; margin: 0 0 8px; text-align: left; cursor: pointer; box-shadow: 0 3px 8px rgba(60,40,20,.08) }
+.fl-thumb { width: 48px; height: 48px; border-radius: 8px; display: grid; place-items: center; flex: none; background: rgba(232,114,44,.13); color: var(--brand) }
+.fl-thumb svg { width: 28px; height: 28px }
+.fl-row b { display: block; font-size: 16px; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.fl-line2 { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--pmuted); margin: 3px 0 }
+.fl-line2 .st { color: var(--brand); letter-spacing: 1px }
+.fl-tags { display: flex; gap: 4px; flex-wrap: wrap }
+.fl-card { background: var(--pcard); border-radius: 14px; padding: 10px; margin: 8px 0; box-shadow: 0 3px 8px rgba(60,40,20,.08) }
+.fl-card h3 { margin: 0 0 6px; font-size: 17px; font-weight: 600; color: var(--brandink) }
+.fl-card h3 small { font-size: 12px; font-weight: 400; color: var(--pmuted); margin-left: 6px }
+
+/* Jar page */
+.fl-hero { background: var(--hero); color: #fff; border-radius: 16px; padding: 12px; margin: 4px 0 8px; display: flex; gap: 12px; align-items: center }
+.fl-hero.rec { background: var(--recfill); display: block } .fl-hero.ins { background: var(--insfill); display: block } .fl-hero.bake { background: var(--bakefill) }
+.fl-hpic { width: 60px; height: 76px; border-radius: 10px; background: rgba(255,255,255,.17); display: grid; place-items: center; flex: none; border: 1.5px solid rgba(255,255,255,.45) }
+.fl-hpic svg { width: 40px; height: 40px }
+.fl-hero h2 { margin: 0; font-size: 20px; line-height: 1.2 }
+.fl-hero .big { font-size: 28px; font-weight: 800; line-height: 1.1 }
+.fl-hero .soft { font-size: 12px; opacity: .88 }
+.fl-hero .fl-pill { background: rgba(255,255,255,.22); color: #fff }
+.fl-pl { height: 6px; border-radius: 3px; background: rgba(255,255,255,.28); overflow: hidden; margin: 5px 0 2px } .fl-pl i { display: block; height: 100%; background: #fff }
+.fl-ftiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 6px 0 }
+.fl-ft { background: rgba(232,114,44,.1); border-radius: 10px; padding: 5px 8px } .fl-ft small { display: block; font-size: 11px; color: var(--pmuted) } .fl-ft b { font-size: 15px }
+.fl-burp { display: flex; align-items: center; gap: 8px; flex-wrap: wrap }
+.fl-burp .rd { font-size: 12.5px; color: var(--pmuted) }
+.fl-sw { display: flex; align-items: center; gap: 8px; font-size: 15px }
+.fl-tg { position: relative; width: 44px; height: 26px; border-radius: 13px; background: rgba(120,120,128,.4); flex: none; border: 0; cursor: pointer; margin-left: auto }
+.fl-tg::after { content: ""; position: absolute; left: 2px; top: 2px; width: 22px; height: 22px; border-radius: 50%; background: #fff }
+.fl-tg.on { background: var(--brand) } .fl-tg.on::after { left: 20px }
+.fl-tg.set.on { background: var(--setc) }
+.fl-todo { display: flex; gap: 8px; width: 100%; border: 0; background: none; padding: 4px 0; text-align: left; cursor: pointer }
+.fl-box { width: 22px; height: 22px; border-radius: 50%; border: 1.9px solid var(--pmuted); flex: none; display: grid; place-items: center; margin-top: 1px }
+.fl-box.on { border-color: var(--ok); background: rgba(74,157,91,.16); color: var(--ok) } .fl-box svg { width: 13px; height: 13px; stroke-width: 2.6 }
+.fl-todo b { display: block; font-size: 14px } .fl-todo small { display: block; font-size: 12px; color: var(--pmuted) } .fl-todo small.dn { color: var(--ok) }
+.fl-tline { display: block; height: 6px; border-radius: 3px; background: rgba(74,157,91,.2); overflow: hidden; width: 140px } .fl-tline i { display: block; height: 100%; background: var(--ok) }
+.fl-dayh { font-size: 12px; font-weight: 700; letter-spacing: .04em; color: var(--brandink); margin: 8px 0 2px }
+.fl-tl { position: relative; display: flex; align-items: flex-start; padding: 3px 0; width: 100%; border: 0; background: none; text-align: left; cursor: pointer; font-size: 14px }
+.fl-tl .tm { width: 42px; font-size: 12px; color: var(--pmuted); font-variant-numeric: tabular-nums; flex: none; padding-top: 1px }
+.fl-tl .dt { width: 22px; flex: none; display: grid; place-items: center; height: 18px; position: relative; z-index: 1 }
+.fl-tl .dt i { width: 8px; height: 8px; border-radius: 50%; background: var(--brand); box-shadow: 0 0 0 1.5px var(--pcard) }
+.fl-tl .dt i.t { width: 9px; height: 9px; background: var(--pcard); border: 2.5px solid var(--ok); box-shadow: none }
+.fl-tl:not(.last)::before { content: ""; position: absolute; left: 52px; top: 14px; bottom: -8px; width: 2px; background: rgba(232,114,44,.28) }
+.fl-tl em { font-style: normal; font-weight: 700; color: var(--ok); margin-right: 4px }
+.fl-pics { display: flex; gap: 4px; padding: 0 0 4px 64px }
+.fl-pic { width: 60px; height: 60px; border-radius: 8px; border: 0; background: linear-gradient(135deg, rgba(232,114,44,.3), rgba(74,157,91,.3)); color: var(--brand); display: grid; place-items: center; cursor: pointer; padding: 0 }
+.fl-pic svg { width: 26px; height: 26px }
+.fl-hr { border: 0; border-top: 1px solid var(--pline); margin: 8px 0 }
+.fl-add { display: flex; align-items: center; gap: 8px; flex-wrap: wrap }
+.fl-when { font-size: 13px; color: var(--pmuted) }
+.fl-box2 { width: 100%; min-height: 54px; border: 1px solid var(--pline); border-radius: 9px; background: var(--pcard); padding: 8px; font-size: 15px; outline-offset: 1px }
+.fl-pend { display: flex; gap: 8px; margin: 6px 0 } .fl-pend div { text-align: center; font-size: 11px } .fl-pend button { border: 0; background: none; color: var(--prob); font-weight: 600; font-size: 12px; cursor: pointer }
+.fl-verdict { border-radius: 8px; padding: 5px 10px; font-weight: 700; font-size: 14px; margin: 2px 0 6px }
+.fl-bar { display: flex; align-items: center; gap: 8px; font-size: 14px; margin: 3px 0 } .fl-bar .nm { width: 70px } .fl-bar .st { color: var(--brand); width: 60px; letter-spacing: 1px } .fl-bar .tr { flex: 1; height: 6px; border-radius: 3px; background: rgba(232,114,44,.16); overflow: hidden } .fl-bar .tr i { display: block; height: 100%; background: var(--brand) }
+.fl-acts { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 }
+
+/* Forms and settings lists */
+.fl-lh { font-size: 17px; font-weight: 600; margin: 12px 4px 5px }
+.fl-lst { background: var(--pcard); border-radius: 12px; overflow: hidden; margin: 0 0 6px }
+.fl-lrow { display: flex; align-items: center; gap: 8px; min-height: 42px; padding: 4px 14px; font-size: 16px; width: 100%; border: 0; background: none; text-align: left }
+.fl-lrow + .fl-lrow { border-top: 1px solid var(--pline) }
+button.fl-lrow { cursor: pointer }
+.fl-lrow .v { margin-left: auto; color: var(--pmuted); font-variant-numeric: tabular-nums }
+.fl-lrow input[type=text], .fl-lrow input.num, .fl-lrow select { margin-left: auto; text-align: right; border: 0; background: var(--pfield); border-radius: 7px; padding: 5px 8px; font-size: 16px; max-width: 170px; min-width: 0 }
+.fl-lrow input.name { text-align: left; margin-left: 0; width: 100%; max-width: none }
+.fl-nt { font-size: 12.5px; color: var(--pmuted); margin: 2px 14px 8px; line-height: 1.3 }
+.fl-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 14px }
+.fl-chip { border: 1.5px solid var(--pline); background: var(--pfield); border-radius: 14px; padding: 4px 10px; font-size: 14px; cursor: pointer }
+.fl-chip.on { border-color: var(--brand); background: none; color: var(--brandink); font-weight: 600 }
+.fl-ok { color: var(--ok); font-weight: 600 }
+.fl-play { border: 0; border-radius: 10px; background: rgba(90,108,128,.16); color: var(--setc); font-weight: 600; padding: 5px 12px; cursor: pointer; font-size: 15px }
+.fl-sound small { display: block; font-size: 12px; color: var(--pmuted) }
+.fl-lrow .pill { background: rgba(102,120,140,.18); color: var(--setc); font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 99px }
+.fl-star { border: 0; background: none; font-size: 22px; color: var(--brand); cursor: pointer; padding: 0 1px }
+.fl-ribbon { display: flex; gap: 3px; margin: 6px 0 4px } .fl-ribbon span { height: 22px; border-radius: 6px; display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #fff; background: var(--recfill) } .fl-ribbon span.w { background: rgba(107,70,168,.28); color: var(--rec) }
+.fl-step { display: flex; gap: 8px; padding: 5px 0 } .fl-step .n { width: 24px; height: 24px; border-radius: 50%; background: var(--recfill); color: #fff; font-weight: 700; font-size: 13px; display: grid; place-items: center; flex: none } .fl-step b { font-size: 14px } .fl-step small { display: block; font-size: 12px; color: var(--pmuted) }
+.fl-dots { position: relative; height: 80px; background: rgba(30,127,143,.07); border-radius: 10px; margin: 4px 0 }
+.fl-dots i { position: absolute; width: 9px; height: 9px; border-radius: 50%; background: var(--ins) }
+.fl-dots u { position: absolute; top: 0; bottom: 0; background: rgba(30,127,143,.16) }
+
+/* Sheets, overlays */
+.fl-dim { position: absolute; inset: 0; background: rgba(0,0,0,.35); z-index: 50 }
+.fl-sheet { position: absolute; left: 0; right: 0; bottom: 0; top: 34px; border-radius: 22px 22px 0 0; background: var(--pbg); z-index: 55; overflow: hidden; box-shadow: 0 -8px 30px rgba(0,0,0,.3) }
+.fl-sheet .scr { inset: 38px 0 0 0; padding: 4px 12px 80px }
+.fl-stitle { text-align: center; font-weight: 700; font-size: 17px; min-height: 36px; display: grid; place-items: center }
+.fl-foot { position: absolute; left: 0; right: 0; bottom: 0; background: color-mix(in srgb, var(--pbg) 96%, transparent); padding: 8px 16px 18px; z-index: 5; display: flex; gap: 12px; justify-content: flex-end }
+.fl-fb { border: 0; border-radius: 20px; min-height: 40px; padding: 0 22px; font-weight: 600; font-size: 17px; cursor: pointer }
+.fl-fb.c { background: rgba(120,120,128,.18); color: var(--pink) } .fl-fb.s { color: #fff; font-weight: 700 }
+.fl-undo { position: absolute; left: 12px; right: 12px; bottom: 72px; z-index: 66; display: flex; align-items: center; gap: 10px; background: #292929; border: 1px solid rgba(255,255,255,.18); border-radius: 22px; padding: 8px 8px 8px 14px; color: #fff; font-weight: 600; font-size: 14.5px }
+.fl-undo button { border: 0; border-radius: 16px; background: #F0873E; color: #fff; font-weight: 700; font-size: 14.5px; padding: 7px 14px; cursor: pointer }
+.fl-toast { position: absolute; left: 50%; bottom: 130px; transform: translateX(-50%); background: #3A332C; color: #fff; font-weight: 600; font-size: 13px; padding: 7px 14px; border-radius: 18px; z-index: 90; animation: pop .3s; max-width: 340px; text-align: center }
+.fl-story { position: absolute; inset: 0; background: #0b0b0d; z-index: 80; color: #fff }
+.fl-story .top { display: flex; align-items: center; padding: 54px 16px 0; font-weight: 600 }
+.fl-story .top button { margin-left: auto; border: 0; background: none; color: #fff; font-weight: 700; font-size: 17px; cursor: pointer }
+.fl-story .img { margin: 40px auto 0; width: 300px; height: 330px; border-radius: 14px; background: linear-gradient(135deg, rgba(232,114,44,.55), rgba(74,157,91,.55)); display: grid; place-items: center }
+.fl-story .img svg { width: 90px; height: 90px }
+.fl-story .cap { position: absolute; left: 0; right: 0; bottom: 70px; text-align: center; padding: 0 24px; font-size: 14px }
+
+/* Highlight: no position here (it would break absolutely placed boxes) */
+.target { z-index: 2; animation: ring 1.6s ease-in-out infinite; border-radius: 9px }
+@keyframes ring { 0%,100% { box-shadow: 0 0 0 2px #E6B53F, 0 0 0 6px rgba(230,181,63,.35) } 50% { box-shadow: 0 0 0 2px #E6B53F, 0 0 0 11px rgba(230,181,63,0) } }
+@keyframes pop { from { transform: translate(-50%, 8px); opacity: .3 } to { transform: translate(-50%, 0); opacity: 1 } }
+
+/* Finish */
+.finish { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px }
+.finish h3 { font-family: var(--f-display); margin: 0 0 8px; font-size: 19px }
+.finish label { display: flex; gap: 10px; align-items: flex-start; padding: 7px 0; border-top: 1px solid var(--line); cursor: pointer }
+.finish input { width: 18px; height: 18px; accent-color: #E8722C; margin-top: 2px; flex: none }
+
+@media (min-width: 1020px) {
+  .main { grid-template-columns: minmax(0,1fr) 402px; align-items: start }
+  .topnote, .finish { grid-column: 1 / -1 }
+  .coach { grid-column: 1; grid-template-columns: minmax(0,1fr); position: sticky; top: 16px }
+  .stagebox { grid-column: 2; grid-row: 2 }
+  .coach { grid-row: 2 }
+}
+@media (max-width: 820px) {
+  .wrap { grid-template-columns: minmax(0,1fr) }
+  .rail { position: static; flex-direction: row; flex-wrap: wrap; gap: 4px }
+  .brand { width: 100% }
+  .chap .n { display: none }
+  .railnote, .bar { width: 100% }
+  .coach { grid-template-columns: minmax(0,1fr) }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important } }
+</style>
+
+<div class="wrap">
+  <nav class="rail" id="rail" aria-label="Chapters"></nav>
+  <main class="main">
+    <p class="topnote">Everything here is a practice copy. Nothing changes on your iPhone.</p>
+    <section class="coach" id="coach" aria-live="polite"></section>
+    <div class="stagebox" id="stagebox"><div class="stage" id="stage"></div></div>
+    <section class="finish" id="finish" hidden></section>
+  </main>
+</div>
+<script>
+/* ---------- Icons: the app's own hand-drawn marks (24-pt grid, stroke 1.9, round ends, no fill). ---------- */
+const ICON = {
+  jar: 'M8 4h8 M8 4v1.4a3 3 0 0 1-.9 2.1A4 4 0 0 0 6 10.4V18a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3v-7.6a4 4 0 0 0-1.1-2.9A3 3 0 0 1 16 5.4V4 M9.2 12.4c-.7 1.2.7 2.1 0 3.3c-.7 1.2.7 2 0 3.1 M12 12.4c.7 1.2-.7 2.1 0 3.3c.7 1.2-.7 2 0 3.1 M14.8 12.4c-.7 1.2.7 2.1 0 3.3c-.7 1.2.7 2 0 3.1',
+  book: 'M6 4.5h8.5a3 3 0 0 1 3 3V20H9a3 3 0 0 1-3-3Z M9.5 9h5 M9.5 12.5h5',
+  plus: 'M12 6v12 M6 12h12', chart: 'M5 20h14 M7.5 20v-4.5 M12 20V8 M16.5 20v-7',
+  gear: 'M8.9 12a3.1 3.1 0 1 0 6.2 0a3.1 3.1 0 1 0 -6.2 0 M12 3v2.4 M12 18.6V21 M3 12h2.4 M18.6 12H21 M5.6 5.6l1.7 1.7 M16.7 16.7l1.7 1.7 M18.4 5.6l-1.7 1.7 M7.3 16.7l-1.7 1.7',
+  bread: 'M5 14.5a4.5 4.5 0 0 1 2.6-4.1A4 4 0 0 1 9.2 6h5.6a4 4 0 0 1 1.6 4.4A4.5 4.5 0 0 1 19 14.5V17a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1Z M9.5 11.5 8 16 M12 11.5 10.5 16 M14.5 11.5 13 16',
+  search: 'M4.8 11a6.2 6.2 0 1 0 12.4 0a6.2 6.2 0 1 0 -12.4 0 M20 20l-3.6-3.6',
+  check: 'M5 12.5l5 5 9-10.5', chevR: 'M9 6l6 6-6 6', chevL: 'M15 6l-6 6 6 6', camera: 'M4 8h3l1.5-2h7L17 8h3v11H4Z M12 10.5a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 0 0 0-6.4Z',
+  photo: 'M4 6h16v12H4Z M4 16l5-5 4 4 2-2 5 5', grip: 'M7 8h10 M7 12h10 M7 16h10'
+};
+const icon = (n, cls = 'i') => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true"><path d="${ICON[n]}"/></svg>`;
+const ico = (n, px) => `<svg class="g" width="${px}" height="${px}" viewBox="0 0 24 24" aria-hidden="true"><path d="${ICON[n]}"/></svg>`;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- The pretend app: invented jars, recipes and dates only ---------- */
+const DOT = ' \u00B7 ';
+const JAR_C = { fermenting: 'var(--brand)', fridge: 'var(--fridge)', done: 'var(--ok)' };
+const JAR_NAME = { fermenting: 'Fermenting', fridge: 'In the fridge', done: 'Done' };
+const mkJars = () => ({
+  cab: { id: 'cab', name: 'Cabbage jar', veg: 'Cabbage', form: 'Shredded', status: 'fermenting', day: 3, start: 'Mon 23 Nov', sn: 23, salt: 25, water: 1000, room: 20, lid: 'Plain lid', weight: 'Glass weight', burp: true, due: false, next: 'Taste test Sat 28 Nov' + DOT + 'in 3 days', share: 0.4, spices: ['Garlic', 'Dill'], recipe: 'Quick sauerkraut', stars: 0,
+    plan: [{ t: 'Shred the cabbage', d: 'Quarter and core it, then shred it finely.', done: '18:05' }, { t: 'Salt it and massage', d: 'Squeeze until it turns watery.', done: '18:12' }, { t: 'Pack the jar', d: 'Press it in a handful at a time.', done: null }, { t: 'Weigh it down', d: 'The cabbage must be under the brine.', done: null }],
+    lines: [{ day: 1, date: 'Mon 23 Nov', time: '18:05', kind: 'did', text: 'Shred the cabbage', pics: 0 }, { day: 1, date: 'Mon 23 Nov', time: '18:12', kind: 'did', text: 'Salt it and massage', pics: 1 },
+      { day: 2, date: 'Tue 24 Nov', time: '08:10', kind: 'did', text: 'Burped the jar', pics: 0 }, { day: 3, date: 'Wed 25 Nov', time: '08:12', kind: 'taste', text: 'Tangy, still crunchy', pics: 1 }], outcome: null },
+  rad: { id: 'rad', name: 'Radish pickles', veg: 'Radish', form: 'Slices', status: 'fermenting', day: 6, start: 'Fri 20 Nov', sn: 20, salt: 28, water: 1000, room: 21, lid: 'Airlock', weight: 'Ceramic weight', burp: false, due: true, next: 'Taste test due since Wed 25 Nov', share: 1, spices: ['Mustard seed'], plan: [], lines: [{ day: 1, date: 'Fri 20 Nov', time: '19:00', kind: 'did', text: 'Sliced the radishes into the brine', pics: 0 }], stars: 0, outcome: null },
+  car: { id: 'car', name: 'Carrot sticks', veg: 'Carrot', form: 'Sticks', status: 'fridge', day: 12, start: 'Sat 14 Nov', sn: 14, salt: 25, water: 1000, room: 20, lid: 'Burping / self-venting lid', weight: 'Glass weight', burp: false, due: false, next: '', share: 0, spices: ['Dill'], plan: [], lines: [{ day: 1, date: 'Sat 14 Nov', time: '17:30', kind: 'did', text: 'Packed the sticks with dill', pics: 0 }], stars: 0, outcome: null },
+  bee: { id: 'bee', name: 'Beetroot', veg: 'Beetroot', form: 'Cubes', status: 'done', day: 14, start: 'Tue 10 Nov', sn: 10, salt: 20, water: 1000, room: 19, lid: 'Cloth / open', weight: 'Smaller jar', burp: false, due: false, next: '', share: 0, spices: ['Bay leaf'], plan: [], lines: [{ day: 1, date: 'Tue 10 Nov', time: '18:00', kind: 'did', text: 'Cubed and brined the beetroot', pics: 0 }], stars: 4, outcome: { ok: true, taste: 4, sour: 4, crunch: 3, overall: 4 } },
+  cuc: { id: 'cuc', name: 'Cucumber dills', veg: 'Cucumber', form: 'Spears', status: 'done', day: 10, start: 'Thu 12 Nov', sn: 12, salt: 32, water: 1000, room: 22, lid: 'Airlock', weight: 'Glass weight', burp: false, due: false, next: '', share: 0, spices: ['Dill', 'Garlic'], plan: [], lines: [{ day: 1, date: 'Thu 12 Nov', time: '16:20', kind: 'did', text: 'Packed the spears with dill', pics: 0 }], stars: 3, outcome: { ok: true, taste: 3, sour: 3, crunch: 2, overall: 3 } }
+});
+const SOUNDS = [['Classic', 'A cheerful little burp'], ['Short pop', 'Quick and bubbly'], ['Chuckle', 'Burps like a happy laugh'], ['Long one', 'Takes its time, with a smile'], ['Squeaky', 'High and small'], ['Double', 'Two in a row, the second one higher'], ['Bubbles', 'Fizzy, like a fresh jar'], ['Rising', 'Ends going up, like a question'], ['Tiny', 'A polite little one'], ['Ta-da', 'Proud, ends on a high note']];
+const BAKES = [{ name: 'Weekend sourdough', cat: 'Sourdough', date: 'Sun 22 Nov', rec: 'Simple sourdough', stars: 4 }, { name: 'Seed loaf', cat: 'Bread', date: 'Sat 14 Nov', rec: '', stars: 0 }];
+const RECIPES = [{ id: 'kraut', title: 'Quick sauerkraut', cat: 'Vegetable ferment', hands: '30 min', total: '2 weeks', steps: [['Shred', '10 min'], ['Salt', '2 min'], ['Massage', '10 min'], ['Pack', '5 min'], ['Weigh down', '2 min'], ['Close', '1 min'], ['Burp and press', 'daily'], ['Taste', 'day 7\u201321'], ['Fridge', '1 min']] },
+  { id: 'sour', title: 'Simple sourdough', cat: 'Sourdough', hands: '45 min', total: '1 day', steps: [['Feed the starter', '4\u20136 h'], ['Mix', '15 min'], ['Bulk fermentation', '4\u20136 h'], ['Shape', '30 min'], ['Cold proof', '12\u201316 h'], ['Bake', '45 min']] }];
+const brineOf = (s, w) => s / (s + w) * 100;
+const inSweet = b => b >= 2 && b <= 3;
+const stars = n => '\u2605'.repeat(n) + '\u2606'.repeat(5 - n);
+const START = () => ({ tab: 'home', page: null, openId: null, sheet: null, story: null, view: 'jars', filter: null, find: '', sort: 'date', kind: 'did', tx: '', pend: 0, undo: null, toast: '',
+  jars: mkJars(), oc: { taste: 0, sour: 0, crunch: 0, overall: 0, ok: true }, rid: 'kraut',
+  nj: { name: '', veg: 'Carrot', form: 'Sticks', salt: 25, water: 1000, lid: 'Burping / self-venting lid', burp: null, note: '', recipe: '' },
+  cfg: { here: true, off: [], played: 0 } });
+let S = START();
+const set = o => { S = Object.assign(START(), o); };      // full reset, then what the step needs
+const timers = [];
+const later = (fn, ms) => { const h = setTimeout(fn, ms); timers.push(h); return h; };
+const clearTimers = () => { while (timers.length) clearTimeout(timers.pop()); };
+const J = id => S.jars[id];
+const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036F]/g, '');
+const dueJars = () => Object.values(S.jars).filter(j => j.due && j.status === 'fermenting');
+function listJars(status) {
+  const f = Object.values(S.jars).filter(j => j.status === status && (!S.find.trim() || norm(j.name + ' ' + j.veg).includes(norm(S.find.trim()))));
+  if (S.sort === 'name') return f.sort((a, b) => a.name.localeCompare(b.name));
+  return f.sort((a, b) => (status === 'fermenting' ? (b.due - a.due) : 0) || (b.sn - a.sn));
+}
+
+/* ---------- Tab bar and the Home list ---------- */
+const TABS = [['home', 'Home', 'jar', 'var(--brand)'], ['recipes', 'Recipes', 'book', 'var(--rec)'], ['new', 'New', 'plus', 'var(--brand)'], ['insights', 'Insights', 'chart', 'var(--ins)'], ['settings', 'Settings', 'gear', 'var(--setc)']];
+function tabBar() {
+  return `<div class="fl-tabs" data-t="tabbar">${TABS.map(([id, nm, ic, col]) => `<button data-act="tab" data-id="${id}" data-t="tab-${id}" class="${S.tab === id ? 'on' : ''}" style="${S.tab === id ? 'color:' + col : ''}">${icon(ic)}${nm}</button>`).join('')}</div>`;
+}
+const pill = (txt, col) => `<span class="fl-pill" style="background:color-mix(in srgb, ${col} 16%, transparent);color:${col}">${esc(txt)}</span>`;
+const tag = (txt, col) => `<span class="fl-tag" style="background:color-mix(in srgb, ${col} 12%, transparent);color:${col}">${esc(txt)}</span>`;
+function jarRow(j) {
+  const col = JAR_C[j.status], label = JAR_NAME[j.status] === 'In the fridge' ? 'In fridge' : JAR_NAME[j.status];
+  const b = brineOf(j.salt, j.water);
+  const tags = (j.due ? tag('Taste test due', 'var(--brandink)') : '') + (j.burp && j.status === 'fermenting' ? tag('Burp alarm on', 'var(--pmuted)') : '');
+  return `<button class="fl-row" data-act="open-jar" data-id="${j.id}" data-t="row-${j.id}"><span class="fl-thumb">${ico('jar', 28)}</span><span class="fl-sp"><b>${esc(j.name)}</b>
+    <span class="fl-line2">${pill(label + DOT + 'day ' + j.day, col)}<span>${b.toFixed(1)}%</span>${j.stars ? `<span class="st">${stars(j.stars)}</span>` : ''}</span>${tags ? `<span class="fl-tags">${tags}</span>` : ''}</span></button>`;
+}
+function homeHTML() {
+  const bk = S.view === 'bakes';
+  const head = `<div class="fl-nav"><span class="fl-sp"></span><button class="fl-nlink" style="color:var(--srch)" data-act="soon" data-t="open-search">${ico('search', 18)}Search</button></div>
+    <h1 class="fl-title">${bk ? 'Bakes' : 'Jars'}</h1>
+    <div class="fl-seg" data-t="home-switch"><button class="${bk ? '' : 'on'}" data-act="home-view" data-id="jars" data-t="home-jars">Jars</button><button class="${bk ? 'on' : ''}" data-act="home-view" data-id="bakes" data-t="home-bakes">Bakes</button></div>`;
+  if (bk) {
+    return `<div class="scr" data-keep="scr">${head}<div style="height:8px"></div>
+      <button class="fl-pb" style="background:var(--bakefill)" data-act="soon" data-t="log-bake">Log a bake</button><div style="height:8px"></div>
+      ${BAKES.map(b => `<div class="fl-row" style="cursor:default"><span class="fl-thumb" style="background:rgba(169,117,28,.14);color:var(--bake)">${ico('bread', 28)}</span><span class="fl-sp"><b>${esc(b.name)}</b><span class="fl-line2">${pill(b.cat, 'var(--bake)')}<span>${b.date}</span></span>${b.rec ? `<span class="fl-line2">${esc(b.rec)}</span>` : ''}${b.stars ? `<span class="fl-line2"><span class="st" style="color:var(--bake)">${stars(b.stars)}</span></span>` : '<span class="fl-line2">Not rated yet</span>'}</span></div>`).join('')}
+      <button class="fl-qb" style="background:rgba(169,117,28,.14);color:var(--bake)" data-act="soon">Bake insights and lessons</button></div>${tabBar()}`;
+  }
+  const all = Object.values(S.jars), cnt = s => all.filter(j => j.status === s).length, f = S.filter;
+  const tile = (s, filled) => { const c = JAR_C[s]; return `<button class="fl-tile${f === s ? ' sel' : ''}" data-act="filter" data-id="${s}" data-t="jars-tile-${s}" style="${filled ? 'background:var(--hero);color:#fff' : `color:${c};background:color-mix(in srgb, ${c} 13%, transparent)`}"><b>${cnt(s)}</b><small style="${filled ? '' : 'color:var(--pmuted)'}">${JAR_NAME[s]}</small></button>`; };
+  const shown = s => !f || f === s;
+  const group = (s) => { const l = listJars(s); return shown(s) && l.length ? `<div class="fl-h">${JAR_NAME[s]}<small>${l.length}</small></div>${l.map(jarRow).join('')}` : ''; };
+  const due = dueJars();
+  const any = ['fermenting', 'fridge', 'done'].some(s => shown(s) && listJars(s).length);
+  const empty = f && !listJars(f).length && !S.find.trim() ? `<p class="fl-cap" data-t="filter-empty">${{ fermenting: 'No jars fermenting.', fridge: 'No jars in the fridge.', done: 'No jars done yet.' }[f]}</p>` : (!any && S.find.trim() ? `<p class="fl-cap" data-t="find-empty">No jar matches \u201C${esc(S.find.trim())}\u201D.</p>` : '');
+  return `<div class="scr" data-keep="scr">${head}
+    <div class="fl-tiles" data-t="jars-tiles">${tile('fermenting', true)}${tile('fridge', false)}${tile('done', false)}</div>
+    ${f ? `<div class="fl-nav" style="min-height:34px"><b style="font-size:14px;color:${JAR_C[f]}">Showing only: ${JAR_NAME[f]}</b><button class="fl-qb" style="background:rgba(232,114,44,.14);color:var(--brandink)" data-act="show-all" data-t="show-all">Show all</button></div>` : '<p class="fl-cap" data-t="filter-hint">Tap a tile to show only those jars</p>'}
+    <div class="fl-nav" style="gap:8px;margin:4px 0"><div class="fl-find">${icon('search', 'g')}<input data-in="find" data-t="find" placeholder="Find a jar by name or vegetable" value="${esc(S.find)}" autocomplete="off">${S.find ? '<button data-act="find-clear">Clear</button>' : ''}</div></div>
+    <div class="fl-nav" style="min-height:34px"><span class="fl-mut" style="font-size:14px">Sort</span><div class="fl-seg" data-t="sort"><button class="${S.sort === 'date' ? 'on' : ''}" data-act="sort" data-id="date">Start date</button><button class="${S.sort === 'name' ? 'on' : ''}" data-act="sort" data-id="name" data-t="sort-name">Name</button></div></div>
+    <button class="fl-pb" style="background:var(--jfill);margin:6px 0" data-act="new-jar-open" data-t="start-jar">Start a jar</button>
+    ${due.length ? `<div class="fl-due" data-t="jars-due"><b>${due.length} ${due.length === 1 ? 'jar is' : 'jars are'} due for a taste test</b><small>${due.map(j => esc(j.name)).join(DOT)}</small></div>` : ''}
+    ${group('fermenting')}${group('fridge')}${group('done')}${empty}</div>${tabBar()}`;
+}
+
+/* ---------- A jar's page ---------- */
+const tlSorted = j => j.lines.slice().sort((a, b) => a.day - b.day || a.time.localeCompare(b.time));
+function jarHTML() {
+  const j = J(S.openId), lines = tlSorted(j), b = brineOf(j.salt, j.water), col = JAR_C[j.status];
+  const pend = S.pend ? `<div class="fl-pend" data-t="pend">${Array.from({ length: S.pend }, (_, i) => `<div><span class="fl-pic" style="display:grid">${ico('photo', 26)}</span><button data-act="pend-remove" data-id="${i}">Remove</button></div>`).join('')}</div>` : '';
+  const canAdd = S.tx.trim() || S.pend;
+  let seenPic = false;
+  const lineHTML = lines.map((l, i) => {
+    const showDay = i === 0 || lines[i - 1].day !== l.day, last = i === lines.length - 1 || lines[i + 1].day !== l.day, showTime = i === 0 || lines[i - 1].day !== l.day || lines[i - 1].time !== l.time;
+    let pics = '';
+    if (l.pics) { pics = `<div class="fl-pics">${Array.from({ length: l.pics }, (_, k) => { const t = !seenPic ? ' data-t="tl-pic"' : ''; seenPic = true; return `<button class="fl-pic" data-act="story-open" data-id="${i}"${t} aria-label="Picture, see it large">${ico('photo', 26)}</button>`; }).join('')}</div>`; }
+    return `${showDay ? `<div class="fl-dayh">DAY ${l.day} \u00B7 ${l.date.toUpperCase()}</div>` : ''}<button class="fl-tl${last ? ' last' : ''}" data-act="soon"><span class="tm">${showTime ? l.time : ''}</span><span class="dt"><i class="${l.kind === 'taste' ? 't' : ''}"></i></span><span class="fl-sp">${l.kind === 'taste' ? '<em>Taste</em>' : ''}${l.text ? esc(l.text) : '<span class="fl-mut">Picture</span>'}</span></button>${pics}`;
+  }).join('');
+  const burpBlock = j.status === 'fermenting' ? `<div class="fl-card" data-t="burp-block"><h3>Burp</h3><div class="fl-burp"><button class="fl-pb" style="background:var(--jfill);width:auto;padding:6px 14px" data-act="burped" data-t="burped">Burped</button>
+      <span class="rd">${j.lastBurp ? 'Last burp: today ' + j.lastBurp + DOT + (j.burpN || 1) + ' today' : 'Not burped yet'}</span></div>
+      <div class="fl-sw" style="margin-top:8px"><span class="fl-sp"><b style="font-weight:500">Burp alarm</b><br><small class="fl-mut" style="font-size:12px">Rings at 08:00 and 20:00${S.cfg.here ? '' : DOT + 'off for this device in Settings'}</small></span><button class="fl-tg${j.burp ? ' on' : ''}" data-act="jar-alarm" data-t="jar-alarm" aria-label="Burp alarm"></button></div></div>` : '';
+  const done = j.plan.filter(p => p.done).length;
+  const planBlock = j.plan.length ? `<div class="fl-card" data-t="todo"><h3>To do \u2014 from ${esc(j.recipe)}</h3><div style="display:flex;gap:8px;align-items:center;margin-bottom:4px"><span class="fl-mut" style="font-size:14px" data-t="todo-count">${done} of ${j.plan.length} done</span><span class="fl-tline"><i style="width:${Math.round(100 * done / j.plan.length)}%"></i></span></div>
+    ${j.plan.map((p, i) => `<button class="fl-todo" data-act="tick" data-id="${i}" data-t="todo-${i + 1}"><span class="fl-box${p.done ? ' on' : ''}">${p.done ? icon('check', 'g') : ''}</span><span class="fl-sp"><b style="${p.done ? 'color:var(--pmuted)' : ''}">${esc(p.t)}</b><small>${esc(p.d)}</small>${p.done ? `<small class="dn">done ${p.done}</small>` : ''}</span></button>`).join('')}
+    <p class="fl-cap">Tick a step when you have done it \u2014 it is written into the Timeline with the time.</p></div>` : '';
+  const oc = j.outcome;
+  const outBlock = oc ? `<div class="fl-card" data-t="outcome-block"><h3>Outcome</h3><div class="fl-verdict" data-t="verdict" style="background:color-mix(in srgb, ${oc.ok ? 'var(--ok)' : 'var(--prob)'} 14%, transparent);color:${oc.ok ? 'var(--ok)' : 'var(--prob)'}">${oc.ok ? 'Success' : 'Didn\u2019t work out'}</div>
+      ${[['Taste', oc.taste], ['Sourness', oc.sour], ['Crunch', oc.crunch], ['Overall', oc.overall]].map(([n, v]) => v ? `<div class="fl-bar"><span class="nm">${n}</span><span class="st">${stars(v)}</span><span class="tr"><i style="width:${v * 20}%"></i></span></div>` : `<div class="fl-bar"><span class="nm">${n}</span><span class="fl-mut">\u2014</span></div>`).join('')}
+      <button class="fl-qb" style="background:rgba(232,114,44,.14);color:var(--brandink)" data-act="soon">Edit outcome</button></div>`
+    : `<div class="fl-card" data-t="outcome-block"><h3>Outcome</h3><p class="fl-mut" style="margin:0 0 8px;font-size:14px">No verdict recorded yet.</p><button class="fl-pb" style="background:var(--jfill);width:auto" data-act="outcome-open" data-t="record-outcome">Record outcome</button></div>`;
+  return `<div class="scr" data-keep="scr"><div class="fl-nav"><button class="fl-nb" data-act="page-back" data-t="page-back">${ico('chevL', 20)}Jars</button><span class="fl-ntitle">${esc(j.name)}</span><button class="fl-nlink" style="color:var(--brandink)" data-act="soon">Edit</button></div>
+    <div class="fl-hero" data-t="jar-hero"><span class="fl-hpic">${ico('jar', 40)}</span><div class="fl-sp"><h2>${esc(j.name)}</h2><div style="display:flex;align-items:baseline;gap:8px"><span class="big" data-t="jar-day">Day ${j.day}</span><span class="fl-pill">${j.status === 'fridge' ? 'In fridge' : JAR_NAME[j.status]}</span></div>
+      <div class="soft">started ${j.start}${j.status === 'fridge' && j.fridgeOn ? DOT + 'in the fridge since ' + j.fridgeOn : ''}</div>
+      ${j.next && j.status === 'fermenting' ? `<div class="fl-pl"><i style="width:${Math.round(j.share * 100)}%"></i></div><div class="soft" style="font-weight:600${j.due ? ';opacity:1' : ''}">${esc(j.next)}</div>` : ''}</div></div>
+    <div class="fl-ftiles" data-t="jar-facts"><div class="fl-ft"><small>Vegetable</small><b>${esc(j.veg)}</b></div><div class="fl-ft"><small>Form</small><b>${esc(j.form)}</b></div><div class="fl-ft"><small>Brine</small><b style="${inSweet(b) ? 'color:var(--ok)' : ''}">${b.toFixed(1)}%</b></div><div class="fl-ft"><small>Room</small><b>${j.room} \u00B0C</b></div><div class="fl-ft"><small>Lid</small><b style="font-size:13px">${esc(j.lid)}</b></div><div class="fl-ft"><small>Weight</small><b style="font-size:13px">${esc(j.weight)}</b></div></div>
+    <div class="fl-tags" style="margin-bottom:6px">${j.spices.map(s => tag(s, 'var(--pmuted)')).join('')}</div>
+    ${burpBlock}${planBlock}
+    <div class="fl-card" data-t="timeline"><h3>Timeline<small>${lines.length} ${lines.length === 1 ? 'line' : 'lines'}${DOT}tap a line to change it</small></h3>${lineHTML}<hr class="fl-hr">
+      <div class="fl-add"><div class="fl-seg" data-t="kind"><button class="${S.kind === 'did' ? 'on' : ''}" data-act="kind" data-id="did" data-t="kind-did">What I did</button><button class="${S.kind === 'taste' ? 'on' : ''}" data-act="kind" data-id="taste" data-t="kind-taste">Taste test</button></div><span class="fl-when">When: now</span></div>
+      <textarea class="fl-box2" style="margin-top:6px" data-in="tl" data-t="tl-text" placeholder="${S.kind === 'did' ? 'What did you do? One step per line\u2026' : 'How does it taste, smell and look?'}" rows="2">${esc(S.tx)}</textarea>${pend}
+      <div class="fl-add" style="margin-top:6px"><button class="fl-qb" style="background:rgba(232,114,44,.14);color:var(--brandink);font-size:14px" data-act="add-pics" data-t="add-pics">Add pictures</button><button class="fl-qb" style="background:rgba(232,114,44,.14);color:var(--brandink);font-size:14px" data-act="soon">Take a picture</button><button class="fl-pb" style="background:var(--jfill);width:auto;padding:6px 18px" data-act="tl-add" data-t="tl-add" ${canAdd ? '' : 'disabled'}>Add</button></div>
+      <p class="fl-cap">${S.kind === 'did' ? 'One step per line \u2014 list numbers are removed. Pictures go with the last line; a picture alone is fine too.' : 'A taste test also moves the next taste-test reminder. A picture alone is fine too.'}</p></div>
+    ${j.status === 'fermenting' ? `<button class="fl-qb" style="background:rgba(232,114,44,.14);color:var(--brandink)" data-act="to-fridge" data-t="to-fridge">Move to the fridge</button>` : ''}
+    ${outBlock}
+    <div class="fl-acts"><button class="fl-qb" style="background:rgba(232,114,44,.14);color:var(--brandink)" data-act="soon">Duplicate</button><button class="fl-qb" style="background:rgba(232,114,44,.14);color:var(--brandink)" data-act="soon">Share</button><button class="fl-qb" style="background:rgba(232,114,44,.14);color:var(--brandink)" data-act="soon">Save steps as a recipe</button></div></div>${tabBar()}`;
+}
+function storyHTML() {
+  const j = J(S.openId), withPics = tlSorted(j).filter(l => l.pics), items = [];
+  withPics.forEach(l => { for (let k = 0; k < l.pics; k++) items.push(l); });
+  const l = items[S.story] || items[0];
+  return `<div class="fl-story" data-t="story"><div class="top"><span>${S.story + 1} of ${items.length}</span><button data-act="story-close" data-t="story-done">Done</button></div><div class="img">${ico('photo', 90)}</div>
+    <div class="cap">Day ${l.day}${DOT}${l.date} ${l.time} \u2014 ${l.kind === 'taste' ? 'Taste: ' : ''}${esc(l.text.toLowerCase() === l.text ? l.text : l.text)}</div></div>`;
+}
+function outcomeSheet() {
+  const o = S.oc, row = (nm, k) => `<div class="fl-lrow"><span class="fl-sp">${nm}</span>${[1, 2, 3, 4, 5].map(n => `<button class="fl-star" data-act="star" data-id="${k}-${n}" data-t="star-${k}-${n}" aria-label="${n} stars">${n <= o[k] ? '\u2605' : '\u2606'}</button>`).join('')}</div>`;
+  return `<div class="fl-dim"></div><div class="fl-sheet" data-t="outcome-sheet"><div class="fl-stitle">Outcome</div><div class="scr" data-keep="scr">
+    <div class="fl-lh" style="color:var(--brandink)">Verdict</div><div class="fl-lst">${row('Taste', 'taste')}${row('Sourness', 'sour')}${row('Crunch', 'crunch')}${row('Overall', 'overall')}<div class="fl-lrow"><span class="fl-sp">Overall a success</span><button class="fl-tg${o.ok ? ' on' : ''}" data-act="soon" aria-label="Overall a success"></button></div></div>
+    <div class="fl-lh" style="color:var(--brandink)">Problems seen</div><div class="fl-lst"><div class="fl-chips">${['Mould', 'Kahm yeast', 'Mushy / soft', 'Too salty', 'Not sour enough', 'Off smell'].map(p => `<span class="fl-chip">${p}</span>`).join('')}</div></div></div>
+    <div class="fl-foot"><button class="fl-fb c" data-act="sheet-cancel" data-t="sheet-cancel">Cancel</button><button class="fl-fb s" style="background:var(--jfill)" data-act="outcome-save" data-t="outcome-save">Save</button></div></div>`;
+}
+
+/* ---------- New jar form ---------- */
+const VEGS = ['Carrot', 'Cabbage', 'Radish', 'Beetroot', 'Cucumber'], LIDS = ['Airlock', 'Burping / self-venting lid', 'Plain lid', 'Cloth / open'];
+function newJarHTML() {
+  const n = S.nj, b = brineOf(n.salt, n.water), ok = inSweet(b), burpOn = n.burp != null ? n.burp : n.lid === 'Plain lid';
+  const cap = n.burp != null ? (n.burp ? 'On for this jar' : 'Off for this jar') : (n.lid === 'Plain lid' ? 'On by itself for a plain lid' : 'Off: this lid lets the gas out by itself');
+  const sec = t => `<div class="fl-lh" style="color:var(--brandink)">${t}</div>`;
+  return `<div class="scr" data-keep="scr"><div class="fl-nav"><button class="fl-nlink" style="color:var(--brandink)" data-act="nj-cancel" data-t="nj-cancel">Cancel</button><span class="fl-ntitle">New jar</span><button class="fl-nlink" style="color:var(--brandink);font-weight:700" data-act="nj-save" data-t="nj-save">Save</button></div>
+    ${sec('Basics')}<div class="fl-lst"><div class="fl-lrow"><input class="name" type="text" data-in="njname" data-t="nj-name" placeholder="Name, e.g. Spicy carrot #1" value="${esc(n.name)}" autocomplete="off"></div>
+      <div class="fl-lrow"><span>Vegetable</span><select data-in="veg" data-t="nj-veg">${VEGS.map(v => `<option${v === n.veg ? ' selected' : ''}>${v}</option>`).join('')}<option>Add your own\u2026</option></select></div>
+      <div class="fl-lrow"><span>Form</span><span class="v">${esc(n.form)}</span></div><div class="fl-lrow"><span>Start date</span><span class="v">Wed 25 Nov</span></div></div>
+    ${sec('Brine and conditions')}<div class="fl-lst"><div class="fl-lrow"><span>Salt (g)</span><input class="num" type="text" inputmode="decimal" data-in="salt" data-t="nj-salt" value="${n.saltRaw != null ? esc(n.saltRaw) : n.salt}" autocomplete="off"></div><div class="fl-lrow"><span>Water (ml)</span><span class="v">${n.water}</span></div>
+      <div class="fl-lrow" style="font-size:14px" data-t="nj-brine"><span class="fl-mut">Brine</span><b>${b.toFixed(1)}%</b><span style="color:${ok ? 'var(--ok)' : 'var(--pmuted)'}">${ok ? '\u2713 in the 2\u20133% sweet spot' : 'typical range is 2\u20133%'}</span></div>
+      <div class="fl-lrow"><span>Room temperature (\u00B0C)</span><span class="v">20</span></div><div class="fl-lrow"><span>Jar size (ml)</span><span class="v">1000</span></div></div>
+    ${sec('Spices')}<div class="fl-lst"><div class="fl-chips">${['Garlic', 'Dill', 'Mustard seed', 'Black pepper', 'Bay leaf', 'Ginger', 'Chilli'].map(s => `<span class="fl-chip${(n.recipe && s === 'Garlic') ? ' on' : ''}">${s}</span>`).join('')}</div></div>
+    ${sec('Equipment')}<div class="fl-lst"><div class="fl-lrow"><span>Vessel</span><span class="v">Glass jar</span></div><div class="fl-lrow"><span>Weight</span><span class="v">Glass weight</span></div>
+      <div class="fl-lrow"><span>Lid</span><select data-in="lid" data-t="nj-lid">${LIDS.map(v => `<option${v === n.lid ? ' selected' : ''}>${v}</option>`).join('')}</select></div></div>
+    ${sec('Reminders')}<div class="fl-lst"><div class="fl-lrow"><span class="fl-sp">Remind me to taste every 3 days</span></div><div class="fl-lrow"><span class="fl-sp">Burp alarm</span><button class="fl-tg${burpOn ? ' on' : ''}" data-act="nj-burp" data-t="nj-burp" aria-label="Burp alarm"></button></div></div>
+    <p class="fl-nt" data-t="nj-burp-cap">${cap}</p>
+    ${sec('Photos and notes')}<div class="fl-lst"><div class="fl-lrow" style="color:var(--pmuted)" data-t="nj-notes">${n.note ? esc(n.note) : 'Notes \u2014 anything worth remembering'}</div></div></div>${tabBar()}`;
+}
+
+/* ---------- Recipes, Insights, New, Settings ---------- */
+function recipesHTML() {
+  return `<div class="scr" data-keep="scr"><h1 class="fl-title" style="margin-top:44px">Recipes</h1><button class="fl-pb" style="background:var(--recfill)" data-act="soon">New recipe</button><div style="height:8px"></div>
+    ${RECIPES.map(r => `<button class="fl-row" data-act="open-recipe" data-id="${r.id}" data-t="recipe-row-${r.id}"><span class="fl-thumb" style="background:rgba(107,70,168,.14);color:var(--rec)">${ico('book', 24)}</span><span class="fl-sp"><b>${esc(r.title)}</b><span class="fl-line2">${pill(r.cat, 'var(--rec)')}<span>Hands-on ${r.hands}</span></span><span class="fl-line2">Total ${r.total}${DOT}${r.steps.length} steps</span></span></button>`).join('')}</div>${tabBar()}`;
+}
+function recipeHTML() {
+  const r = RECIPES.find(x => x.id === S.rid);
+  return `<div class="scr" data-keep="scr"><div class="fl-nav"><button class="fl-nb" style="color:var(--rec)" data-act="page-back" data-t="page-back">${ico('chevL', 20)}Recipes</button><span class="fl-ntitle">${esc(r.title)}</span><button class="fl-nlink" style="color:var(--rec)" data-act="soon">Edit</button></div>
+    <div class="fl-hero rec"><h2>${esc(r.title)} ${pill(r.cat, '#fff')}</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0"><div class="fl-ft" style="background:rgba(255,255,255,.17)"><small style="color:rgba(255,255,255,.86)">Hands-on</small><b>${r.hands}</b></div><div class="fl-ft" style="background:rgba(255,255,255,.17)"><small style="color:rgba(255,255,255,.86)">Start to finish</small><b>${r.total}</b></div></div>
+      <div class="fl-acts" style="margin:4px 0">${r.cat !== 'Sourdough' ? '<button class="fl-qb" style="background:#fff;color:var(--recfill)" data-act="recipe-jar" data-t="recipe-start-jar">Start a jar from this recipe</button>' : ''}<button class="fl-qb" style="background:rgba(255,255,255,.2);color:#fff" data-act="soon">Duplicate</button><button class="fl-qb" style="background:rgba(255,255,255,.2);color:#fff" data-act="soon">Share</button></div>
+      ${r.cat !== 'Sourdough' ? '<div class="soft" style="font-size:12px;opacity:.88">The jar gets this recipe\u2019s steps as a list to tick off \u2014 each tick is written into the jar\u2019s Timeline with the time.</div>' : ''}</div>
+    <div class="fl-card"><h3 style="color:var(--rec)">Method</h3><div class="fl-ribbon">${r.steps.map((s, i) => `<span class="${/h|day|daily/.test(s[1]) ? 'w' : ''}" style="flex:${/h|day|daily/.test(s[1]) ? 2 : 1}">${i + 1}</span>`).join('')}</div>
+      ${r.steps.map((s, i) => `<div class="fl-step"><span class="n">${i + 1}</span><span class="fl-sp"><b>${esc(s[0])}</b><small>${esc(s[1])}</small></span></div>`).join('')}</div></div>${tabBar()}`;
+}
+function newHTML() {
+  const row = (t, note, col, ic, act, tt) => `<div style="margin:0 0 12px"><button class="fl-pb" style="background:${col};justify-content:flex-start" data-act="${act}" data-t="${tt}">${ico(ic, 20)}${t}</button><div class="fl-cap">${note}</div></div>`;
+  return `<div class="scr" data-keep="scr"><h1 class="fl-title" style="margin-top:44px">New</h1>${row('New jar', 'Start a jar of vegetables to ferment.', 'var(--jfill)', 'jar', 'new-jar-open', 'new-jar')}${row('New bake', 'Log a loaf or another bake.', 'var(--bakefill)', 'bread', 'soon', 'new-bake')}${row('New recipe', 'Write one down, with its ingredients and timed steps.', 'var(--recfill)', 'book', 'soon', 'new-recipe')}</div>${tabBar()}`;
+}
+function insightsHTML() {
+  const tl = (t, v, fill) => `<div class="fl-tile" style="cursor:default;${fill ? 'background:var(--insfill);color:#fff' : 'background:rgba(30,127,143,.12);color:var(--ins)'}"><b>${v}</b><small style="${fill ? '' : 'color:var(--pmuted)'}">${t}</small></div>`;
+  return `<div class="scr" data-keep="scr"><h1 class="fl-title" style="margin-top:44px">Insights</h1><div class="fl-seg"><button class="on" data-act="soon">Ferments</button><button data-act="soon" data-t="ins-bakes">Bakes</button></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0" data-t="ins-tiles">${tl('Jars', 5, true)}${tl('Active now', 3)}${tl('Success', '100%')}${tl('Average rating', '3.5 \u2605')}</div>
+    <div class="fl-card" data-t="ins-rec"><h3 style="color:var(--ins)">Recommended recipe</h3><p class="fl-mut" style="margin:0;font-size:14px">Once two jars are rated 4 stars or more, a recipe learned from them appears here.</p></div>
+    <div class="fl-card"><h3 style="color:var(--ins)">Best jar so far</h3><div style="display:flex;align-items:center;gap:8px"><span class="fl-sp"><b>Beetroot</b> <span style="color:var(--ins)">${stars(4)}</span><br><span class="fl-mut" style="font-size:13px">Beetroot${DOT}2.0% brine${DOT}19\u00B0C${DOT}Cloth / open</span></span><span class="fl-qb" style="background:rgba(30,127,143,.12);color:var(--ins);font-size:13px">Open this jar</span></div></div>
+    <div class="fl-card"><h3 style="color:var(--ins)">Rating against brine strength<small>shaded = the usual 2\u20133%</small></h3><div class="fl-dots"><u style="left:30%;width:40%"></u><i style="left:34%;top:30%"></i><i style="left:12%;top:60%"></i><i style="left:62%;top:46%"></i><i style="left:84%;top:70%"></i></div></div></div>${tabBar()}`;
+}
+const PEOPLE = ['Kim', 'Robin'];
+function settingsHTML() {
+  if (S.page === 'safety') return safetyHTML();
+  const sec = (t, body, foot) => `<div class="fl-lh" style="color:var(--setc)">${t}</div>${body}${foot || ''}`;
+  const note = t => `<p class="fl-nt">${t}</p>`;
+  const sw = (id, on, t) => `<button class="fl-tg set${on ? ' on' : ''}" data-act="${id}" ${t ? `data-t="${t}"` : ''} aria-label="switch"></button>`;
+  const sq = (txt, c) => `<button class="fl-qb" style="background:rgba(90,108,128,.16);color:var(--setc);margin:6px 14px" data-act="soon">${txt}</button>`;
+  return `<div class="scr" data-keep="scr" style="background:var(--pbg)"><h1 class="fl-title" style="margin-top:44px">Settings</h1>
+    ${sec('Who is logging', `<div class="fl-lst">${PEOPLE.map((p, i) => `<div class="fl-lrow"><span>${p}</span>${i === 0 ? '<span class="pill">Logging</span>' : ''}<span class="fl-sp"></span><span style="color:var(--prob);font-size:15px">Remove</span></div>`).join('')}</div>`)}
+    ${sec('Burp alarm', `<div class="fl-lst" data-t="burp-sec"><div class="fl-lrow"><span>Morning</span><span class="v">08:00</span></div><div class="fl-lrow"><span>Evening</span><span class="v">20:00</span></div><div class="fl-lrow"><span class="fl-sp">Ring on this iPhone</span>${sw('cfg-here', S.cfg.here, 'ring-here')}</div></div>${note('Rings for every fermenting jar with a plain lid. Each jar has its own switch. The notification has a Burped button \u2014 one tap writes the burp into the jar\u2019s Timeline and plays a burp.')}<p class="fl-nt fl-ok" style="margin-top:-4px" data-t="notify-ok">\u2713 Notifications are allowed</p>`)}
+    ${sec('Burp sounds', `<div class="fl-lst" data-t="sounds">${SOUNDS.map((s, i) => `<div class="fl-lrow fl-sound"><button class="fl-play" data-act="play" data-id="${i + 1}" data-t="play-${i + 1}">Play</button><span class="fl-sp"><span>${s[0]}</span><small>${s[1]}</small></span>${sw('sound-on', !S.cfg.off.includes(i + 1), 'sound-on-' + (i + 1)).replace('data-act="sound-on"', `data-act="sound-on" data-id="${i + 1}"`)}</div>`).join('')}</div>${note('All off: Burped makes no sound. Your choice is kept on this iPhone; the iPhone, the iPad and the Mac each keep their own.')}`)}
+    ${sec('Taste-test reminder', `<div class="fl-lst"><div class="fl-lrow"><span class="fl-sp">Remind on this iPhone</span><button class="fl-tg set on" data-act="soon" aria-label="switch"></button></div></div>`)}
+    ${sec('Appearance', `<div class="fl-lst" style="padding:6px 14px"><div class="fl-seg" style="display:flex"><button class="on" style="flex:1" data-act="soon">System</button><button style="flex:1" data-act="soon">Light</button><button style="flex:1" data-act="soon">Dark</button></div></div>`)}
+    ${sec('iCloud', `<div class="fl-lst" data-t="icloud-sec"><div class="fl-lrow" style="font-weight:600;font-size:15px">In iCloud \u2014 the same jars on your iPhone, iPad and Mac</div><div class="fl-lrow"><span>State</span><span class="v">Up to date</span></div><div class="fl-lrow"><span>Last synced</span><span class="v">2026-11-25 09:41</span></div>${sq('Sync now')}<button class="fl-lrow" style="color:var(--setc)" data-act="open-safety" data-t="row-safety">Safety copies<span class="v">${ico('chevR', 14)}</span></button></div>`)}
+    ${sec('Bring your jars over from the web app', `<div class="fl-lst" data-t="import-sec"><div class="fl-lrow" style="font-size:13px;color:var(--pmuted);display:block;padding:8px 14px">1. Open the old FermentLog (the web app) on the iPhone.<br>2. Settings \u203A Backup &amp; export \u203A Export backup \u203A save the file to Files.<br>3. Come back here and choose that file.</div><div style="padding:6px 14px 10px"><button class="fl-pb" style="background:var(--setfill)" data-act="soon">Choose the backup file</button></div></div>`)}
+    ${sec('Export', `<div class="fl-lst"><div style="padding:6px 14px;display:flex;gap:6px;flex-wrap:wrap"><span class="fl-qb" style="background:rgba(90,108,128,.16);color:var(--setc)">Spreadsheet (.xlsx)</span><span class="fl-qb" style="background:rgba(90,108,128,.16);color:var(--setc)">CSV</span><span class="fl-qb" style="background:rgba(90,108,128,.16);color:var(--setc)">Backup file</span></div></div>`)}
+    <div class="fl-lst" style="margin-top:14px"><div class="fl-lrow"><span class="fl-sp">Your lists</span>${ico('chevR', 14)}</div><div class="fl-lrow"><span class="fl-sp">How it works</span>${ico('chevR', 14)}</div><div class="fl-lrow"><span class="fl-sp">What\u2019s new</span>${ico('chevR', 14)}</div><div class="fl-lrow"><span>Version</span><span class="v" data-t="version">6.7 (10)</span></div></div></div>${tabBar()}`;
+}
+function safetyHTML() {
+  return `<div class="scr" data-keep="scr"><div class="fl-nav"><button class="fl-nb" style="color:var(--setc)" data-act="page-back" data-t="page-back">${ico('chevL', 20)}Settings</button><span class="fl-ntitle">Safety copies</span><span style="width:60px"></span></div>
+    <p class="fl-nt" style="margin-top:8px" data-t="safety-note">FermentLog keeps a safety copy of everything once a day, for 30 days. Copies made before an import or a restore, and the ones you make yourself, are kept for good.</p>
+    <div style="padding:0 14px 8px"><button class="fl-pb" style="background:var(--setfill)" data-act="soon">Make a safety copy now</button></div>
+    <div class="fl-lh" style="color:var(--setc)">Copies, newest first</div><div class="fl-lst">${[['Daily 2026-11-25', '2026-11-25 08:02', '5 jars \u00B7 2 bakes \u00B7 2 recipes'], ['Daily 2026-11-24', '2026-11-24 07:55', '5 jars \u00B7 2 bakes \u00B7 2 recipes'], ['Before import', '2026-11-20 18:30', '4 jars \u00B7 1 bake \u00B7 1 recipe']].map(c => `<div class="fl-lrow" style="display:block;padding:8px 14px"><div style="display:flex"><b>${c[0]}</b><span class="fl-sp"></span><span style="color:var(--setc);font-size:15px">Restore this copy</span></div><small class="fl-mut" style="font-size:12px">${c[1]}${DOT}${c[2]}</small></div>`).join('')}</div></div>${tabBar()}`;
+}
+
+/* ---------- Stage ---------- */
+function renderStage() {
+  const st = document.getElementById('stage');
+  const pk = () => S.tab + ':' + (S.page || '') + (S.view || '');
+  const keyOf = e => e.closest('.fl-sheet') ? 'sh:' + S.sheet : 'pg:' + pk(), prevKeys = renderStage.keys || {};
+  const scrolls = renderStage.scrolls = renderStage.scrolls || {};
+  st.querySelectorAll('[data-keep]').forEach(e => { if (e.dataset.k) scrolls[e.dataset.k] = e.scrollTop; });
+  const ae = document.activeElement, inId = ae && st.contains(ae) ? ae.dataset.in : null, sel = inId && ae.selectionStart != null ? [ae.selectionStart, ae.selectionEnd] : null;
+  let body;
+  if (S.tab === 'home') body = S.page === 'jar' ? jarHTML() : S.page === 'newjar' ? newJarHTML() : homeHTML();
+  else if (S.tab === 'recipes') body = S.page === 'recipe' ? recipeHTML() : S.page === 'newjar' ? newJarHTML() : recipesHTML();
+  else if (S.tab === 'new') body = S.page === 'newjar' ? newJarHTML() : S.page === 'jar' ? jarHTML() : newHTML();
+  else if (S.tab === 'insights') body = insightsHTML();
+  else body = settingsHTML();
+  const over = (S.sheet === 'outcome' ? outcomeSheet() : '') + (S.story != null ? storyHTML() : '');
+  const undo = S.undo ? `<div class="fl-undo" data-t="undo-bar"><span class="fl-sp">${esc(S.undo.label)}</span><button data-act="undo" data-t="undo-btn">Undo</button></div>` : '';
+  st.innerHTML = `<div class="fl-sbar"><span>9:41</span><span class="fl-bat"></span></div>${body}${undo}${over}${S.toast ? `<div class="fl-toast">${esc(S.toast)}</div>` : ''}`;
+  renderStage.keys = {};
+  st.querySelectorAll('[data-keep]').forEach(e => { const k = keyOf(e); e.dataset.k = k; renderStage.keys[k] = 1; e.scrollTop = prevKeys[k] ? (scrolls[k] || 0) : 0; });
+  if (inId) { const nf = st.querySelector(`[data-in="${inId}"]`); if (nf) { nf.focus(); try { if (sel) nf.setSelectionRange(sel[0], sel[1]); } catch (e) {} } }
+  markTarget();
+}
+let toastH = null;
+function toast(t) { S.toast = t; renderStage(); clearTimeout(toastH); toastH = setTimeout(() => { S.toast = ''; renderStage(); }, 2400); }
+const soon = () => toast('Practice copy: not drawn here.');
+
+/* The Undo bar: 4 seconds, as in the app. In practice steps it comes back so there is time to try. */
+let undoSeq = 0;
+function startUndo(label, restore, practice) {
+  const id = ++undoSeq; S.undo = { id, label, restore, practice: !!practice };
+  later(() => {
+    if (!S.undo || S.undo.id !== id) return;
+    if (S.undo.practice && !solved) { startUndo(label, restore, true); toast('The bar lasts 4 seconds and has gone. Here it is again, for practice.'); }
+    else { S.undo = null; renderStage(); }
+  }, 4000);
+  renderStage();
+}
+
+/* ---------- Actions inside the pretend iPhone ---------- */
+const stage = document.getElementById('stage');
+const num = v => { const n = parseFloat(String(v).replace(',', '.')); return isFinite(n) ? n : 0; };
+function onField(ev) {
+  const k = ev.target.dataset.in; if (!k) return; const v = ev.target.value;
+  if (k === 'find') { S.find = v; renderStage(); emit('find', v); }
+  else if (k === 'tl') { S.tx = v; renderStage(); if (v.trim()) emit('tl-typed'); }
+  else if (k === 'njname') S.nj.name = v;
+  else if (k === 'salt') { S.nj.salt = num(v); S.nj.saltRaw = v; renderStage(); emit('salt', S.nj.salt); }
+  else if (k === 'veg') { S.nj.veg = v; renderStage(); emit('veg', v); }
+  else if (k === 'lid') { S.nj.lid = v; S.nj.burp = null; renderStage(); emit('lid', v); }
+}
+stage.addEventListener('input', onField);
+stage.addEventListener('change', ev => { if (ev.target.tagName === 'SELECT') onField(ev); });
+stage.addEventListener('keydown', ev => { if (ev.key !== 'Enter') return; const k = ev.target.dataset && ev.target.dataset.in; if (k && ev.target.tagName === 'INPUT') ev.target.blur(); });
+stage.addEventListener('click', ev => {
+  const el = ev.target.closest('[data-act]'); if (!el) return;
+  act(el.dataset.act, el.dataset.id, el);
+});
+const nowTime = '09:40';
+function act(a, id, el) {
+  switch (a) {
+    case 'soon': soon(); break;
+    case 'tab': { if (S.tab !== id) { S.page = null; S.sheet = null; } S.tab = id; renderStage(); emit('tab', id); break; }
+    case 'home-view': S.view = id; renderStage(); emit('home-view', id); break;
+    case 'filter': S.filter = S.filter === id ? null : id; renderStage(); emit('filter', S.filter); break;
+    case 'show-all': S.filter = null; renderStage(); emit('filter', null); break;
+    case 'find-clear': S.find = ''; renderStage(); break;
+    case 'sort': S.sort = id; renderStage(); emit('sort', id); break;
+    case 'open-jar': S.openId = id; S.page = 'jar'; S.kind = 'did'; S.tx = ''; S.pend = 0; renderStage(); emit('open-jar', id); break;
+    case 'page-back': S.page = null; renderStage(); break;
+    case 'burped': { const j = J(S.openId), old = { lines: j.lines.slice(), lastBurp: j.lastBurp, burpN: j.burpN };
+      j.lines.push({ day: j.day, date: 'Wed 25 Nov', time: nowTime, kind: 'did', text: 'Burped the jar', pics: 0 }); j.lastBurp = nowTime; j.burpN = (j.burpN || 0) + 1;
+      startUndo('Burp logged ' + nowTime, () => { Object.assign(j, old); }, false); emit('burped'); break; }
+    case 'undo': if (S.undo) { S.undo.restore(); S.undo = null; renderStage(); emit('undo'); } break;
+    case 'jar-alarm': { const j = J(S.openId); j.burp = !j.burp; renderStage(); emit('jar-alarm', j.burp); break; }
+    case 'tick': { const j = J(S.openId), p = j.plan[+id]; if (!p.done) { p.done = nowTime; j.lines.push({ day: j.day, date: 'Wed 25 Nov', time: nowTime, kind: 'did', text: p.t, pics: 0 }); renderStage(); emit('tick', +id); } break; }
+    case 'kind': S.kind = id; renderStage(); emit('kind', id); break;
+    case 'add-pics': if (S.pend < 6) S.pend++; renderStage(); emit('pics', S.pend); break;
+    case 'pend-remove': S.pend = Math.max(0, S.pend - 1); renderStage(); break;
+    case 'tl-add': { const j = J(S.openId); if (!(S.tx.trim() || S.pend)) break;
+      const parts = S.kind === 'did' ? S.tx.split('\n').map(x => x.replace(/^\s*(\d+[.)]|[-\u2022])\s+/, '').trim()).filter(Boolean) : [S.tx.trim()];
+      if (!parts.length) parts.push('');
+      parts.forEach((t, i) => j.lines.push({ day: j.day, date: 'Wed 25 Nov', time: nowTime, kind: S.kind, text: t, pics: i === parts.length - 1 ? S.pend : 0 }));
+      const d = { kind: S.kind, text: S.tx.trim(), pics: S.pend }; S.tx = ''; S.pend = 0; renderStage(); emit('tl-added', d); break; }
+    case 'story-open': S.story = 0; { const j = J(S.openId), withPics = tlSorted(j), want = withPics[+id]; let n = 0, idx = 0; withPics.forEach(l => { if (l.pics) { if (l === want) idx = n; n += l.pics; } }); S.story = idx; } renderStage(); emit('story-open'); break;
+    case 'story-close': S.story = null; renderStage(); emit('story-closed'); break;
+    case 'to-fridge': { const j = J(S.openId); j.status = 'fridge'; j.fridgeOn = 'Wed 25 Nov'; j.due = false; renderStage(); emit('fridge'); break; }
+    case 'outcome-open': S.sheet = 'outcome'; renderStage(); emit('sheet-open'); break;
+    case 'star': { const [k, n] = id.split('-'); S.oc[k] = +n; renderStage(); emit('star', id); break; }
+    case 'sheet-cancel': S.sheet = null; renderStage(); break;
+    case 'outcome-save': { const j = J(S.openId), o = S.oc; j.outcome = { ok: true, taste: o.taste, sour: o.sour, crunch: o.crunch, overall: o.overall }; j.status = 'done'; j.stars = o.overall; S.sheet = null; renderStage(); emit('outcome-saved'); break; }
+    case 'new-jar-open': S.nj = START().nj; S.page = 'newjar'; if (S.tab !== 'home' && S.tab !== 'new') S.tab = 'home'; renderStage(); emit('newjar-open'); break;
+    case 'nj-burp': { const on = S.nj.burp != null ? S.nj.burp : S.nj.lid === 'Plain lid'; S.nj.burp = !on; renderStage(); break; }
+    case 'nj-cancel': S.page = null; renderStage(); break;
+    case 'nj-save': { const n = S.nj; const id = 'j' + Object.keys(S.jars).length;
+      S.jars[id] = { id, name: n.name.trim() || n.veg, veg: n.veg, form: n.form, status: 'fermenting', day: 1, start: 'Wed 25 Nov', sn: 25, salt: n.salt, water: n.water, room: 20, lid: n.lid, weight: 'Glass weight', burp: n.burp != null ? n.burp : n.lid === 'Plain lid', due: false, next: 'Taste test Sat 28 Nov' + DOT + 'in 3 days', share: 0, spices: [], plan: [], lines: [], stars: 0, outcome: null };
+      S.openId = id; S.page = 'jar'; S.tab = 'home'; renderStage(); emit('jar-saved'); break; }
+    case 'open-recipe': S.rid = id; S.page = 'recipe'; renderStage(); emit('open-recipe', id); break;
+    case 'recipe-jar': S.nj = Object.assign(START().nj, { name: 'Quick sauerkraut', veg: 'Cabbage', form: 'Shredded', note: 'From recipe: Quick sauerkraut', recipe: 'kraut' }); S.page = 'newjar'; renderStage(); emit('recipe-jar'); break;
+    case 'cfg-here': S.cfg.here = !S.cfg.here; renderStage(); emit('ring-here', S.cfg.here); break;
+    case 'play': S.cfg.played = +id; renderStage(); toast('Playing: ' + SOUNDS[+id - 1][0]); emit('play', +id); break;
+    case 'sound-on': { const n = +id; S.cfg.off = S.cfg.off.includes(n) ? S.cfg.off.filter(x => x !== n) : S.cfg.off.concat([n]); renderStage(); emit('sound-on', { n, on: !S.cfg.off.includes(n) }); break; }
+    case 'open-safety': S.page = 'safety'; renderStage(); emit('safety-open'); break;
+    default: break;
+  }
+}
+
+/* ---------- Lessons (see, try, check). Every step's setup does a full reset of what that step needs. ---------- */
+const jarP = (id, o) => set(Object.assign({ tab: 'home', page: 'jar', openId: id }, o || {}));
+const LESSONS = [
+  { title: 'The first screen', icon: 'jar', steps: [
+    { kind: 'look', head: 'Home, top to bottom', text: 'Home shows your jars. At the top is a small switch, Jars | Bakes, and a Search button. Under it are three tiles with big numbers: Fermenting (orange), In the fridge (blue) and Done (green). Then a find box, a Sort switch, the full-colour Start a jar button, and your jars in three groups.', target: 'jars-tiles', setup: () => set({}) },
+    { kind: 'look', head: 'Five tabs', text: 'Home, Recipes, New, Insights and Settings sit in the bar at the bottom. Each part of the app has its own colour: jars orange, bakes gold-brown, recipes purple, Insights teal, Search slate blue, Settings grey-blue. On the iPad and the Mac the same parts stand in a list at the side.', target: 'tabbar', setup: () => set({}) },
+    { kind: 'try', head: 'Open Recipes', text: 'Tap "Recipes".', target: 'tab-recipes', setup: () => set({}), wait: 'tab', when: d => d === 'recipes', ok: 'Your recipe book opens, with its own purple colour. The tab bar turns purple too.' },
+    { kind: 'try', head: 'Back to Home', text: 'Now tap "Home".', target: 'tab-home', setup: () => set({ tab: 'recipes' }), wait: 'tab', when: d => d === 'home', ok: 'Back on your jars.' },
+  ]},
+  { title: 'Your jars', icon: 'jar', steps: [
+    { kind: 'try', head: 'Show only the fridge', text: 'The three tiles are buttons. Tap the blue "In the fridge" tile.', target: 'jars-tile-fridge', setup: () => set({}), wait: 'filter', when: d => d === 'fridge', ok: 'Only the jars in the fridge stay. The tile gets an outline, and a line says "Showing only: In the fridge". The choice is not kept: after you close the app all jars are shown again.' },
+    { kind: 'try', head: 'Show all again', text: 'Tap "Show all".', target: 'show-all', setup: () => set({ filter: 'fridge' }), wait: 'filter', when: d => d === null, ok: 'Every jar is back. Tapping the same tile again does the same.' },
+    { kind: 'try', head: 'Find a jar', text: 'Type "carrot" in the find box.', target: 'find', setup: () => set({}), wait: 'find', when: d => /carrot/i.test(d), robot: { type: 'type', value: 'carrot' }, ok: 'Only jars whose name or vegetable contains those letters stay, at once. Big or small letters and accents do not matter. The word Clear empties the box. It works together with a tile, and it starts empty every time the list opens.' },
+    { kind: 'try', head: 'Put them in order', text: 'Tap "Name" in the Sort switch.', target: 'sort-name', setup: () => set({}), wait: 'sort', when: d => d === 'name', ok: 'Every group is now A to Z. With "Start date", jars due for a taste test come first, then the newest. Your choice is remembered on this device; the iPhone, the iPad and the Mac each keep their own.' },
+    { kind: 'look', head: 'Reading a row', text: 'A row shows the jar\u2019s newest picture (or a jar mark), its name, a pill with the day number, the brine, and stars once it is rated. Two small tags can follow: "Taste test due" and "Burp alarm on". The orange box above the groups names the jars due for a taste test.', target: 'row-rad', setup: () => set({}) },
+    { kind: 'check', head: 'Quick check', text: 'A pill says "Fermenting \u00B7 day 3". What does the 3 count?', answers: ['The days since you started the jar; the start day is Day 1', 'The days since the last taste test', 'The days left until it goes in the fridge'], right: 0, ok: 'Right. Start a jar today and it is Day 1; tomorrow it is Day 2.' },
+  ]},
+  { title: 'Starting a jar', icon: 'plus', steps: [
+    { kind: 'try', head: 'The New tab', text: 'Tap "New".', target: 'tab-new', setup: () => set({}), wait: 'tab', when: d => d === 'new', ok: 'Three big buttons: New jar, New bake and New recipe. (On Home, "Start a jar" does the same as New jar.)' },
+    { kind: 'try', head: 'New jar', text: 'Tap "New jar".', target: 'new-jar', setup: () => set({ tab: 'new' }), wait: 'newjar-open', ok: 'The page has Basics, Brine and conditions, Spices, Equipment, Reminders, and Photos and notes. Carrot and Sticks are chosen to begin with, so change them. The vegetable is the only thing you must have; Save stays off until there is one. Cancel and Save are at the top.' },
+    { kind: 'try', head: 'Choose the vegetable', text: 'Under Basics, set Vegetable to "Cabbage".', target: 'nj-veg', setup: () => set({ tab: 'new', page: 'newjar' }), wait: 'veg', when: d => d === 'Cabbage', robot: { type: 'select', value: 'Cabbage' }, ok: 'Cabbage. Vegetable and Form are lists that end in "Add your own\u2026".' },
+    { kind: 'try', head: 'Weigh the salt', text: 'Under Brine and conditions, type 30 in Salt (g).', target: 'nj-salt', setup: () => set({ tab: 'new', page: 'newjar', nj: Object.assign(START().nj, { veg: 'Cabbage', form: 'Shredded' }) }), wait: 'salt', when: d => d === 30, robot: { type: 'type', value: '30' }, ok: 'A line under the water works out the brine for you: salt \u00F7 (salt + water). From 2 % to 3 % it reads "\u2713 in the 2\u20133% sweet spot" in green. Outside that it says "typical range is 2\u20133%", which is only a hint, not an error.' },
+    { kind: 'try', head: 'Pick the lid', text: 'Under Equipment, set Lid to "Plain lid".', target: 'nj-lid', setup: () => set({ tab: 'new', page: 'newjar', nj: Object.assign(START().nj, { veg: 'Cabbage', form: 'Shredded', salt: 30 }) }), wait: 'lid', when: d => d === 'Plain lid', robot: { type: 'select', value: 'Plain lid' }, ok: 'Under Reminders the Burp alarm switch turned itself on: "On by itself for a plain lid". The other lids let the gas out by themselves, so for them it says "Off". Once you flip the switch yourself, it stays as you set it.' },
+    { kind: 'try', head: 'Save', text: 'Press "Save".', target: 'nj-save', setup: () => set({ tab: 'new', page: 'newjar', nj: Object.assign(START().nj, { veg: 'Cabbage', form: 'Shredded', salt: 30, lid: 'Plain lid' }) }), wait: 'jar-saved', ok: 'A new jar opens on its own page, at Day 1. Save as a template (at the bottom of the form) keeps these settings so the next jar can start from them.' },
+  ]},
+  { title: 'A jar\u2019s page', icon: 'jar', steps: [
+    { kind: 'look', head: 'The head card', text: 'The orange card shows the jar\u2019s picture, its name, a big "Day 3", its state (Fermenting, In fridge or Done) and "started Mon 23 Nov". A slim line fills from the start day to the next taste test, with the date under it; the words turn bold when the day has come. Under the card are tiles for Vegetable, Form, Brine (green when it is 2\u20133 %), Room, Lid and Weight.', target: 'jar-hero', setup: () => jarP('cab') },
+    { kind: 'try', head: 'Burped', text: 'You opened the lid to let the gas out. Tap the full-colour "Burped" button.', target: 'burped', setup: () => jarP('cab'), wait: 'burped', ok: '"Burped the jar" and the time are written into the Timeline. A random burp plays from the ones switched on in Settings (nothing on a silent iPhone). A bar at the bottom says "Burp logged".' },
+    { kind: 'try', head: 'Undo', text: 'Tap "Undo" in the dark bar. It stays for 4 seconds, as in the app.', hint: 'If the 4 seconds run out here, the bar comes back by itself so you can try again. In the real app it does not.', target: 'undo-btn', setup: () => { jarP('cab'); act('burped'); S.undo.practice = true; }, wait: 'undo', ok: 'The burp is taken back. The same bar appears after removing most things in the app.' },
+    { kind: 'try', head: 'The To do list', text: 'This jar was started from a recipe, so its steps are a list. Tap the round box of "Pack the jar".', target: 'todo-3', setup: () => jarP('cab'), wait: 'tick', when: d => d === 2, ok: 'The box turns green with a tick, the step says "done 09:40", the count reads "3 of 4 done", and a Did line with the step\u2019s words is written into the Timeline. Tap it again to take both back.' },
+    { kind: 'try', head: 'Add a line', text: 'The Timeline is everything about the jar, oldest first. At its end, with "What I did" chosen, type a step, for example "Added a bay leaf", then press "Add".', target: 'tl-text', setup: () => jarP('cab'), wait: 'tl-added', when: d => d.kind === 'did', on: { 'tl-typed': 'tl-add' }, robot: { type: 'type', value: 'Added a bay leaf' }, ok: 'The line joins the rail, under today\u2019s heading. A filled orange dot is something you did. In What I did every line you type or paste becomes its own step, and list numbers are taken off.' },
+    { kind: 'try', head: 'A taste test', text: 'Tap "Taste test" in the switch above the box.', target: 'kind-taste', setup: () => jarP('cab'), wait: 'kind', when: d => d === 'taste', ok: 'The box now asks "How does it taste, smell and look?". The whole text is one note, shown with a green ring and the word "Taste". A taste test also moves the next taste-test reminder; a Did line never does.' },
+    { kind: 'try', head: 'A picture alone', text: 'Tap "Add pictures" (up to 6 from Photos; on iPhone and iPad there is also "Take a picture"). Then press "Add" without any words.', target: 'add-pics', setup: () => jarP('cab'), wait: 'tl-added', when: d => d.pics > 0, on: { pics: 'tl-add' }, ok: 'A picture alone is a line too: it says "Picture" and shows a small square. Under the box the picked pictures show with the word Remove under each, before you press Add.' },
+    { kind: 'try', head: 'The photo story', text: 'Tap the small picture square under a Timeline line.', hint: 'Then tap "Done" to close it.', target: 'tl-pic', setup: () => jarP('cab'), wait: 'story-closed', on: { 'story-open': 'story-done' }, ok: 'The story shows every Timeline picture of the jar, oldest first, opened at the one you tapped, with "1 of 2" and Done at the top and a caption at the bottom. Swipe left and right on the iPhone and iPad; on the Mac use Previous, Next and the arrow keys.' },
+    { kind: 'try', head: 'Move to the fridge', text: 'The jar tastes right. Tap "Move to the fridge".', target: 'to-fridge', setup: () => jarP('cab'), wait: 'fridge', ok: 'Today is written as the fridge day, the state turns to In fridge, the burp block goes and the alarms stop. There is no way back from this page, so tap it when you mean it.' },
+    { kind: 'try', head: 'Record the outcome', text: 'Tap "Record outcome". Give Overall five stars, then press "Save".', target: 'record-outcome', setup: () => jarP('cab'), wait: 'outcome-saved', on: { 'sheet-open': 'star-overall-5', star: 'outcome-save' }, ok: 'A green box says "Success", with Taste, Sourness, Crunch and Overall as stars beside slim bars; problems show as red tags. Recording an outcome makes the jar Done.' },
+    { kind: 'check', head: 'Quick check', text: 'You tasted the jar but wrote it under "What I did". What happens to the next taste-test reminder?', answers: ['Nothing: only a Taste line moves it', 'It moves anyway', 'It is switched off for this jar'], right: 0, ok: 'Right. The days are counted from your last Taste line, or from the start date when there is none.' },
+  ]},
+  { title: 'Burp alarm and sounds', icon: 'gear', steps: [
+    { kind: 'look', head: 'The Burp block', text: 'While a jar is fermenting, one row holds the Burped button, when the last burp was ("Not burped yet" or "Last burp: today 08:12 \u00B7 2 today") and the jar\u2019s own switch, Burp alarm, with "Rings at 08:00 and 20:00". A jar with a plain lid rings by itself; other lids do not, because the gas leaves on its own.', target: 'burp-block', setup: () => jarP('cab') },
+    { kind: 'try', head: 'Open Settings', text: 'Tap "Settings".', target: 'tab-settings', setup: () => set({}), wait: 'tab', when: d => d === 'settings', ok: 'The sections are Who is logging, Burp alarm, Burp sounds, Taste-test reminder, Appearance, iCloud, Bring your jars over from the web app, Export, AI assistant and, at the end, Your lists, How it works, What\u2019s new and the version.' },
+    { kind: 'try', head: 'Ring on this iPhone', text: 'Under Burp alarm, switch "Ring on this iPhone" off.', target: 'ring-here', setup: () => set({ tab: 'settings' }), wait: 'ring-here', when: d => d === false, ok: 'This device stops ringing; the jar page then adds "off for this device in Settings". It is a choice for each device: on from the start on the iPhone, off on iPad and Mac. The two times are the same everywhere. A green tick says "Notifications are allowed".' },
+    { kind: 'try', head: 'Hear a burp', text: 'Under Burp sounds, tap "Play" beside "Chuckle".', target: 'play-3', setup: () => set({ tab: 'settings' }), wait: 'play', when: d => d === 3, ok: 'Play lets you hear one at once, even on silent. There are ten: Classic, Short pop, Chuckle, Long one, Squeaky, Double, Bubbles, Rising, Tiny and Ta-da.' },
+    { kind: 'try', head: 'Leave one out', text: 'Switch off "Squeaky" with its switch.', target: 'sound-on-5', setup: () => set({ tab: 'settings' }), wait: 'sound-on', when: d => d.n === 5 && d.on === false, ok: 'Every Burped now picks at random from the burps that are on, never the same one twice in a row. With all of them off, Burped makes no sound.' },
+    { kind: 'check', head: 'Quick check', text: 'The 20:00 alarm rings and your hands are full. What does one tap on the notification\u2019s Burped button do?', answers: ['Writes "Burped the jar" and the time into the Timeline without opening the app, and plays a burp', 'Snoozes the alarm for an hour', 'Opens the jar and waits for you to type'], right: 0, ok: 'Right. Press and hold the notification (or pull it down) to see the button. A burp logged in the 3 hours before a ring makes that ring skip.' },
+  ]},
+  { title: 'Recipes, bakes and Insights', icon: 'book', steps: [
+    { kind: 'try', head: 'Open a recipe', text: 'Open "Quick sauerkraut".', target: 'recipe-row-kraut', setup: () => set({ tab: 'recipes' }), wait: 'open-recipe', when: d => d === 'kraut', ok: 'A purple head card holds the name, the category, two tiles (Hands-on and Start to finish) and the buttons. Under it, a time ribbon has one numbered piece per step: pale for a wait of 2 hours or more, full colour for a shorter step.' },
+    { kind: 'try', head: 'Start a jar from it', text: 'Tap "Start a jar from this recipe".', target: 'recipe-start-jar', setup: () => set({ tab: 'recipes', page: 'recipe', rid: 'kraut' }), wait: 'recipe-jar', ok: 'The New jar page opens already filled in: the name is the recipe\u2019s title, the vegetable is found from the title, and the notes say "From recipe: \u2026". Nothing is saved until you press Save. The recipe\u2019s steps then become the jar\u2019s To do list.' },
+    { kind: 'try', head: 'Bakes', text: 'Back on Home, tap "Bakes" in the switch.', target: 'home-bakes', setup: () => set({}), wait: 'home-view', when: d => d === 'bakes', ok: 'The same place shows your bakes, in gold-brown: a bread mark, the name, a category pill, the date, the recipe and stars (or "Not rated yet"). The full-colour button is "Log a bake".' },
+    { kind: 'try', head: 'Insights', text: 'Tap "Insights".', target: 'tab-insights', setup: () => set({}), wait: 'tab', when: d => d === 'insights', ok: 'A switch, Ferments | Bakes, then four number tiles: Jars, Active now, Success (with a small ring) and Average rating. Below: a recommended recipe, the best jar so far and dot charts, each dot one jar. The shaded band in the brine chart is the usual 2\u20133 %.' },
+    { kind: 'check', head: 'Quick check', text: 'When does "Recommended recipe" show real numbers?', answers: ['Once two finished jars are rated 4 stars or more', 'As soon as you start your first jar', 'Only after a year of jars'], right: 0, ok: 'Right. Until then it says how to get one. Its tiles are the typical values of those jars: Vegetable, Brine, Room, Days and Lid.' },
+  ]},
+  { title: 'Settings, safety and signs', icon: 'gear', steps: [
+    { kind: 'look', head: 'iCloud', text: 'All your data is one file in iCloud Drive, so iPhone, iPad and Mac show the same jars. This section says "In iCloud \u2014 the same jars on your iPhone, iPad and Mac", the State, when it last synced, and has Sync now. Two devices saving at once are joined jar by jar: the newest change wins and nothing is lost.', target: 'icloud-sec', setup: () => set({ tab: 'settings' }) },
+    { kind: 'try', head: 'Safety copies', text: 'Tap "Safety copies".', target: 'row-safety', setup: () => set({ tab: 'settings' }), wait: 'safety-open', ok: 'The first save of each day writes a safety copy; the newest 30 stay. Copies made before an import or a restore, and the ones you make yourself, are kept for good. "Restore this copy" asks first and keeps a "Before restore" copy of how things are now.' },
+    { kind: 'look', head: 'Your jars from the web app', text: 'Three steps, once: export a backup from the old web app and save it to Files, then come back here and choose that file. FermentLog shows what is inside and asks first; it makes a "Before import" safety copy, deletes nothing, and brings the pictures too.', target: 'import-sec', setup: () => set({ tab: 'settings' }) },
+    { kind: 'look', head: 'Signs: colours', text: 'Orange, blue and green mean the state of a jar, on the tiles and on the pills: orange = Fermenting, blue = In the fridge, green = Done. A deep orange tag "Taste test due" and a grey tag "Burp alarm on" show on a row. A green brine figure means 2\u20133 %. Red words or a red tag mean something is wrong or a problem you noted.', target: 'jars-tiles', setup: () => set({}) },
+    { kind: 'look', head: 'Signs: the Timeline', text: 'A filled orange dot is something you did. A green ring with the word "Taste" is a taste test. A small picture square under a line is a picture taken with that line: tap it for the photo story. The slim line on the head card is how far it is to the next taste test; a round box with a green tick is a To do step that is done.', target: 'timeline', setup: () => jarP('cab') },
+    { kind: 'check', head: 'Quick check', text: 'On a jar\u2019s Timeline you see a green ring with the word "Taste". What is it?', answers: ['A taste test you wrote', 'A To do step that is done', 'A burp that was logged'], right: 0, ok: 'Right. A done To do step is a round box with a tick; a burp is a filled orange Did line.' },
+  ]},
+];
+
+/* ---------- Tour engine (reusable) ---------- */
+let ci = 0, si = 0, solved = false, targetOff = false;
+const store = { get(k) { try { return localStorage.getItem(k) } catch { return null } }, set(k, v) { try { localStorage.setItem(k, v) } catch {} } };
+let doneChapters = new Set(JSON.parse(store.get('fermentlogtour-done') || '[]'));
+
+function emit(name, data) {
+  const st = LESSONS[ci]?.steps[si]; if (!st || solved || st.kind !== 'try') return;
+  if (st.on && st.on[name]) { markTarget(st.on[name]); }
+  if ((st.wait === name || st.alt === name) && (!st.when || st.when(data))) succeed(st.ok);
+}
+function succeed(msg) {
+  solved = true; targetOff = true; const fb = document.getElementById('fb'); if (fb) { fb.textContent = '\u2713 ' + msg; fb.className = 'feedback'; }
+  const nx = document.getElementById('next'); if (nx) { nx.disabled = false; nx.focus({ preventScroll: true }); }
+  markTarget();
+}
+let curTarget = null;
+function markTarget(t) {
+  if (t !== undefined) curTarget = t;
+  document.querySelectorAll('.target').forEach(e => e.classList.remove('target'));
+  if (!curTarget || targetOff) return;
+  const q = n => document.querySelector(`#stage [data-t="${CSS.escape(n)}"]`);
+  // If the thing to tap is out of sight (a stray tap closed a page), point at the way back to it.
+  const first = LESSONS[ci] && LESSONS[ci].steps[si] && LESSONS[ci].steps[si].target;
+  const el = q(curTarget) || (first && first !== curTarget ? q(first) : null)
+    || (S.story != null ? q('story-done') : S.sheet ? q('sheet-cancel') : S.page === 'newjar' ? q('nj-cancel') : S.page ? q('page-back') : S.tab !== 'home' ? q('tab-home') : null);
+  if (el) {
+    el.classList.add('target');
+    const sc = el.closest('.scr');
+    if (sc) { const r = el.getBoundingClientRect(), s = sc.getBoundingClientRect(), k = document.getElementById('stagebox').clientWidth / 390;
+      if (r.top < s.top + 40 * k || r.bottom > s.bottom - 110 * k) sc.scrollTop += (r.top - s.top - 120 * k) / k; }
+  }
+}
+function renderRail() {
+  const total = LESSONS.reduce((n, l) => n + l.steps.length, 0);
+  const before = LESSONS.slice(0, ci).reduce((n, l) => n + l.steps.length, 0) + si;
+  document.getElementById('rail').innerHTML = `<div class="brand"><span class="logo">${icon('jar')}</span><div><h1>FermentLog Tour</h1><small>Learn the app in about 20 minutes</small></div></div>
+    ${LESSONS.map((l, i) => `<button class="chap ${i === ci ? 'cur' : ''} ${doneChapters.has(i) ? 'done' : ''}" data-ch="${i}">${icon(l.icon)}<span>${l.title}</span><span class="n">${doneChapters.has(i) ? '\u2713' : l.steps.length + ' steps'}</span></button>`).join('')}
+    <button class="chap ${ci === LESSONS.length ? 'cur' : ''}" data-ch="${LESSONS.length}">${icon('chevR')}<span>Now on your iPhone</span></button>
+    <div class="bar"><i style="width:${Math.round(100 * Math.min(before, total) / total)}%"></i></div>
+    <p class="railnote">Everything here is a practice copy. Nothing changes on your iPhone, iPad or Mac. Written for FermentLog 6.7.</p>`;
+}
+document.getElementById('rail').addEventListener('click', e => { const b = e.target.closest('[data-ch]'); if (b) goChapter(+b.dataset.ch); });
+
+function goChapter(i) {
+  ci = i; si = 0; clearTimers(); S = START();
+  const L = LESSONS[i]; if (L && L.setup) L.setup();
+  renderStep();
+}
+function renderStep() {
+  renderRail();
+  const coach = document.getElementById('coach'), fin = document.getElementById('finish');
+  if (ci >= LESSONS.length) { renderFinish(); coach.hidden = true; return; }
+  coach.hidden = false; fin.hidden = true;
+  const L = LESSONS[ci], st = L.steps[si];
+  solved = st.kind === 'look'; targetOff = false;
+  clearTimers(); clearTimeout(toastH);
+  if (st.setup) st.setup();
+  S.toast = '';
+  const kindName = { look: 'Look', try: 'Try it', check: 'Check' }[st.kind];
+  coach.innerHTML = `<div class="eyebrow">${icon(L.icon)} ${esc(L.title)} <span class="kind">\u00B7 ${kindName} \u00B7 step ${si + 1} of ${L.steps.length}</span></div>
+    <div><h2>${esc(st.head)}</h2><p>${esc(st.text)}</p>${st.hint ? `<p style="color:var(--muted);font-size:13px">${esc(st.hint)}</p>` : ''}</div>
+    <div class="btns">${ci + si > 0 ? '<button class="btn ghost" id="back">Back</button>' : ''}<button class="btn main-b" id="next" ${solved ? '' : 'disabled'}>${si === L.steps.length - 1 ? 'Finish chapter' : 'Next'}</button></div>
+    ${st.kind === 'check' ? `<div class="answers">${st.answers.map((a, i) => `<button class="ans" data-a="${i}">${esc(a)}</button>`).join('')}</div>` : ''}
+    <p class="feedback" id="fb"></p>`;
+  curTarget = st.target || null;
+  renderStage();
+  if (st.kind === 'check') coach.querySelectorAll('.ans').forEach(b => b.onclick = () => {
+    const fb = document.getElementById('fb');
+    if (+b.dataset.a === st.right) { coach.querySelectorAll('.ans').forEach(x => x.disabled = true); b.classList.add('right'); succeed(st.ok); }
+    else { b.classList.add('wrong'); fb.textContent = 'Not quite. Try another answer.'; fb.className = 'feedback no'; }
+  });
+  document.getElementById('next').onclick = next;
+  const bk = document.getElementById('back'); if (bk) bk.onclick = back;
+}
+function next() {
+  const L = LESSONS[ci];
+  if (si < L.steps.length - 1) { si++; renderStep(); return; }
+  doneChapters.add(ci); store.set('fermentlogtour-done', JSON.stringify([...doneChapters]));
+  goChapter(ci + 1);
+}
+function back() { if (si > 0) { si--; renderStep(); } else if (ci > 0) { goChapter(ci - 1); } }
+
+function renderFinish() {
+  const fin = document.getElementById('finish'); fin.hidden = false;
+  clearTimers(); S = START(); curTarget = null; renderStage();
+  const items = ['Open FermentLog on your iPhone. On Home, tap the Fermenting tile, then "Show all". Type a few letters in the find box, then try Sort: Start date and Name.',
+    'Tap "New", then "New jar". Choose a vegetable, change the salt and watch the brine line, pick "Plain lid" and read the line under Burp alarm. Press Cancel (or Save, if you really want the jar).',
+    'Open a jar. Read the head card, tap Burped and then Undo in the dark bar. If it has a To do list, tick a step.',
+    'In the Timeline, add a "What I did" line with a picture, then a "Taste test" line. Tap a picture to open the photo story and press Done.',
+    'On a jar you are finished with, tap "Move to the fridge", then "Record outcome", give some stars and press Save. Check that the jar now sits under Done.',
+    'Open Settings \u203A Burp alarm: look at the two times and "Ring on this iPhone". Under Burp sounds, tap Play on two burps and switch one off.',
+    'Open Recipes, open a recipe and tap "Start a jar from this recipe" (nothing is saved until Save). Then look at Insights, and at Settings \u203A iCloud and Safety copies.'];
+  let ticks = JSON.parse(store.get('fermentlogtour-real') || '[]');
+  fin.innerHTML = `<h3>Now on your iPhone</h3>${items.map((t, i) => `<label><input type="checkbox" id="real-${i}" ${ticks.includes(i) ? 'checked' : ''}><span>${esc(t)}</span></label>`).join('')}
+    <p class="railnote">Everything here is a practice copy. Nothing changes on your iPhone, iPad or Mac.</p>
+    <div style="display:flex;gap:8px;margin-top:12px"><button class="btn main-b" id="again">Start the tour again</button></div>`;
+  fin.querySelectorAll('input').forEach((c, i) => c.onchange = () => { ticks = ticks.filter(x => x !== i); if (c.checked) ticks.push(i); store.set('fermentlogtour-real', JSON.stringify(ticks)); });
+  document.getElementById('again').onclick = () => goChapter(0);
+}
+
+/* Fit the 390 x 760 pretend iPhone into its box */
+function fit() { const box = document.getElementById('stagebox'); document.getElementById('stage').style.transform = `scale(${box.clientWidth / 390})`; }
+new ResizeObserver(fit).observe(document.getElementById('stagebox'));
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (S.story != null) { act('story-close'); return; }
+    if (S.sheet) { S.sheet = null; renderStage(); return; }
+    if (S.page === 'newjar') { act('nj-cancel'); return; }
+  }
+  if (e.key === 'Enter' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'BUTTON') { const n = document.getElementById('next'); if (n && !n.disabled && document.activeElement !== n) n.click(); }
+});
+goChapter(0); fit();
+</script>
